@@ -1,8 +1,23 @@
 # PROJ-122 — Benachrichtigung beim Wieder-Einreichen nach Rückfrage
 
-**Status:** In Review
+**Status:** Deployed (v1.48.0-PROJ-122, sha-133b6fd)
 **Owner-Anfrage:** 2026-07-01 (Follow-up zu PROJ-121: „bekommt die EEG eine Info,
 wenn der Antrag aktualisiert wurde?")
+
+## Deployment
+
+- **Datum:** 2026-07-01
+- **Tag:** `v1.48.0-PROJ-122`
+- **Image:** `sha-133b6fd` (Backend + Frontend; values.yaml Auto-Bump 19a5a69).
+  Dieses Image **enthält auch PROJ-121** → ein `helm upgrade` rollt beide
+  Features gemeinsam aus (löst den früheren sha-f905fa0 aus PROJ-121 ab).
+- **Migration:** keine → reiner Image-Wechsel.
+- **Owner-Aktion:** `git pull` + `helm upgrade` je Zone (test + prod) mit
+  `-f values-env.yaml -f values-secret.yaml`. Owner führt `helm upgrade` selbst
+  aus.
+- **Smoke:** Antrag auf „Info benötigt" → Mitglied korrigiert über den Link +
+  reicht erneut ein → EEG bekommt E-Mail „Antrag aktualisiert" UND Mitglied
+  bekommt die Übersichts-Bestätigung (gleiche Kette wie beim Erstantrag).
 
 ## Problem
 
