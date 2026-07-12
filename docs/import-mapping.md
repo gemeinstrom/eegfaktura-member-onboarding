@@ -180,7 +180,7 @@ Onboarding-only fields (intentionally **not** sent to core):
 `POST /api/admin/applications/check-activation` ruft pro Tenant `GET /participant` im Core auf. Das Auslöse-Kriterium pro EEG ist konfigurierbar via `registration_entrypoint.activation_mode` (PROJ-53):
 
 - **`participant_active`** (Default): liest `participant.status` (`NEW` / `PENDING` / `ACTIVE`); transitioniert bei `ACTIVE` auf `activated`.
-- **`any_meter_registration_started`** (PROJ-53): liest zusätzlich `participant.meters[].processState`; transitioniert sobald mindestens ein Zählpunkt `processState ∈ {PENDING, APPROVED, ACTIVE}` hat (Netzbetreiber hat die EDA-Online-Registrierung mindestens bestätigt).
+- **`any_meter_registration_started`** (PROJ-53; PROJ-123 verschärft 2026-07-12): liest zusätzlich `participant.meters[].processState`; transitioniert sobald mindestens ein Zählpunkt `processState = ACTIVE` hat (Netz-Registrierung abgeschlossen). Vorher genügte `∈ {PENDING, APPROVED, ACTIVE}` („gestartet"); der DB-Wert-String bleibt unverändert (Legacy-Identifier), nur die Bedeutung wurde verschärft.
 
 Keine Schreib-Aktion gegen den Core, nur ein Lese-Pfad zum Status-Sync. Bei erfolgreichem Wechsel auf `activated` läuft asynchron `SendActivationNotification` (volle Beitrittsbestätigungs-Mail mit PDF), idempotent via `application.activation_notification_sent_at`.
 
