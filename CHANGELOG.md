@@ -10,6 +10,17 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+## 2026-07-12
+
+### Aktivierungs-Kriterium Variante B: „Zählpunkt aktiv" statt „Registrierung gestartet" (PROJ-123)
+
+Das per-EEG-Aktivierungs-Kriterium Variante B (`any_meter_registration_started`) löst den Übergang `ready_for_activation → activated` (und damit die Beitrittsbestätigungs-Mail) jetzt erst aus, wenn **mindestens ein Zählpunkt im Core `processState = ACTIVE`** hat — die Netzbetreiber-/EDA-Registrierung also abgeschlossen ist. Vorher genügten bereits die Zwischenstadien `PENDING`/`APPROVED` („Registrierung gestartet"), wodurch Mitglieder zu früh aktiviert und die Beitrittsbestätigung vor Abschluss der Netz-Registrierung versandt wurde (Tester-Befund 2026-07-12).
+
+- `shouldActivate` (`internal/importing`): Mode-B-Zweig triggert nur noch bei `processState == "ACTIVE"`.
+- Der gespeicherte DB-Wert `any_meter_registration_started` bleibt unverändert (Legacy-Identifier) → **keine Migration**; CHECK-Constraint, Configexport und `sanitize`-Whitelist unberührt. Geändert wurden nur Bedeutung, Settings-Label, Doku und Tests.
+- Variante A (`participant_active`) unverändert.
+- Status-Transition → `/security-review` APPROVED (reine Verschärfung, kein neuer Endpoint/Auth/Tenant/PII/Schema; gosec 0). Deploy `v1.49.0-PROJ-123`.
+
 ## 2026-07-01
 
 ### Mitglieder-Bearbeitungslink im needs_info-Flow (PROJ-121)

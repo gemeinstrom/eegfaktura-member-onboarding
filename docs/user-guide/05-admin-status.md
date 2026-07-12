@@ -196,7 +196,7 @@ Das Mitglied ist im eegFaktura-Core angelegt und wartet darauf, vom Core-Team ak
 
 **Welches EDA-Kriterium der Batch anwendet, ist pro EEG konfigurierbar:**
 - **Variante A** (Default, `participant_active`): der Teilnehmer im Core hat den Status `ACTIVE`.
-- **Variante B** (`any_meter_registration_started`): mindestens ein Zählpunkt im Core hat den `processState` in PENDING/APPROVED/ACTIVE — sprich der Netzbetreiber hat auf die Online-Registrierung mindestens geantwortet. Damit aktivieren EEGs schon dann, wenn die EDA-Anmeldung läuft, ohne auf den Abschluss zu warten.
+- **Variante B** (`any_meter_registration_started`): mindestens ein Zählpunkt im Core hat den `processState = ACTIVE` — die Netz-Registrierung ist beim Netzbetreiber abgeschlossen. Damit aktivieren EEGs erst, wenn das Mitglied wirklich aktiv ist, und **nicht** schon, wenn die EDA-Anmeldung nur läuft (früher genügten hier bereits PENDING/APPROVED; seit 07/2026 muss der Zählpunkt aktiv sein).
 
 Umschalten in den EEG-Einstellungen unter **„Aktivierungs-Kriterium"** (siehe `06-admin-settings.md`).
 

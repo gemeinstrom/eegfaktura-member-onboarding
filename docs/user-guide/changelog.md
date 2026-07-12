@@ -4,6 +4,12 @@
 
 ---
 
+## 2026-07-12
+
+**Aktivierungs-Kriterium „Variante B" ist genauer geworden**
+
+Nutzt deine EEG das Aktivierungs-Kriterium **Variante B**, werden Mitglieder jetzt erst automatisch auf **„Aktiviert"** gesetzt (und bekommen die Beitrittsbestätigung), wenn beim Netzbetreiber **mindestens ein Zählpunkt wirklich aktiv** ist — die Netz-Registrierung also **abgeschlossen** ist. Bisher genügte es, dass die Registrierung nur *gestartet* war (der Netzbetreiber hatte lediglich geantwortet) — dadurch ging die Bestätigung teils zu früh raus. **Variante A** (Teilnehmer im Core ist „ACTIVE") bleibt unverändert. Umstellen kannst du das jederzeit in den Einstellungen unter **„Aktivierungs-Kriterium"**.
+
 ## 2026-07-01
 
 **Mitglieder können ihren Antrag nach einer Rückfrage selbst korrigieren**

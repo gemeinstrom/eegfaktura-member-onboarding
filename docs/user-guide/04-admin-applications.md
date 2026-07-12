@@ -12,7 +12,7 @@ Rechts oben in der Übersicht stehen dir zwei Aktionen zur Verfügung:
 
 - **„Aktivierung im Core prüfen"** — fragt für alle Anträge im Status „Bereit zur Aktivierung" beim eegFaktura-Core nach. Das **Auslöse-Kriterium** ist pro EEG konfigurierbar (Einstellungen → „Aktivierungs-Kriterium"):
   - *Variante A* (Default): Mitglied im Core ist auf Status `ACTIVE`.
-  - *Variante B*: mindestens ein Zählpunkt im Core hat `processState` in PENDING/APPROVED/ACTIVE (Netzbetreiber hat geantwortet).
+  - *Variante B*: mindestens ein Zählpunkt im Core hat `processState = ACTIVE` (die Netz-Registrierung beim Netzbetreiber ist abgeschlossen — das Mitglied ist wirklich aktiv).
 
   Trifft das Kriterium zu, wird der Antrag automatisch auf **„Aktiviert"** gesetzt und das Mitglied bekommt die volle Beitrittsbestätigungs-Mail mit PDF. Toast zeigt das Ergebnis (z. B. „3 von 5 auf Aktiviert gesetzt") und die Liste wird neu geladen.
 - **„Alle Entwürfe löschen"** — erscheint nur, wenn Entwürfe existieren; löscht unwiderruflich alle nicht eingereichten Anträge deiner EEG(s).
