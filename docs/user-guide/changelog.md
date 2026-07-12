@@ -10,6 +10,10 @@
 
 Nutzt deine EEG das Aktivierungs-Kriterium **Variante B**, werden Mitglieder jetzt erst automatisch auf **„Aktiviert"** gesetzt (und bekommen die Beitrittsbestätigung), wenn beim Netzbetreiber **mindestens ein Zählpunkt wirklich aktiv** ist — die Netz-Registrierung also **abgeschlossen** ist. Bisher genügte es, dass die Registrierung nur *gestartet* war (der Netzbetreiber hatte lediglich geantwortet) — dadurch ging die Bestätigung teils zu früh raus. **Variante A** (Teilnehmer im Core ist „ACTIVE") bleibt unverändert. Umstellen kannst du das jederzeit in den Einstellungen unter **„Aktivierungs-Kriterium"**.
 
+**SEPA-Mandat lässt sich jetzt herunterladen**
+
+Bisher wurde das SEPA-Lastschriftmandat nur per E-Mail an das Mitglied geschickt. Ab sofort kannst du es — wie die Beitrittsbestätigung — jederzeit in der Antrags-Detailansicht über **Herunterladen ▾ → SEPA-Mandat** abrufen. Das Dokument wird unverändert erzeugt, ohne dass eine Mail versendet wird. Gibt es für den Antrag kein Mandat (kein SEPA gewählt) oder fehlen EEG-Stammdaten wie die Gläubiger-ID, bekommst du einen kurzen Hinweis, was noch ergänzt werden muss.
+
 ## 2026-07-01
 
 **Mitglieder können ihren Antrag nach einer Rückfrage selbst korrigieren**

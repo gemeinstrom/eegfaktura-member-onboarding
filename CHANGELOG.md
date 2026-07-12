@@ -21,6 +21,16 @@ Das per-EEG-Aktivierungs-Kriterium Variante B (`any_meter_registration_started`)
 - Variante A (`participant_active`) unverändert.
 - Status-Transition → `/security-review` APPROVED (reine Verschärfung, kein neuer Endpoint/Auth/Tenant/PII/Schema; gosec 0). Deploy `v1.49.0-PROJ-123`.
 
+### SEPA-Lastschriftmandat als Admin-Download (PROJ-124)
+
+Das SEPA-Mandat-PDF wurde bisher nur per E-Mail an das Mitglied verschickt und war — anders als die Beitrittsbestätigung — im Admin-UI nicht abrufbar (Kundenfrage 2026-07-12). Neu: On-Demand-Download in der „Herunterladen ▾"-Gruppe der Antrags-Detailansicht.
+
+- **Neuer Endpoint** `GET /api/admin/applications/{id}/sepa-mandate.pdf` (`DownloadSEPAMandatePDF`): read-only Reproduktion des Mandats. `GenerateCompany` für `einzugsart=b2b`, sonst `Generate`. Tenant-Iso (`checkTenantAccess`) + PROJ-71-Cool-Down-Gate wie beim Beitrittsbestätigungs-Download.
+- `409` mit klarer Meldung, wenn kein Mandat existiert (`kein_sepa`/leer oder EEG-Stammdaten unvollständig, z. B. fehlende Gläubiger-ID) — der Admin sieht die Ursache als Toast.
+- **Read-only:** der Download schreibt nichts (keine `mandate_reference`/`mandate_date`-Persistierung); vor Import ohne Referenz, danach mit Mitgliedsnummer.
+- Mandatsreferenz + B2B-Debtor-Name kommen aus dem gemeinsamen Helfer `applyMandateReferenceAndDebtor` — dieselbe Quelle wie der Import-Mail-Pfad (keine divergierende Zweit-Implementierung).
+- **Kein Schema-Change.** Neuer Admin-Endpoint + PII-Download → `/security-review`.
+
 ## 2026-07-01
 
 ### Mitglieder-Bearbeitungslink im needs_info-Flow (PROJ-121)

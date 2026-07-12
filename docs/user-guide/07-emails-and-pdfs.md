@@ -51,6 +51,21 @@ eines Antrags.
 Alle PDFs tragen das EEG-Logo (sofern in den EEG-Einstellungen synchronisiert)
 und werden mit Europe/Vienna-Zeitstempel versehen.
 
+### PDFs nachträglich herunterladen
+
+In der Antrags-Detailansicht kannst du die erzeugten Dokumente jederzeit über
+das Menü **Herunterladen ▾** erneut abrufen — ohne eine Mail auszulösen:
+
+- **Beitrittsbestätigung** — sobald der Antrag genehmigt/importiert/aktiviert ist.
+- **SEPA-Mandat** — bei Anträgen mit Lastschriftmandat (Basislastschrift bzw.
+  B2B-Firmenlastschrift). Ist für den Antrag kein Mandat hinterlegt (kein SEPA
+  gewählt) oder fehlen EEG-Stammdaten wie die Gläubiger-ID, erscheint stattdessen
+  ein Hinweis, was ergänzt werden muss.
+- **Beitrittserklärung** — nur bei EEGs mit aktiviertem Vorstands-Genehmigungs-Workflow.
+
+Das SEPA-Mandat wird beim Download unverändert reproduziert; vor dem Import trägt
+es noch keine Mandatsreferenz, danach die Mitgliedsnummer.
+
 ---
 
 ## Wann das Mitglied *nichts* bekommt

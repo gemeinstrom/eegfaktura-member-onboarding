@@ -1940,7 +1940,7 @@ Keycloak JWT. Tenant-admin access is checked against the application's RC number
 - `403 Forbidden` — tenant mismatch
 - `409 Conflict` — application not in downloadable status
 
-The PDF is identical to the one auto-attached to the member/EEG mails at import time (PROJ-46 Stage B). Up to PROJ-46 Stage B this PDF was emailed to the EEG on `→ approved`; that auto-send is gone and the PDF generation is now anchored to the import step (so the member number is available for the SEPA mandate reference). For B2B applicants (`einzugsart=b2b`) and for CORE-applicants with `prepare_b2b_documents=true` (PROJ-91) the import mail additionally contains a separate Firmenlastschrift-Mandat-PDF with embedded Mandatsreferenz=Mitgliedsnummer (PROJ-47); that mandate PDF is currently **not** downloadable via this endpoint.
+The PDF is identical to the one auto-attached to the member/EEG mails at import time (PROJ-46 Stage B). Up to PROJ-46 Stage B this PDF was emailed to the EEG on `→ approved`; that auto-send is gone and the PDF generation is now anchored to the import step (so the member number is available for the SEPA mandate reference). The SEPA-Lastschriftmandat itself is downloadable via the dedicated `sepa-mandate.pdf` endpoint below (PROJ-124). For CORE-applicants with `prepare_b2b_documents=true` (PROJ-91) the import mail additionally contains a *second* Firmenlastschrift-Mandat-PDF; that PROJ-91 secondary document is **not** separately downloadable — the `sepa-mandate.pdf` endpoint always returns the primary mandate matching the application's `einzugsart`.
 
 Contents:
 - Header: title "Beitrittsbestätigung", EEG name, RC number, approval date, reference number
@@ -1950,6 +1950,25 @@ Contents:
 - Erteilte Zustimmungen: privacy acceptance (with version), accuracy confirmation, SEPA (checkbox or per-email note), document consents with dates
 - Statusverlauf: table with status transitions (from → to) in German labels, timestamps, comments
 - Weitere Angaben: configurable fields (if any are filled in)
+
+---
+
+### GET `/api/admin/applications/{id}/sepa-mandate.pdf`
+
+Generates and downloads the **SEPA-Lastschriftmandat** as a PDF file for the given application (PROJ-124). Read-only reproduction of the mandate that is (also) emailed to the member at submission/import time. For `einzugsart=b2b` the Firmenlastschrift-Mandat (`GenerateCompany`) is rendered, otherwise the Basislastschrift (`Generate`).
+
+### Auth
+Keycloak JWT. Tenant-admin access is checked against the application's RC number. Blocked while the EEG's platform contract is suspended (PROJ-71 cool-down), same as the approval-pdf download.
+
+### Response
+- `200 OK` — PDF file
+  - `Content-Type: application/pdf`
+  - `Content-Disposition: attachment; filename="sepa-lastschriftmandat-{referenceNumber}.pdf"` (CORE) resp. `sepa-firmenlastschriftmandat-{referenceNumber}.pdf` (B2B)
+- `404 Not Found` — application not found
+- `403 Forbidden` — tenant mismatch
+- `409 Conflict` — no mandate available: `einzugsart=kein_sepa`/empty, or EEG master data incomplete (e.g. missing Gläubiger-ID). The response message names the cause and is surfaced to the admin.
+
+The endpoint writes nothing — Mandatsreferenz and Mandatsdatum are only persisted by the submit/import path. A mandate downloaded before import has no reference yet (matching the submission-time mail); after import it carries the Mandatsreferenz (member number, or the admin-set override).
 
 ---
 
@@ -2798,13 +2817,14 @@ aus den persistierten Submission-Daten regeneriert.
 
 ## 9.7 Soft-Suspend guard *(PROJ-71)*
 
-Sechs bestehende Admin-Endpoints sind Soft-Suspend-geschützt. Wenn der
+Sieben bestehende Admin-Endpoints sind Soft-Suspend-geschützt. Wenn der
 Vertrag der adressierten EEG aktuell `suspended` ist, antworten sie mit `403`
 und einer generischen Fehlermeldung:
 
 - `POST /api/admin/applications/{id}/import`
 - `GET  /api/admin/applications/export` (Excel)
 - `GET  /api/admin/applications/{id}/approval-pdf`
+- `GET  /api/admin/applications/{id}/sepa-mandate.pdf` (PROJ-124)
 - `POST /api/admin/reconciliation/run` (PROJ-69)
 - `POST /api/admin/eeg/resync-from-core` (PROJ-32)
 - `POST /api/admin/sepa-mandate/renewal`
