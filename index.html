@@ -726,9 +726,9 @@
 <li><code>import_failed → approved</code>: nach Fehlerbehebung kann der Import erneut versucht werden.</li>
 <li><code>imported</code> ist <strong>transient</strong> (nur Millisekunden) — der Server transitioniert sofort weiter nach <code>ready_for_activation</code>, unabhängig von der Einzugsart. Wenn der Antrag für eine spätere B2B-Umstellung vorgesehen ist (Toggle „Mitglied für Umstellung auf B2B vorbereiten" oder Einzugsart=B2B), enthält die Mandat-Mail zusätzlich ein Firmenlastschrift-PDF — der spätere Wechsel auf SEPA-B2B passiert manuell im eegFaktura-Core nach der Bank-Bestätigung.</li>
 <li><code>ready_for_activation → activated</code>: Admin klickt manuell „Als aktiv markieren" ODER nutzt den Batch-Button „Aktivierung im Core prüfen" in der Antragsliste.</li>
-<li><code>activated → imported</code>: über die Aktion <strong>Aktivierung zurücksetzen</strong> (z. B. bei irrtümlicher Aktivierung). Reine Onboarding-Buchhaltung — Mitgliedsnummer und Core-Teilnehmer-ID bleiben, der Core wird nicht berührt.</li>
+<li><code>activated → ready_for_activation</code>: über die Aktion <strong>Aktivierung zurücksetzen</strong> (z. B. bei irrtümlicher Aktivierung). Der Antrag ist von dort wieder aktivierbar (manuell oder über die Core-Prüfung). Reine Onboarding-Buchhaltung — Mitgliedsnummer und Core-Teilnehmer-ID bleiben, der Core wird nicht berührt.</li>
 <li><code>imported / ready_for_activation → approved</code>: über die Aktion <strong>Import zurücksetzen</strong> in der Detailansicht.</li>
-<li><code>imported → under_review</code>: über die Aktion <strong>Auf Prüfung zurücksetzen</strong> — vollständiges Zurückholen in die Bearbeitung (Import- und Aktivierungs-Vermerke werden geleert).</li>
+<li><code>imported</code> / <code>ready_for_activation → under_review</code>: über die Aktion <strong>Auf Prüfung zurücksetzen</strong> — vollständiges Zurückholen in die Bearbeitung (Import- und Aktivierungs-Vermerke werden geleert).</li>
 </ul>
 <table>
 <thead>
