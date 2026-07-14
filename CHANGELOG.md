@@ -20,7 +20,8 @@ Tester-Befund (Manuel Wurzinger): Anträge, die per **Aktivierung zurücksetzen*
 - **Fix:** `ResetActivationTx`/`ResetActivation` setzen jetzt auf **`ready_for_activation`** zurück (genau wie der PROJ-76-interne `RollbackActivation` bereits). Von dort greifen Batch (`ready_for_activation → activated`) und manuelle Aktivierung wieder.
 - `reset-to-review` akzeptiert zusätzlich `ready_for_activation` als Quelle, damit der Voll-Cleanup-Recovery-Pfad (`→ under_review`, 13 Felder genullt) erhalten bleibt.
 - Frontend: Toast/Warnung nennen „Bereit zur Aktivierung"; „Auf Prüfung zurücksetzen" ist auch im ready_for_activation-Block verfügbar.
-- **Keine Migration, kein Schema-Change.** Drift-Guard-Tests unverändert grün (`activated`/`imported` bleiben ohne Eintrag in der Transition-Map — Rollbacks laufen weiter über dedizierte Endpoints). Status-Transition → `/security-review` APPROVED (0 Findings, gosec 0).
+- **Bestands-Rettung (Migration 000092):** Anträge, die durch das alte Verhalten schon in `imported` gestrandet sind, werden einmalig nach `ready_for_activation` gehoben (nur abgeschlossene Importe, In-Flight ausgeschlossen; reine Daten-Korrektur ohne DDL, idempotent).
+- **Kein Schema-Change.** Drift-Guard-Tests unverändert grün (`activated`/`imported` bleiben ohne Eintrag in der Transition-Map — Rollbacks laufen weiter über dedizierte Endpoints). Status-Transition + Daten-Migration → `/security-review` APPROVED (0 Findings, gosec 0).
 
 ## 2026-07-12
 

@@ -31,7 +31,11 @@ sowohl der Batch (`ready_for_activation → activated`) als auch die manuelle
 Aktivierung. Damit der Voll-Cleanup-Recovery-Pfad erhalten bleibt, akzeptiert
 `reset-to-review` jetzt **`imported` ODER `ready_for_activation`** als Quelle.
 
-Keine Migration, keine Feld-Änderung — nur der Ziel-/Quell-Status.
+Kein Schema-Change, keine Feld-Änderung — nur der Ziel-/Quell-Status. **Eine
+Daten-Migration** (000092) rettet zusätzlich die bereits gestrandeten
+Bestands-Anträge (Owner-Entscheidung 2026-07-14): alle Anträge, die per altem
+Verhalten in `imported` hängen (mit abgeschlossenem Import), werden einmalig
+nach `ready_for_activation` gehoben.
 
 ## Acceptance Criteria
 
@@ -63,16 +67,19 @@ Keine Migration, keine Feld-Änderung — nur der Ziel-/Quell-Status.
   Quelle → der „ganz zurück"-Pfad (`ready_for_activation → approved → rejected`)
   bleibt intakt.
 - **EC-3** Bestand-Anträge, die aktuell in `imported` hängen (durch das alte
-  Verhalten): der `imported`-Block behält „Auf Prüfung zurücksetzen" +
-  „Import zurücksetzen"; über `reset-import → approved` bzw. `reset-to-review`
-  kommen sie wieder in Fluss. (Ein direkter `imported → ready_for_activation`
-  wurde bewusst NICHT ergänzt — Variante B verworfen.)
+  Verhalten): werden durch **Migration 000092** einmalig nach
+  `ready_for_activation` gehoben (Owner-Entscheidung 2026-07-14). Der
+  `imported`-Block behält daneben „Auf Prüfung zurücksetzen" + „Import
+  zurücksetzen" für den seltenen Fall einer fehlgeschlagenen Auto-Transition.
+  (Ein permanenter `imported → ready_for_activation`-Button wurde bewusst NICHT
+  ergänzt — Variante B verworfen; die Migration deckt die Bestandsfälle ab, und
+  künftig landet reset-activation gar nicht mehr in `imported`.)
 
 ## Non-Goals
 
 - Kein neuer „Zur Aktivierung freigeben"-Button aus `imported` (Variante B,
-  verworfen).
-- Keine DB-Migration, kein Schema-Change.
+  verworfen — die Migration 000092 deckt die Bestandsfälle ab).
+- Kein Schema-Change (Migration 000092 ist reine Daten-Korrektur, keine DDL).
 - Batch-Scan-Umfang unverändert (weiterhin nur `ready_for_activation`).
 
 ## Security
@@ -104,6 +111,7 @@ unverändert.
 | reset-to-review Quell-Erweiterung | `ready_for_activation` als zusätzliche Quelle: gleicher Tenant-Check, Pflicht-Grund, In-Flight-Guard, 13-Feld-Cleanup. `ready_for_activation` ist ein legitimer Post-Import-State — kein Eskalations-/Cross-Tenant-Pfad. ✓ |
 | SQL | Parametrisiert, Status als Go-Konstanten; kein String-Concat. ✓ |
 | Transition-Map | `adminTransitions` unverändert; `activated`/`imported` bleiben ohne Eintrag → Drift-Guards grün, generisches `/status` flippt nichts. ✓ |
+| Migration 000092 | Reine Daten-Korrektur (`UPDATE ... SET status`), kein DDL. Guard `import_finished_at IS NOT NULL` schließt In-Flight-Importe aus; idempotent; hebt nur `imported`→`ready_for_activation`. Kein PII, kein Cross-Tenant (globaler Status-Fix). ✓ |
 | Abgrenzung | Kein neuer Endpoint/Env/Secret/Helm/Schema/PII/Auth. ✓ |
 
 **Scans:** gosec `-severity medium -confidence medium` (internal/application + internal/http) → **0 Issues** (59 Files). govulncheck → nur stdlib-Baseline (crypto/tls, kein go.mod-Change). Trivy/npm-audit n/a.
