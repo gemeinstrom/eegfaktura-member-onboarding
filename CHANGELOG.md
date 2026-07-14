@@ -10,6 +10,18 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+## 2026-07-14
+
+### reset-activation landet in „Bereit zur Aktivierung" statt „Importiert" (PROJ-125)
+
+Tester-Befund (Manuel Wurzinger): Anträge, die per **Aktivierung zurücksetzen** von `activated` zurückgerollt wurden, blieben in `Importiert` hängen — dort war weder eine manuelle Aktivierung noch eine erneute Core-Prüfung möglich.
+
+- **Ursache:** Der Aktivierungs-Check-Batch scannt nur Anträge in `ready_for_activation`, und aus `imported` gibt es keinen Vorwärts-Übergang (die Auto-Schaltung `imported → ready_for_activation` macht nur der Import-Service, einmalig beim Import). `reset-activation` landete aber in `imported` → Sackgasse.
+- **Fix:** `ResetActivationTx`/`ResetActivation` setzen jetzt auf **`ready_for_activation`** zurück (genau wie der PROJ-76-interne `RollbackActivation` bereits). Von dort greifen Batch (`ready_for_activation → activated`) und manuelle Aktivierung wieder.
+- `reset-to-review` akzeptiert zusätzlich `ready_for_activation` als Quelle, damit der Voll-Cleanup-Recovery-Pfad (`→ under_review`, 13 Felder genullt) erhalten bleibt.
+- Frontend: Toast/Warnung nennen „Bereit zur Aktivierung"; „Auf Prüfung zurücksetzen" ist auch im ready_for_activation-Block verfügbar.
+- **Keine Migration, kein Schema-Change.** Drift-Guard-Tests unverändert grün (`activated`/`imported` bleiben ohne Eintrag in der Transition-Map — Rollbacks laufen weiter über dedizierte Endpoints). Status-Transition → `/security-review` APPROVED (0 Findings, gosec 0).
+
 ## 2026-07-12
 
 ### Aktivierungs-Kriterium Variante B: „Zählpunkt aktiv" statt „Registrierung gestartet" (PROJ-123)

@@ -4,6 +4,12 @@
 
 ---
 
+## 2026-07-14
+
+**„Aktivierung zurücksetzen" führt nicht mehr in eine Sackgasse**
+
+Wenn du bei einem aktivierten Mitglied **Aktivierung zurücksetzen** klickst, landet der Antrag jetzt wieder im Status **„Bereit zur Aktivierung"** (vorher „Importiert"). Das ist wichtig, weil du ihn von dort aus **erneut aktivieren** kannst — entweder manuell über **„Als aktiv markieren"** oder automatisch über die Core-Prüfung. Bisher blieb ein zurückgesetzter Antrag in „Importiert" stecken und ließ sich weder manuell noch automatisch wieder aktivieren. Falls du den Antrag ganz zurücknehmen willst, steht dir dort weiterhin **„Auf Prüfung zurücksetzen"** zur Verfügung.
+
 ## 2026-07-12
 
 **Aktivierungs-Kriterium „Variante B" ist genauer geworden**

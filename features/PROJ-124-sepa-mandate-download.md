@@ -1,6 +1,6 @@
 # PROJ-124 — SEPA-Lastschriftmandat als Admin-Download
 
-**Status:** In Progress
+**Status:** Approved
 **Created:** 2026-07-12
 **Owner-Auslöser:** Kundenfrage 2026-07-12 („Die Beitrittsbestätigung kann ich nachträglich herunterladen, aber das SEPA-Formular finde ich nicht.")
 
@@ -69,3 +69,44 @@ Ansicht, der das SEPA-Mandat-PDF für den Antrag on-demand erzeugt.
 PII-Download (IBAN, Name, Adresse) → gleiche Klassifikation wie der
 Beitrittsbestätigungs-/Excel-Download. Neuer Admin-Endpoint + Tenant-Iso →
 `/security-review` Pflicht.
+
+## QA / Verifikation (2026-07-12)
+
+- `go build ./...`, `go vet ./...`, `go test ./...` grün. Neuer Unit-Test
+  `TestApplyMandateReferenceAndDebtor` (5 Fälle: Override-vor-Default, MemberNumber-
+  Default, beide leer, B2B-Debtor, CORE behält Kontoinhaber). Bestehende
+  `buildSEPAMandateData`- + Import-Pfad-Tests unverändert grün → Helper-Extraktion
+  verhaltensgleich (AC-6).
+- Frontend: `tsc --noEmit` clean, `vitest run` 258/258, `npm run build` clean.
+- AC-1..AC-6 + EC-1..EC-3 code-verifiziert.
+
+## Security Review (2026-07-12) — **APPROVED**
+
+**Scope:** `internal/http/admin_attachments.go` (neuer Handler),
+`internal/application/admin_service.go` (`GenerateSEPAMandatePDF`),
+`internal/application/application_service.go` (`applyMandateReferenceAndDebtor`),
+`cmd/server/main.go` (Route), Frontend-Download.
+
+| Prüfung | Ergebnis |
+|---------|----------|
+| Tenant-Iso | `checkTenantAccess(id)` ist die **erste** Prüfung im Handler (nach `parseID`), identisch zu `DownloadApprovalPDF`. `GenerateSEPAMandatePDF` lädt App→Entrypoint über `app.RCNumber`; kein Cross-RC-Pfad. ✓ |
+| Cool-Down-Gate | `enforceCustomerContractByID` wie beim approval-pdf → suspendierte EEG kann nicht laden. ✓ |
+| Read-only | Nur `GetByID`/`GetByRCNumber`/`GetLogo` + reine Helfer + PDF-Renderer; **kein** `Set*`/Insert. Ein Öffnen des Downloads schreibt nichts. ✓ |
+| Refactor-Integrität | Import-Mail-Pfad ruft jetzt denselben Helfer; bit-identisch (Tests grün). ✓ |
+| Input-Validierung | `parseID` = `uuid.Parse` (malformed → 400). Repos parametrisiert, kein neuer Query-Bau. ✓ |
+| PII in Logs | Handler loggt nichts; keine IBAN/Name/E-Mail im Log-Pfad. ✓ |
+| Error-Model | `409` mit Klartext-Ursache (kein Mandat / EEG-Stammdaten unvollständig) — kein Stack-Trace/DB-Detail; sonst generischer `handleServiceError`. ✓ |
+| Content-Disposition | Dateiname aus system-generierter `ReferenceNumber` (PROJ-35-Muster, kein CRLF/User-Freitext) — wie approval-pdf, keine Header-Injection. ✓ |
+| Abgrenzung | Keine neuen Secrets/Env/Helm/Public-Endpoints/Rate-Limits/Status-Transitions/Import-Logik/Schema. ✓ |
+
+**Scans:** gosec `-severity medium -confidence medium` auf `internal/http/` +
+`internal/application/` → **0 Issues** (59 Files). govulncheck → 1 stdlib-Baseline
+(`GO-2026-5856`, crypto/tls) — **nicht durch PROJ-124 eingeführt** (kein go.mod-Change),
+separater Go-Toolchain-Bump. Trivy/npm-audit n/a (keine Helm/Dockerfile/package.json-
+Änderung).
+
+**Info (kein Blocker):** Der Excel-PII-Export schreibt ein DSGVO-`pii-export`-
+Audit-Log (Metadaten, keine PII-Werte); approval-pdf + dieser SEPA-Download tun
+das nicht. Optionaler künftiger Angleich, da IBAN betroffen ist.
+
+**Verdikt: APPROVED** — 0 Critical/High/Medium.

@@ -91,8 +91,8 @@ Die Aktionsleiste oben rechts gruppiert Aktionen in zwei Dropdowns plus einzelne
 | **Löschen** | Top-Level (destruktiv) | Status *Entwurf* oder *Abgelehnt* |
 | **Bearbeiten** | Top-Level (primär) | Status *Eingereicht* / *In Prüfung* / *Rückfrage* / *Genehmigt* / *Import fehlgeschlagen* |
 | **Import zurücksetzen** | Status-Block (destruktiv) | Status *Importiert* / *Bereit zur Aktivierung* — bringt den Antrag zurück auf *Genehmigt*, damit erneut importiert werden kann |
-| **Auf Prüfung zurücksetzen** | Status-Block (destruktiv) | Status *Importiert* — bringt den Antrag zurück auf *In Prüfung*. Geeignet wenn der Antrag inhaltlich verworfen werden soll: nach diesem Schritt erreichbar ist *Ablehnen*. Mitgliedsnummer und alle Import-Verknüpfungen werden genullt. |
-| **Aktivierung zurücksetzen** | Status-Block (destruktiv) | Status *Aktiviert* — bringt den Antrag zurück auf *Importiert*. Geeignet wenn die Aktivierung versehentlich passiert ist (manueller Klick oder Auto-Aktivierungs-Check trotz fehlender Core-Aktivität). Mitgliedsnummer + Core-Verknüpfung bleiben erhalten. |
+| **Auf Prüfung zurücksetzen** | Status-Block (destruktiv) | Status *Importiert* oder *Bereit zur Aktivierung* — bringt den Antrag zurück auf *In Prüfung*. Geeignet wenn der Antrag inhaltlich verworfen werden soll: nach diesem Schritt erreichbar ist *Ablehnen*. Mitgliedsnummer und alle Import-Verknüpfungen werden genullt. |
+| **Aktivierung zurücksetzen** | Status-Block (destruktiv) | Status *Aktiviert* — bringt den Antrag zurück auf *Bereit zur Aktivierung*. Geeignet wenn die Aktivierung versehentlich passiert ist (manueller Klick oder Auto-Aktivierungs-Check trotz fehlender Core-Aktivität). Von dort ist der Antrag jederzeit wieder aktivierbar (manuell oder über die Core-Prüfung). Mitgliedsnummer + Core-Verknüpfung bleiben erhalten. |
 
 Die Detailansicht zeigt alle Angaben des Mitglieds:
 
