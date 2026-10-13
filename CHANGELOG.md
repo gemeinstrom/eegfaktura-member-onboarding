@@ -10,6 +10,17 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+## 2026-10-13
+
+### Abweichende Zählpunkt-Adresse wird beim Import in den Core übernommen (PROJ-126)
+
+Nutzer-Rückmeldung: Beim Import landete an jedem Zählpunkt die Adresse des Mitglieds, auch wenn im Antrag eine abweichende Zählpunkt-Adresse erfasst war.
+
+- **Ursache:** Die Übernahme der abweichenden Adresse (PROJ-39) war beim Core-Import nie umgesetzt worden — der Import setzte die Zählpunkt-Adresse immer aus der Mitgliedsadresse.
+- **Fix:** Zählpunkte mit eigener Adresse übergeben diese an den Core; Zählpunkte ohne eigene Adresse erben weiterhin die Mitgliedsadresse. Wohn- und Rechnungsadresse des Mitglieds bleiben unverändert.
+- Bereits importierte Anträge werden nicht nachträglich korrigiert.
+- Kein Schema-Change.
+
 ## 2026-07-14
 
 ### reset-activation landet in „Bereit zur Aktivierung" statt „Importiert" (PROJ-125)

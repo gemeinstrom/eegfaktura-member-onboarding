@@ -249,6 +249,8 @@ Felder:
 
 Bricht die ursprüngliche V1-Architekturentscheidung „all metering points
 use the same address as the member" aus älteren Versionen dieser Doku.
+Seit PROJ-126 wird die abweichende Adresse auch in den Core übernommen
+(`meters[].street/streetNumber/zip/city`, siehe `docs/import-mapping.md`).
 
 Stores the metering points of an application.
 

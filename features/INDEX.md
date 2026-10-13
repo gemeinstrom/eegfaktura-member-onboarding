@@ -160,4 +160,6 @@ Central tracking for all features.
 
 | PROJ-125 | reset-activation-Sackgassen-Fix (Tester Manuel Wurzinger 2026-07-14): Anträge, die von `activated` per `reset-activation` zurückgesetzt wurden, landeten in `imported` — einem Durchgangsstatus ohne Vorwärts-Pfad (Batch scannt nur `ready_for_activation`, keine manuelle Vorwärts-Transition aus `imported`). Fix (Owner-Variante A): `ResetActivationTx`/`ResetActivation` setzen jetzt auf `ready_for_activation` (wie der PROJ-76-interne Rollback schon). `reset-to-review` akzeptiert zusätzlich `ready_for_activation` als Quelle, damit der Voll-Cleanup-Recovery-Pfad erhalten bleibt. Frontend: Toast/Warnung + „Auf Prüfung zurücksetzen" im ready_for_activation-Block. Daten-Migration 000092 hebt bereits gestrandete `imported`-Bestandsanträge einmalig nach `ready_for_activation` (kein DDL, In-Flight-Guard, idempotent). QA grün, /security-review APPROVED (0 Findings, gosec 0). | Approved | `features/PROJ-125-reset-activation-lands-in-ready.md` | 2026-07-14 |
 
-## Next Available ID: PROJ-126
+| PROJ-126 | Abweichende Zählpunkt-Adresse (PROJ-39) beim Core-Import übernehmen (Nutzer-Rückmeldung 2026-10-13): `BuildPayload` setzte `meters[].street/streetNumber/zip/city` immer aus der Mitgliedsadresse. Fix: eigene ZP-Adresse gewinnt, sonst Fallback Mitgliedsadresse. Bereits importierte Anträge werden nicht nachgebessert (Owner). Kein Schema-/Endpoint-Change. Tests grün, gosec 0. | Approved | `features/PROJ-126-meter-address-core-import.md` | 2026-10-13 |
+
+## Next Available ID: PROJ-127
