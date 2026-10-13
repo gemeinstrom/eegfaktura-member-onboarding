@@ -162,4 +162,6 @@ Central tracking for all features.
 
 | PROJ-126 | Abweichende Zählpunkt-Adresse (PROJ-39) beim Core-Import übernehmen (Nutzer-Rückmeldung 2026-10-13): `BuildPayload` setzte `meters[].street/streetNumber/zip/city` immer aus der Mitgliedsadresse. Fix: eigene ZP-Adresse gewinnt, sonst Fallback Mitgliedsadresse. Bereits importierte Anträge werden nicht nachgebessert (Owner). Kein Schema-/Endpoint-Change. Tests grün, gosec 0. | Approved | `features/PROJ-126-meter-address-core-import.md` | 2026-10-13 |
 
-## Next Available ID: PROJ-127
+| PROJ-127 | Rechtsdokument-Links in der Mitglieds-Eingangsbestätigung (ElWG § 69 Abs 1 Z 2, Nutzer-Rückmeldung 2026-10-13): ALB + Informationsblatt sind über PROJ-9 bereits als Pflicht-Dokumente erfassbar; die Mail zeigte aber nur Titel + „Zugestimmt am“ ohne Link und auch Info-Dokumente (PROJ-36) fälschlich als „Zugestimmt“. Neu: Titel verlinkt + URL sichtbar, Wording je consent_type („Zugestimmt am“ / „Zur Kenntnis genommen am“). Nur Mitglieds-Mail, kein Schema-Change. | Planned | `features/PROJ-127-legal-document-links-in-member-mail.md` | 2026-10-13 |
+
+## Next Available ID: PROJ-128
