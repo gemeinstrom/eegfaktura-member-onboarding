@@ -12,6 +12,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-10-13
 
+### Sicherheits-Updates der Abhängigkeiten
+
+Dependabot-Alerts waren für das Repo deaktiviert, und alle drei Update-Kanäle hingen am PR-Limit — seit Juli kamen keine Updates mehr an. Der Frontend-Image-Build scheiterte seit September am Trivy-Gate (kritische Next.js-Lücken), es wurde nichts mehr ausgerollt.
+
+- **Frontend:** `next` 16.2.7 → 16.3.8 (u. a. unauthentifizierte Remote-Code-Ausführung über die Image-Optimierung, SSRF, Middleware-Bypass, Cache-Poisoning), `eslint-config-next` 16.3.8, `next-auth` 4.24.14 → 4.24.15, `dompurify` → 3.4.17 (Sanitizer-Bypässe), `@tiptap/*` 3.25 → 3.31.4 inkl. `prosemirror-view` 1.42.6 (XSS beim Einfügen, ReDoS). `npm audit --omit=dev`: keine kritischen Funde mehr; Rest betrifft nur Build-Werkzeuge.
+- **Backend:** Go 1.26.4 → 1.26.9 (HTTP/2-Server-DoS, `html/template`-Kontext-Fixes, TLS), `golang.org/x/net` 0.60.0, `golang.org/x/text` 0.42.0, `excelize` 2.11.0. `govulncheck`: 0 erreichbare Schwachstellen.
+- Dependabot-Alerts + Security-Updates wieder aktiviert.
+
 ### Abweichende Zählpunkt-Adresse wird beim Import in den Core übernommen (PROJ-126)
 
 Nutzer-Rückmeldung: Beim Import landete an jedem Zählpunkt die Adresse des Mitglieds, auch wenn im Antrag eine abweichende Zählpunkt-Adresse erfasst war.
