@@ -355,6 +355,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#2026-10-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2026-10-25
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#2026-07-14" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -930,6 +941,9 @@
 <h1 id="was-ist-neu">Was ist neu?<a class="headerlink" href="#was-ist-neu" title="Permanent link">&para;</a></h1>
 <p>Übersicht der Änderungen der letzten Tage, die für <strong>EEG-Admins</strong> und <strong>Mitglieder</strong> spürbar sind. Technische Details, Bug-Fixes ohne UI-Auswirkung und Infrastruktur-Themen sind hier bewusst weggelassen — die finden sich in der Commit-Historie.</p>
 <hr />
+<h2 id="2026-10-25">2026-10-25<a class="headerlink" href="#2026-10-25" title="Permanent link">&para;</a></h2>
+<p><strong>Abweichende Zählpunkt-Adresse wird jetzt nach eegFaktura übernommen</strong></p>
+<p>Hat ein Mitglied für einen Zählpunkt eine eigene, von der Mitgliedsadresse abweichende Adresse angegeben, landet diese Adresse beim Import jetzt auch in eegFaktura am Zählpunkt. Bisher wurde dort immer die Adresse des Mitglieds eingetragen. Zählpunkte ohne eigene Adresse übernehmen wie bisher die Mitgliedsadresse. Bereits importierte Mitglieder werden nicht nachträglich geändert — falls nötig, die Zählpunkt-Adresse bitte direkt in eegFaktura korrigieren.</p>
 <h2 id="2026-07-14">2026-07-14<a class="headerlink" href="#2026-07-14" title="Permanent link">&para;</a></h2>
 <p><strong>„Aktivierung zurücksetzen" führt nicht mehr in eine Sackgasse</strong></p>
 <p>Wenn du bei einem aktivierten Mitglied <strong>Aktivierung zurücksetzen</strong> klickst, landet der Antrag jetzt wieder im Status <strong>„Bereit zur Aktivierung"</strong> (vorher „Importiert"). Das ist wichtig, weil du ihn von dort aus <strong>erneut aktivieren</strong> kannst — entweder manuell über <strong>„Als aktiv markieren"</strong> oder automatisch über die Core-Prüfung. Bisher blieb ein zurückgesetzter Antrag in „Importiert" stecken und ließ sich weder manuell noch automatisch wieder aktivieren. Falls du den Antrag ganz zurücknehmen willst, steht dir dort weiterhin <strong>„Auf Prüfung zurücksetzen"</strong> zur Verfügung.</p>
