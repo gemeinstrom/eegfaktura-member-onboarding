@@ -340,6 +340,84 @@ Always work from a documented feature spec in `features/`.
 Keycloak auth, tenant isolation, public endpoints, rate limiting, DB schema,
 status transitions, import logic, Helm/Kubernetes, Dockerfiles, CI/CD, or secrets.
 
+## Pull Requests — Fresh-Context Self-Reviews
+
+Taken over from the eegfaktura rules (`vfeeg/eegfaktura/CLAUDE.md`, 2026-10-23) and adapted to
+this repository (2026-10-25). Goal: a human reviewer should not have to find the obvious.
+
+**Which changes go through a PR**
+
+- **Changes with code logic** (`internal/`, `cmd/`, `src/`, `db/migrations/`) go through a
+  **draft PR**, not directly to `main`. Side effect: the E2E suite (Playwright) runs before the
+  merge — it runs only on PRs.
+- **Docs, specs, config and trivial one-liners** may still go directly to `main`.
+- Dependency batches (several Dependabot updates in one PR) count as config: review 1 only if
+  code had to be adapted, otherwise none; CI incl. E2E is the gate.
+
+**How**
+
+- Each review runs in a **new subagent** (Agent tool), so it does not share this conversation's
+  context. The reviewer gets only the PR (number/diff), the feature spec in `features/`, and the
+  instruction for its lens. **Not** Claude's reasoning, earlier findings, or "this part is fine".
+- The two reviews use **different lenses and different models**:
+
+  | | Lens | How | Model |
+  |---|---|---|---|
+  | **Review 1** | Correctness: bugs, edge cases, tests | the subagent runs the built-in `/code-review high` on the PR | same as the main session |
+  | **Review 2** | Domain reviewer: data variants, side effects, PR/CHANGELOG/spec claims | the subagent follows the domain checklist below | a **different** model (e.g. Sonnet when the session runs Opus) |
+
+- **Once per PR, at the end:** start the reviews only when everything for the PR is in (code,
+  tests, CHANGELOG, spec update, description). No reviews of intermediate states.
+- **Both reviews run in parallel, in the background**, on the same state. Claude collects the
+  findings, verifies each one (reproduce or point at code), and fixes them in one pass. Run
+  another review only if the fixes change logic. Wording and comment fixes do not need one.
+- **Threshold:** review 1 for every PR with code logic. Review 2 only when the PR reaches beyond
+  its own code: DB migrations or data changes, mails/PDFs/texts that members or EEGs see,
+  the core import (`importing`, `coreclient`), status transitions, tenant isolation or auth,
+  public endpoints, the data export catalog, Helm/CI, or claims in `docs/` (incl. the user
+  guide) that admins or operators act on. Code that stays inside one area without outside
+  effect gets review 1 only.
+- **Relation to the other gates:** the reviews do not replace `/qa` or `/security-review`.
+  `/security-review` stays mandatory for the areas listed above; its findings follow
+  `.claude/rules/security.md`.
+- **Low-complexity PRs skip the human review:** once the review findings are fixed and CI
+  (incl. E2E) is green, a PR of low complexity is merged directly. Complexity counts, not size:
+  a short change to tricky logic still goes to the user, as do critical PRs (auth, tenant
+  isolation, import, migrations, billing).
+- Mark the PR ready and ask the user only after that. The PR description states in one line
+  what the reviews found and what was fixed or deliberately left.
+- For large or critical PRs, suggest `/code-review ultra` (multi-agent cloud review) to the
+  user — it is billed and only the user can start it.
+
+**Domain checklist (review 2, minimum)** — the reviewer must:
+
+- read the callers and the code paths around the diff, not just the diff;
+- check every claim in the PR description, CHANGELOG and feature spec against the code
+  ("unchanged", "only", "no effect on …");
+- check domain variants that the tests don't cover — e.g. member types (private, farmer,
+  company, association, municipality), Einzugsart (`core`, `b2b`, `kein_sepa`), EEG vs. BEG,
+  EEGs with/without email confirmation (PROJ-31), several metering points incl. deviating
+  addresses, tenant admins with several RC numbers vs. superuser, consent types
+  (`explicit`/`informational`);
+- check side effects: member and EEG mails, `status_log`, the core import payload, data export
+  (backend `fields.go` and frontend catalog in sync), form state on full-replace saves (all six
+  layers of an admin field);
+- check that applied migrations are not edited (changes need a new migration) and that
+  business-sensitive material is under `private/` or marked `visibility: private` (public mirror);
+- run the tests (`go test ./...`, `npx vitest run`);
+- report each finding with a concrete failure scenario (input/state → wrong result) and a
+  severity, and say "nothing found" instead of padding.
+
+Findings without a failure scenario are noted, not fixed blindly. When a finding depends on
+production data, prepare a read-only query for the user instead of guessing.
+
+**Who closes a PR**
+
+- The **reviewer** (subagent) only gives an assessment: findings, open questions, an opinion on
+  readiness. It does not merge or close the PR.
+- Claude evaluates the review feedback, fixes or lists what is left, and merges low-complexity
+  PRs. For everything else the user decides and merges.
+
 ## Security Workflow mit Snyk
 
 Dieses Projekt nutzt Snyk als ergänzenden Security-Scanner.

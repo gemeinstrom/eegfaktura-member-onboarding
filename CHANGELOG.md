@@ -10,6 +10,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+## 2026-10-25
+
+### Sicherheits-Update Next.js 16.4.3 und Go 1.26.10
+
+- **Next.js 16.3.8 → 16.4.3:** behebt eine neue kritische Lücke (GHSA-2464-fhr4-w9xw, Remote-Code-Ausführung ohne Anmeldung über die Bild-Optimierung). Der Frontend-Image-Build blockierte an dieser Lücke (Trivy-Gate).
+- **Go 1.26.10:** behebt GO-2026-6809 (`crypto/x509`, kompromittierte Zwischenzertifikate), erreichbar über die Core-Anbindung.
+- Gesammelte Dependabot-Updates (#79–#92), u. a. **Playwright 1.64.1** — der GitHub-Runner `ubuntu-latest` ist jetzt Ubuntu 26.04, auf dem Playwright 1.60 Chromium nicht mehr installieren kann (sonst wäre jeder E2E-Lauf rot).
+
 ## 2026-10-13
 
 ### Sicherheits-Updates der Abhängigkeiten
