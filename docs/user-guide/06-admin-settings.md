@@ -473,6 +473,10 @@ Die Auswahl ist binär — ein „optional anhakbar" gibt es nicht mehr.
 3. Wähle über den Schalter **„Mitglied muss zustimmen"** vs **„Nur zur Information"** — der Hinweistext unter dem Schalter erklärt das Verhalten.
 4. Klicke auf **Hinzufügen**.
 
+> **Tipp: Links mit Versionsnummer verwenden.** Gespeichert wird beim Absenden der Link zum Dokument, nicht das Dokument selbst. Verwende daher Links mit Versionsnummer oder Datum (z. B. `…/alb-2026-10.pdf`) und lade eine geänderte Fassung unter einem **neuen** Link hoch, statt die Datei unter derselben Adresse zu ersetzen. So bleibt nachvollziehbar, welche Fassung ein Mitglied bestätigt hat.
+>
+> **Beispiel ALB und Informationsblatt:** Seit 1. 10. 2026 müssen die Allgemeinen Lieferbedingungen und ein Informationsblatt neuen Mitgliedern nachweislich vor Vertragsabschluss zur Verfügung gestellt werden (§ 69 Abs 1 Z 2 ElWG — ob deine EEG darunter fällt, hängt u. a. von der Anlagengröße ab). Lege dafür einfach zwei eigene Dokumente mit **„Mitglied muss zustimmen"** an. Sind ALB und AGB bei euch getrennte Dokumente, legst du beide separat an.
+
 ### Dokument bearbeiten oder löschen
 
 Über die Symbole in der Dokumentenliste kannst du bestehende Einträge bearbeiten oder entfernen.
