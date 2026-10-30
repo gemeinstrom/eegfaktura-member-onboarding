@@ -1,6 +1,6 @@
 # PROJ-124 — SEPA-Lastschriftmandat als Admin-Download
 
-**Status:** Approved
+**Status:** Deployed
 **Created:** 2026-07-12
 **Owner-Auslöser:** Kundenfrage 2026-07-12 („Die Beitrittsbestätigung kann ich nachträglich herunterladen, aber das SEPA-Formular finde ich nicht.")
 
@@ -110,3 +110,7 @@ Audit-Log (Metadaten, keine PII-Werte); approval-pdf + dieser SEPA-Download tun
 das nicht. Optionaler künftiger Angleich, da IBAN betroffen ist.
 
 **Verdikt: APPROVED** — 0 Critical/High/Medium.
+
+## Deployment
+
+- Live in Prod seit 2026-07-14 (Image sha-37cd890).

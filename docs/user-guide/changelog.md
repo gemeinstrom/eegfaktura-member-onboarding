@@ -4,6 +4,12 @@
 
 ---
 
+## 2026-10-25
+
+**Abweichende Zählpunkt-Adresse wird jetzt nach eegFaktura übernommen**
+
+Hat ein Mitglied für einen Zählpunkt eine eigene, von der Mitgliedsadresse abweichende Adresse angegeben, landet diese Adresse beim Import jetzt auch in eegFaktura am Zählpunkt. Bisher wurde dort immer die Adresse des Mitglieds eingetragen. Zählpunkte ohne eigene Adresse übernehmen wie bisher die Mitgliedsadresse. Bereits importierte Mitglieder werden nicht nachträglich geändert — falls nötig, die Zählpunkt-Adresse bitte direkt in eegFaktura korrigieren.
+
 ## 2026-07-14
 
 **„Aktivierung zurücksetzen" führt nicht mehr in eine Sackgasse**

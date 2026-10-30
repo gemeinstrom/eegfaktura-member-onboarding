@@ -289,7 +289,7 @@ Standalone build and standalone migrations in repository `eegfaktura-member-onbo
 
 - **Body size limits** are enforced per route group via the `MaxBodySize` middleware: 256 KiB for `/api/public` and `/api/external`, 1 MiB for `/api/admin`. Decode errors surface as 400.
 - **Trusted-proxy CIDRs** (`TRUSTED_PROXY_CIDRS` env var, default in Helm covers the typical K8s pod/service ranges): `X-Real-IP` / `X-Forwarded-For` headers are only honoured when the immediate peer (`r.RemoteAddr`) is inside a trusted CIDR. Otherwise `realIP()` falls back to `RemoteAddr` so a direct pod-callee cannot spoof the per-IP rate limit.
-- **NetworkPolicies** (`networkPolicies.enabled` in Helm, default `true`): backend ← frontend + ingress controller, frontend ← ingress controller, postgres ← backend + migrate + seed only. The frontend cannot reach Postgres directly.
+- **NetworkPolicies** (`networkPolicies.enabled` in Helm, default `true`): backend ← frontend + ingress controller, frontend ← ingress controller, postgres ← backend + migrate + seed + data-export-cleanup + billing CronJobs only. With a hostNetwork ingress controller, `networkPolicies.ingressNodeCIDRs` adds its node addresses as source. The frontend cannot reach Postgres directly.
 
 ### Health Probes
 

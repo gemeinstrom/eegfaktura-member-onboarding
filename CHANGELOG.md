@@ -10,6 +10,11 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### NetworkPolicies: Ingress im hostNetwork und Billing-CronJobs
+
+- **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
+- **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
+
 ## 2026-10-25
 
 ### Sicherheits-Update Next.js 16.4.3 und Go 1.26.10

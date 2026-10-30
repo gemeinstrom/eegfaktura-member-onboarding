@@ -1,6 +1,6 @@
 # PROJ-125 — reset-activation landet in „Bereit zur Aktivierung" (Sackgassen-Fix)
 
-**Status:** Approved
+**Status:** Deployed
 **Created:** 2026-07-14
 **Owner-Auslöser:** Tester-Rückmeldung Manuel Wurzinger 2026-07-14 — „Mitglieder im Status ‚Importiert' können nicht Aktiv gekennzeichnet werden und werden auch nicht im Core geprüft."
 
@@ -117,3 +117,7 @@ unverändert.
 **Scans:** gosec `-severity medium -confidence medium` (internal/application + internal/http) → **0 Issues** (59 Files). govulncheck → nur stdlib-Baseline (crypto/tls, kein go.mod-Change). Trivy/npm-audit n/a.
 
 **Verdikt: APPROVED** — 0 Critical/High/Medium.
+
+## Deployment
+
+- Live in Prod seit 2026-07-14 (Image sha-37cd890, Migration 000092 angewendet).

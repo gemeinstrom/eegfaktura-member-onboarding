@@ -378,6 +378,6 @@ Aus dem Architektur-Review 2026-05-13 (und Updates seither) — diese Punkte sin
 - **Mail-Outbox** für die nicht-Status-Mails ist noch nicht implementiert (offen, siehe OQ-3 in `docs/open-questions.md`).
 - **Activation-Check 4-MiB-Cap** — `GET /participant` im Core ist auf 4 MiB / ~2000 Teilnehmer gecappt. EEGs > 2000 Teilnehmer brauchen perspektivisch ein „thinner" Core-Endpoint oder Pagination (siehe OQ-5).
 
-> **Was nicht mehr offen ist:** NetworkPolicies sind seit Chart 1.x default-true (backend ← frontend + ingress, frontend ← ingress, postgres ← backend + migrate + seed; siehe `helm/member-onboarding/values.yaml` `networkPolicies.enabled`). Prometheus-Metrics sind seit Chart 1.9.0 live — siehe Section 4 oben.
+> **Was nicht mehr offen ist:** NetworkPolicies sind seit Chart 1.x default-true (backend ← frontend + ingress, frontend ← ingress, postgres ← backend + migrate + seed + data-export-cleanup + Billing-CronJobs; bei Ingress im hostNetwork zusätzlich `networkPolicies.ingressNodeCIDRs`; siehe `helm/member-onboarding/values.yaml` `networkPolicies.enabled`). Prometheus-Metrics sind seit Chart 1.9.0 live — siehe Section 4 oben.
 
 Vollständige Liste: siehe Architektur-Review-Bericht.

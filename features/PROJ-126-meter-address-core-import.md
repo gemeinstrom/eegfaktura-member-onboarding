@@ -1,6 +1,6 @@
 # PROJ-126 — Abweichende Zählpunkt-Adresse beim Core-Import übernehmen
 
-**Status:** Approved
+**Status:** Deployed
 **Created:** 2026-10-13
 **Auslöser:** Nutzer-Rückmeldung 2026-10-13 — „die Adresse des Zählpunkts wird nicht übernommen, nur die Adresse des Mitglieds."
 
@@ -46,3 +46,7 @@ Da die vier Adress-Spalten serverseitig all-or-nothing sind, entscheidet
 
 - `go build ./...` + `go test ./...` grün; gosec auf `internal/importing` 0 Findings.
 - Security-Bewertung (Import-Logik): keine neue Eingabe-Oberfläche — die Adressfelder sind bereits beim Submit/Admin-Edit serverseitig validiert (Längen, all-or-nothing). Werte gehen nur JSON-serialisiert an den Core (kein SQL/Template-Kontext). Tenant-Isolation, Status-Transitions und Auth unberührt. Keine PII in Logs hinzugefügt.
+
+## Deployment
+
+- Live in Prod seit 2026-10-25 (helm Revision 28, Image sha-efeb910).
