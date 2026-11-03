@@ -363,7 +363,7 @@ this repository (2026-10-25). Goal: a human reviewer should not have to find the
 
   | | Lens | How | Model |
   |---|---|---|---|
-  | **Review 1** | Correctness: bugs, edge cases, tests | the subagent runs the built-in `/code-review high` on the PR | same as the main session |
+  | **Review 1** | Correctness: bugs, edge cases, tests; plus code quality | the subagent runs the built-in `/code-review high` on the PR and then the code-quality checklist below | same as the main session |
   | **Review 2** | Domain reviewer: data variants, side effects, PR/CHANGELOG/spec claims | the subagent follows the domain checklist below | a **different** model (e.g. Sonnet when the session runs Opus) |
 
 - **Once per PR, at the end:** start the reviews only when everything for the PR is in (code,
@@ -388,6 +388,28 @@ this repository (2026-10-25). Goal: a human reviewer should not have to find the
   what the reviews found and what was fixed or deliberately left.
 - For large or critical PRs, suggest `/code-review ultra` (multi-agent cloud review) to the
   user — it is billed and only the user can start it.
+
+**Code-quality checklist (review 1, after `/code-review`)** — `/code-review` looks for bugs; it does not
+reliably catch code that is harder than it needs to be. The reviewer also reports:
+
+- unnecessary complexity: code that could be much shorter, abstractions or options with one user, own
+  machinery where the framework (chi, `database/sql`, react-hook-form, zod, shadcn/ui) or an existing helper already
+  does it;
+- duplication, and needless differences between parallel paths for the same concept (field names,
+  defaults, error handling, accepted values) — e.g. Go backend vs. Next.js frontend (export catalog,
+  validation, calculations), public form vs. admin form, the several mail send paths (submit, resend,
+  re-submit). Read the parallel path's code when the PR touches such a shared concept;
+- dead code, leftovers and comments that no longer match;
+- test fragility: global state left behind (env vars, `slog` default logger, package-level vars,
+  default HTTP clients, vitest mocks/timers not restored), order dependence, sleeps or timing (also in
+  Playwright), tests that pass only alone, slow setups, assertions on wording or other implementation
+  details instead of behaviour.
+
+Each with file and line, a concrete simpler alternative and the effort (small, medium, large). Fixed in the
+same pass are what is small or removes a source of failure; larger refactorings are listed in the PR as
+follow-up. Why (taken over from eegfaktura 2026-11-03): there, a logging change needed many test rounds; a
+later quality review found the causes — shared test JVM, substring-matching scanners, a second masking
+layer — none of which the correctness reviews had reported.
 
 **Domain checklist (review 2, minimum)** — the reviewer must:
 

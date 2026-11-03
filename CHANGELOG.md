@@ -15,6 +15,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
 - **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
 
+## 2026-11-03
+
+### Dependabot-Updates gesammelt
+
+- Gesammelte Dependabot-Updates (#94, #97–#105): React 19.3.1, Tiptap 3.32.2, `@hookform/resolvers` 6 (Breaking Change betrifft nur den Effect-Resolver, wir nutzen zod), tsx, setup-node 7, Docker-/CodeQL-/gosec-Actions.
+- Schließt alle 10 offenen Dependabot-Meldungen: undici (DoS, high), `@vitest/mocker`, postcss-selector-parser 6.1.5 — alle nur Test-/Build-Tooling. fast-uri fällt weg, weil resolvers 6 ajv nicht mehr mitzieht.
+- Offen, nur Dev-Tooling: minimatch über eslint (GHSA-g3hv-75wg-m249), Fix nur in Major 11.
+
 ## 2026-10-25
 
 ### Sicherheits-Update Next.js 16.4.3 und Go 1.26.10
