@@ -17,6 +17,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-07
 
+### PDFs nach eegFaktura hochladen — Oberfläche (PROJ-129, Teil 2)
+
+- Antrags-Detailansicht: Menü **Nach eegFaktura hochladen ▾** (SEPA-Mandat, Beitrittsbestätigung, Beitrittserklärung) neben „Herunterladen" — nur Pro-Edition, nur ab `imported`, gleiche Dokument-Regeln wie der Download (gemeinsamer Helfer `src/lib/application-documents.ts`). Bestätigungsdialog nennt das Ziel-Mitglied in eegFaktura; bei 409 `already_uploaded` Rückfrage mit Datum und erneutem Senden mit `confirmRepeat`; Menü gesperrt, solange ein Upload läuft. Neuer Bereich **Dokumente in eegFaktura** (Protokoll-Tabelle). Ist der Upload nicht verfügbar (503, z. B. ohne https-`CORE_BASE_URL`), bleibt beides ausgeblendet.
+- Neuer Endpunkt `GET /api/admin/applications/{id}/eegfaktura-uploads/target`: nennt vor dem Upload das eegFaktura-Mitglied (Nummer, Name, Quelle `import`/`member_number`), damit eine vertippte Mitgliedsnummer bei Aktivierung ohne Import auffällt. Gleiche Prüfungen wie der Upload, schreibt nichts; gleiche Mitglieds-Suche wie der Upload (gemeinsame Funktion). Zusätzlich meldet er 409 `participant_not_found`, wenn die beim Import gespeicherte Teilnehmer-ID in der gelesenen Teilnehmerliste fehlt (Mitglied in eegFaktura gelöscht).
+- `GET .../eegfaktura-uploads` liefert zusätzlich `eegEdition` (die Oberfläche bietet den Upload nur für Pro an); `uploads` ist ohne Einträge ein leeres Array statt `null`.
+- User-Guide: Abschnitt „Dokumente nach eegFaktura hochladen" (Antrags-Detailansicht), Verweis in „E-Mails & PDFs", Was-ist-neu-Eintrag.
+
 ### PDFs nach eegFaktura hochladen — Backend (PROJ-129, Teil 1)
 
 - Neue Admin-Endpunkte `POST`/`GET /api/admin/applications/{id}/eegfaktura-uploads`: SEPA-Mandat, Beitrittsbestätigung oder (unsignierte) Beitrittserklärung werden mit denselben Generatoren wie „Herunterladen" erzeugt und als Vertragsdokument zum Mitglied in den eegFaktura-Filestore hochgeladen. Nur Pro-Edition, nur nach dem Import; Mitglied ohne Import-Referenz (manuelle Aktivierung) wird über die Mitgliedsnummer im Core gesucht.

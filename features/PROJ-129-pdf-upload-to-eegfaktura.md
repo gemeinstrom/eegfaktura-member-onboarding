@@ -290,6 +290,19 @@ Offen / in der Test-Zone zu verifizieren:
 - Strawberry nimmt `$userId: UUID` als Variable an (Abweichung von eegfaktura-web, das die ID in den Query-String schreibt).
 - Kein Schutz gegen zwei gleichzeitige Klicks (UI sperrt den Button, PR 2). Eine veraltete `target_participant_id` erkennt der Filestore nicht (er prüft die Teilnehmer-ID nicht).
 
+### PR 2 — Frontend + Ziel-Mitglied-Endpunkt (2026-11-07)
+
+- Neuer Endpunkt `GET /api/admin/applications/{id}/eegfaktura-uploads/target` (Owner-Freigabe 2026-11-07, Security-Review-Fund „vertippte Mitgliedsnummer"): `{participantId, participantNumber?, displayName?, source: "import"|"member_number"}`. Prüfungen wie der `POST` in derselben Reihenfolge (`checkTenantAccess`, 503 ohne Filestore, PROJ-71-Cool-Down 423, 503 ohne Admin-Sitzung, 403 `pro_edition_required`, 409 `not_imported`). Fehler: 409 `participant_not_found`, 502 `participant_lookup_failed` (deutsche `message`). Schreibt kein Protokoll.
+  - Gemeinsamer Code mit dem Upload: `loadEligible` (Pro + Status) und `resolveParticipant` (vorher `resolveParticipantID`); `findParticipantIDByNumber` → `findParticipantByNumber` (liefert den Eintrag statt nur die ID).
+  - Bei gespeicherter `target_participant_id` liest der Endpunkt die Teilnehmerliste für Nummer und Name. Fehlt die ID in der gelesenen Liste, ist das Mitglied in eegFaktura gelöscht → 409 `participant_not_found`, der Dialog bietet kein Hochladen an (Fix-Pass 2026-11-07). Ist die Liste nicht lesbar, antwortet er 200 mit der gespeicherten ID und ohne Nummer/Name (`source: "import"`) — der Upload braucht nur die ID; der Dialog zeigt dann „das beim Import angelegte Mitglied". Der Upload selbst liest die Liste in diesem Fall weiterhin nicht (kein zusätzlicher Core-Aufruf).
+  - `displayName` = Core-`firstname` + `lastname` (Firmen/Vereine/Gemeinden tragen ihren Namen in `firstname`, siehe `docs/import-mapping.md`).
+- Edition in der Oberfläche: Die Detailansicht kannte die Edition bisher nicht (kein Edition-Feld in Antrag oder EEG-Einstellungen für Tenant-Admins). Explizites Signal statt 403-Raten: `GET .../eegfaktura-uploads` liefert zusätzlich `eegEdition`. Das Protokoll selbst bleibt ohne Edition-/Status-Gate lesbar (nach Downgrade sichtbar).
+- Frontend: `src/lib/api/document-uploads.ts` (über `adminRequest`), `src/lib/application-documents.ts` (Dokument-Regeln gemeinsam für „Herunterladen" und „Nach eegFaktura hochladen", Fehler-Labels, Ziel-Text; Vitest), `src/components/admin-eegfaktura-uploads.tsx` (Menü + Bestätigungs-/Rückfrage-Dialog, Protokoll-Tabelle), eingebunden in `admin-application-detail.tsx`.
+  - Sichtbarkeit: Menü nur bei `eegEdition = pro` und Status `imported`/`ready_for_activation`/`activated` (sonst ausgeblendet, kein deaktivierter Button); Bereich „Dokumente in eegFaktura" bei Pro nach dem Import oder sobald Einträge existieren; bei 503 (Upload nicht konfiguriert) beides ausgeblendet. Ein 503 beim Upload/Ziel wegen fehlender Admin-Sitzung zeigt die Server-Meldung statt die Aktion auszublenden.
+  - Bestätigungsdialog lädt das Ziel bei jedem Öffnen neu; bei `source: "member_number"` Hinweis, das Mitglied zu prüfen; bei Fehler Grund, kein Hochladen-Button. 409 `already_uploaded` → zweiter Dialog mit Datum → erneuter `POST` mit `confirmRepeat: true`. Menü-Button gesperrt („Wird hochgeladen…"), solange ein Upload läuft. Erfolg → Toast + Protokoll neu laden; 502 → Server-`message` als Fehler-Toast + Protokoll neu laden.
+  - Spalte „Von": Das Protokoll speichert nur die Keycloak-Subject-ID; angezeigt werden die ersten 8 Zeichen (voller Wert im Tooltip). Ein Admin-Name bräuchte eine zusätzliche Spalte (Follow-up, falls gewünscht).
+- User-Guide: `04-admin-applications.md` Abschnitt „Dokumente nach eegFaktura hochladen" + Tabellenzeile, `07-emails-and-pdfs.md` Verweis, `changelog.md`. Screenshots fehlen (Generator braucht ein Backend mit Filestore) — Follow-up.
+
 ### Bekannte Grenzen Welle 1 (Reviews 2026-11-07, bewusst akzeptiert bzw. Folge-PRs)
 
 - **Doppelte Kopie in eegFaktura ohne Rückfrage** möglich, wenn (a) zwei Requests gleichzeitig laufen
@@ -298,7 +311,16 @@ Offen / in der Test-Zone zu verifizieren:
   Filestore schon gespeichert hat (als `filestore_unreachable` protokolliert). Abhilfe (a): PR 2 sperrt
   den Button während des Uploads; in eegFaktura lässt sich eine Kopie löschen.
 - **Gelöschtes Mitglied in eegFaktura:** zeigt `target_participant_id` auf ein dort gelöschtes Mitglied,
-  meldet der Filestore trotzdem Erfolg (er prüft den Teilnehmer nicht).
+  meldet der Filestore trotzdem Erfolg (er prüft den Teilnehmer nicht). Seit Welle 2 fängt der
+  Bestätigungsdialog das ab (Ziel-Endpunkt → 409 `participant_not_found`, sofern die Teilnehmerliste
+  lesbar ist); der `POST` selbst prüft weiterhin nicht.
+- **Ziel kann sich zwischen Dialog und Upload ändern:** der Dialog zeigt das Ziel, der `POST` ermittelt es
+  erneut. Ändern sich Mitgliedsnummer oder Teilnehmer-ID dazwischen, kann der Upload an ein anderes
+  Mitglied gehen. Follow-up (PR 3): bestätigte `participantId` mitsenden, bei Abweichung ablehnen.
+- **Teilnehmerliste bei jedem Dialog-Öffnen:** jedes Öffnen des Bestätigungsdialogs liest die komplette
+  Core-Teilnehmerliste der EEG (akzeptiert, wie im Import-Dialog).
+- **Spalte „Von":** zeigt nur eine gekürzte Keycloak-ID (ersten 8 Zeichen, voller Wert im Tooltip), keinen
+  Admin-Namen.
 - **Zielmitglied wechselt nach Reset + erneutem Import:** die „bereits hochgeladen"-Prüfung kennt nur
   (Antrag, Dokumentart), nicht das Zielmitglied → Rückfrage, obwohl das neue Mitglied das Dokument
   noch nicht hat; „erneut hochladen" bestätigen genügt.
@@ -365,6 +387,36 @@ Mitgliedsnummer (kein Path Traversal), ohne https-`CORE_BASE_URL` = Funktion aus
 **Ergebnis:** 0 Critical, 0 High, 0 Medium, 2 Low, 2 Info. Welle 1 ist **merge-bereit** (Funktion
 bleibt ohne https-`CORE_BASE_URL` inaktiv). `/security-review` erforderlich (neue Core-Anbindung, Auth,
 Tenant-Isolation, Helm, Migration).
+
+### Welle 2 — Frontend + Ziel-Endpoint (PR #122), 2026-11-07
+
+**QA-Ergebnis:** 0 Critical, 0 High, 0 Medium. AC-1 bis AC-8 und AC-14 bis AC-16 bestanden (mit
+Anmerkungen, siehe unten); AC-9 bis AC-13 sind Welle 3 (Automatik, EEG-Schalter). Offen: Browser- und
+Responsive-Prüfung (375/768/1440) und die Test-Zone-Prüfungen (Admin-Token beim Filestore, Dokument beim
+richtigen Mitglied); Screenshots im User-Guide fehlen (Generator braucht ein Backend mit Filestore).
+Neu: `src/components/admin-eegfaktura-uploads.test.tsx` (Dialog mit Ziel-Mitglied, kein Hochladen bei
+nicht auflösbarem Ziel, Rückfrage bei 409, Fehler-Toast + Neuladen bei 502, veraltete Ziel-Antwort).
+
+**Reviews / Security:** `/security-review` APPROVED (ein Low: roher Core-Fehlertext im Log). Code- und
+Domain-Review sowie QA meldeten u. a. einen High-Fund (Exchange-Modus) und mehrere Robustheits-Punkte.
+
+**Behoben im Fix-Pass:**
+- High: Ziel-Abfrage und Upload senden `X-Core-Authorization` (`coreAuthHeader` nach
+  `src/lib/api/_internal.ts`) — ohne den Header nutzten sie im `CORE_AUTH_MODE=exchange` das falsche Token.
+- Protokoll wird erst mit Sitzung geladen; Zustand je Antrag (kein Durchsickern von Edition/Einträgen nach
+  Antragswechsel); ein fehlgeschlagenes Neuladen behält die zuletzt geladene Liste (Menü verschwindet nicht);
+  Fehlerkarte nur in Status, in denen ein Upload möglich ist (nie bei Entwürfen).
+- Bestätigungsdialog übernimmt nur die Antwort der zuletzt gestarteten Ziel-Abfrage; Dialoge behalten Titel
+  und Text während der Schließ-Animation; Lade-Skeleton mit `role="status"` + Screenreader-Text.
+- Backend: `List` liefert bei fehlendem Entrypoint das Protokoll mit leerer Edition statt eines Fehlers;
+  `Target` meldet 409 `participant_not_found`, wenn die gespeicherte Teilnehmer-ID in der gelesenen
+  Core-Liste fehlt; Logs der Mitglieds-Suche nur mit HTTP-Status bzw. Fehlertyp (kein Core-Antworttext).
+- Doku: api-spec §6.16a, User-Guide (Rückfrage-Dialog ohne wörtliches Zitat, drei Dropdowns), Bekannte Grenzen.
+
+**Abschluss-Review (Fix-Commit):** behoben — Swagger-Beschreibung des Ziel-Endpoints (409 bei gelöschtem
+Mitglied), Log-Helfer redigiert nur Core-HTTP-/Parse-Fehler (Timeout/Token/Netzwerk bleiben lesbar),
+Upload-Menü bei abgeschalteter Funktion ausgeblendet. Follow-up: Render-Test für das Status-Modell der
+Detailansicht; Upload (POST) prüft das gelöschte Mitglied nicht selbst (nur der Dialog).
 
 ## Deployment
 _To be added by /deploy_

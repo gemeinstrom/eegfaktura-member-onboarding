@@ -6,6 +6,10 @@
 
 ## 2026-11-07
 
+**PDFs direkt nach eegFaktura hochladen (Pro)**
+
+In der Antrags-Detailansicht gibt es nach dem Import das neue Menü **Nach eegFaktura hochladen ▾**: SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung landen damit beim Mitglied in eegFaktura unter den Dokumenten. Vor jedem Upload nennt ein Dialog das Mitglied in eegFaktura, an das das Dokument geht; ein zweiter Upload desselben Dokuments braucht eine eigene Bestätigung. Der neue Bereich **Dokumente in eegFaktura** zeigt, was wann hochgeladen wurde oder warum ein Upload fehlgeschlagen ist. Die vom Vorstand unterschriebene Beitrittserklärung musst du weiterhin selbst in eegFaktura ergänzen. Verfügbar in der Pro-Edition.
+
 **Wechselrichter-Leistung geht beim Bearbeiten nicht mehr verloren**
 
 Hat ein Mitglied bei einer PV-Anlage die Leistung des Wechselrichters angegeben, wurde dieser Wert gelöscht, sobald ein Admin den Antrag bearbeitet und gespeichert hat. Das ist behoben: Die Wechselrichter-Leistung bleibt erhalten, lässt sich beim Bearbeiten neben der PV-Leistung ändern und wird in der Zählpunkt-Übersicht des Antrags angezeigt. Bereits verlorene Werte werden nicht wiederhergestellt — bei Bedarf bitte beim Mitglied nachfragen und neu eintragen.

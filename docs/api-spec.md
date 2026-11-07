@@ -2031,11 +2031,38 @@ Keycloak JWT. Tenant-admin access is checked against the application's RC number
 
 ### GET `/api/admin/applications/{id}/eegfaktura-uploads`
 
-Upload protocol of the application, newest first. Same auth and tenant check; `404` for an unknown application, `503` when the filestore is not wired (see POST).
+Upload protocol of the application, newest first (empty array when there is none), plus the edition of the application's EEG (`standard`/`pro`) — the admin UI offers the upload action only for `pro`. Same auth and tenant check; `404` for an unknown application, `503` when the filestore is not wired (see POST). Not subject to the edition or status gate (the protocol stays readable after a downgrade).
 
 ```json
-{ "uploads": [ { "id": "uuid", "documentType": "joining_confirmation", "trigger": "manual", "result": "failed", "fileName": "Beitrittsbestaetigung-A005.pdf", "errorCode": "participant_not_found", "createdAt": "…" } ] }
+{ "uploads": [ { "id": "uuid", "documentType": "joining_confirmation", "trigger": "manual", "result": "failed", "fileName": "Beitrittsbestaetigung-A005.pdf", "errorCode": "participant_not_found", "createdAt": "…" } ], "eegEdition": "pro" }
 ```
+
+### GET `/api/admin/applications/{id}/eegfaktura-uploads/target`
+
+The eegFaktura member an upload of this application would go to — shown in the confirm dialog before every upload, so that a mistyped member number (activation without import, PROJ-53) is noticed before the document lands at another member. Read-only: no upload, no `document_upload` row.
+
+Same guards as the `POST`, in the same order: tenant check, `503` if not configured, PROJ-71 cool-down (`423`), admin session token (`503`), `pro` edition (`403 pro_edition_required`), status `imported`/`ready_for_activation`/`activated` (`409 not_imported`).
+
+Resolution (same code path as the upload):
+- `source: "import"` — `application.target_participant_id` is set. The core participant list (`GET /api/participant`) is read to show number and name. If the list was read and the id is not in it, the member was deleted in eegFaktura → `409 participant_not_found`. If the list cannot be read, the response still carries the stored `participantId` without `participantNumber`/`displayName` — the upload only needs the id. The `POST` itself does not read the list for a stored id (the filestore does not check the participant either).
+- `source: "member_number"` — no stored id (PROJ-53); the participant is looked up by `member_number` in the core list, exactly as the upload does.
+
+`displayName` = core `firstname` + `lastname` (companies, associations and municipalities carry their name in `firstname`, see `docs/import-mapping.md`).
+
+### Response 200
+```json
+{ "participantId": "uuid", "participantNumber": "A015", "displayName": "Max Mustermann", "source": "member_number" }
+```
+
+### Errors
+- `400 validation_error` — malformed id
+- `403 forbidden` / `403 pro_edition_required`
+- `404 not_found`
+- `409 not_imported`
+- `409 participant_not_found` — stored id not in the core participant list (member deleted in eegFaktura), PROJ-53: member number not (or more than once) in eegFaktura, or no member number / malformed stored id; `message` German
+- `423 contract_suspended`
+- `502 participant_lookup_failed` — PROJ-53: core participant list not readable; `message` German
+- `503 service_unavailable` — filestore not wired (see POST), or no admin session token
 
 ---
 
@@ -2893,6 +2920,7 @@ und einer generischen Fehlermeldung:
 - `GET  /api/admin/applications/{id}/approval-pdf`
 - `GET  /api/admin/applications/{id}/sepa-mandate.pdf` (PROJ-124)
 - `POST /api/admin/applications/{id}/eegfaktura-uploads` (PROJ-129)
+- `GET  /api/admin/applications/{id}/eegfaktura-uploads/target` (PROJ-129)
 - `POST /api/admin/reconciliation/run` (PROJ-69)
 - `POST /api/admin/eeg/resync-from-core` (PROJ-32)
 - `POST /api/admin/sepa-mandate/renewal`

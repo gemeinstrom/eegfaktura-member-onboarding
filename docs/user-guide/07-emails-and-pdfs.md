@@ -66,6 +66,10 @@ das Menü **Herunterladen ▾** erneut abrufen — ohne eine Mail auszulösen:
 Das SEPA-Mandat wird beim Download unverändert reproduziert; vor dem Import trägt
 es noch keine Mandatsreferenz, danach die Mitgliedsnummer.
 
+In der Pro-Edition kannst du dieselben PDFs nach dem Import auch direkt beim Mitglied
+in eegFaktura ablegen: Menü **Nach eegFaktura hochladen ▾**, siehe
+[Dokumente nach eegFaktura hochladen](04-admin-applications.md#dokumente-nach-eegfaktura-hochladen).
+
 ---
 
 ## Wann das Mitglied *nichts* bekommt
