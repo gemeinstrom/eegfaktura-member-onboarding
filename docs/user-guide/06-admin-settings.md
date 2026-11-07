@@ -455,7 +455,7 @@ Klicke auf **Konfiguration speichern**, um die Änderungen zu übernehmen.
 
 ![Rechtsdokumente](images/admin-settings-legal.png)
 
-Hier verwaltest du EEG-spezifische Dokumente (z.B. Satzung, Nutzungsbedingungen). Jedes Dokument wird auf eine von zwei Arten behandelt:
+Hier verwaltest du EEG-spezifische Dokumente (z.B. Satzung, Nutzungsbedingungen). Jedes Dokument wird auf eine von zwei Arten behandelt. In der Eingangsbestätigung an das Mitglied erscheint jedes Dokument mit Link, der Adresse und dem passenden Vermerk:
 
 | Modus | Anzeige im Formular | Was wird protokolliert |
 |---|---|---|
@@ -475,7 +475,7 @@ Die Auswahl ist binär — ein „optional anhakbar" gibt es nicht mehr.
 
 > **Tipp: Links mit Versionsnummer verwenden.** Gespeichert wird beim Absenden der Link zum Dokument, nicht das Dokument selbst. Verwende daher Links mit Versionsnummer oder Datum (z. B. `…/alb-2026-10.pdf`) und lade eine geänderte Fassung unter einem **neuen** Link hoch, statt die Datei unter derselben Adresse zu ersetzen. So bleibt nachvollziehbar, welche Fassung ein Mitglied bestätigt hat.
 >
-> **Beispiel ALB und Informationsblatt:** Seit 1. 10. 2026 müssen die Allgemeinen Lieferbedingungen und ein Informationsblatt neuen Mitgliedern nachweislich vor Vertragsabschluss zur Verfügung gestellt werden (§ 69 Abs 1 Z 2 ElWG — ob deine EEG darunter fällt, hängt u. a. von der Anlagengröße ab). Lege dafür einfach zwei eigene Dokumente mit **„Mitglied muss zustimmen"** an. Sind ALB und AGB bei euch getrennte Dokumente, legst du beide separat an.
+> **Beispiel ALB und Informationsblatt:** Seit 1. 10. 2026 müssen die Allgemeinen Lieferbedingungen und ein Informationsblatt neuen Mitgliedern nachweislich vor Vertragsabschluss zur Verfügung gestellt werden (§ 69 Abs 1 Z 2 ElWG — ob deine EEG darunter fällt, hängt u. a. von der Anlagengröße ab). Lege dafür einfach zwei eigene Dokumente mit **„Mitglied muss zustimmen"** an. Sind ALB und AGB bei euch getrennte Dokumente, legst du beide separat an. Die Eingangsbestätigung an das Mitglied führt jedes Dokument mit Link und sichtbarer Adresse auf — so ist die Übergabe auch im Postfach des Mitglieds dokumentiert.
 
 ### Dokument bearbeiten oder löschen
 

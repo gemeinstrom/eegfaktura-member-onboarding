@@ -235,7 +235,7 @@ internal/
 **HTTP Error Responses**:
 - `400 Bad Request` for validation errors with detailed field messages
 - `404 Not Found` for invalid application IDs or registration slugs
-- `409 Conflict` for status conflicts or duplicate metering points
+- `409 Conflict` for status conflicts; duplicate metering points → `400 validation_error` (field `meteringPoints`)
 - `500 Internal Server Error` for unexpected database/system errors
 
 **Custom Error Types**:

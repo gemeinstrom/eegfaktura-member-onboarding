@@ -17,6 +17,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-07
 
+### Fehlerbehandlung: 409/400 statt 500 (Audit K6–K8)
+
+- Klick auf den Bestätigungs-Link, nachdem der Antrag schon abgelehnt oder weiterbearbeitet wurde, liefert jetzt 409 (Konflikt, Antrag wartet nicht mehr auf Bestätigung) statt eines Serverfehlers.
+- Admin-Aktionen, die an einem gleichzeitigen Statuswechsel scheitern, melden 409 (Konflikt) statt 500; öffentliche und Admin-Endpunkte nutzen dafür eine gemeinsame Fehlerzuordnung.
+- Admin-Bearbeitung mit doppelt erfasstem Zählpunkt wird jetzt als Validierungsfehler (400) abgelehnt statt mit einem Serverfehler; das Admin-Formular zeigt dabei noch nicht an, welcher Zählpunkt doppelt ist (Follow-up).
+- Die Konfliktmeldungen „wartet nicht mehr auf Bestätigung" / „nicht mehr im Status Eingereicht" sind jetzt deutsch (die Bestätigungsseite zeigt sie dem Mitglied an).
+
 ### Admin-Bearbeiten: Wechselrichter-Leistung bleibt erhalten (Audit K2)
 
 - Behoben: Das Admin-Bearbeiten-Formular kannte `inverterPowerKw` nicht; da das Backend beim Speichern alle Zählpunkte ersetzt, wurde die Wechselrichter-Leistung bei jedem Admin-Speichern genullt. Das Feld ist jetzt im Formular editierbar (neben PV-Leistung) und in der Zählpunkt-Tabelle der Detailansicht sichtbar.
@@ -32,6 +39,15 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - Bestandsfunde (63, v. a. neue React-Compiler-Regeln aus eslint-plugin-react-hooks 7) sind in `eslint-suppressions.json` eingefroren — neuer Code muss sauber sein, Abbau als Follow-up.
 - Neue Regel: kein `placeholder` auf Eingabefeldern (Hint-Popover verwenden); `react/no-unescaped-entities` aus.
 - Behoben: Die Sortier-Köpfe der Antragsliste wurden bei jedem Render als neue Komponente angelegt und dadurch neu montiert; die Links „aktuelle Fassung" auf den archivierten AGB-/AVV-Seiten nutzen jetzt `next/link`.
+
+### Rechtsdokumente mit Link in der Eingangsbestätigung (PROJ-127)
+
+- Die Eingangsbestätigung an das Mitglied zeigt jedes Rechtsdokument mit Link auf die beim Absenden gespeicherte URL und die URL zusätzlich als Text (ElWG § 69: ALB und Informationsblatt nachweislich bereitstellen). Gilt für Erst-Submit, erneuten Versand und Re-Submit.
+- Info-Dokumente (`consent_type = informational`) heißen jetzt „Zur Kenntnis genommen am …" statt „Zugestimmt am …".
+- Nur `http(s)`-URLs werden klickbar; alles andere erscheint als Text. EEG-Benachrichtigung, PDFs und Schema unverändert.
+- **Sicherheit:** Beim Einreichen übernahm der Server Titel und URL der Zustimmungen ungeprüft aus dem öffentlichen Request — so hätte ein fremder Link in die Eingangsbestätigung gelangen können. Jetzt zählen nur Dokumente, die die EEG konfiguriert hat (bzw. die zentrale Datenschutzerklärung); Titel und URL kommen aus der Konfiguration. Passt ein angehaktes Dokument nicht (Admin hat es geändert, während das Formular offen war), lädt das Formular die aktuellen Dokumente nach und bittet um erneute Bestätigung — die übrigen Eingaben bleiben erhalten.
+- Re-Submit nach Rückfrage speichert die Zustimmungen nicht mehr doppelt; die ursprünglichen Einträge mit Zeitstempel bleiben.
+- Text-Version aller Mails: `<br>` wird jetzt zum Zeilenumbruch (vorher klebten Zeilen zusammen).
 
 ## 2026-11-03
 

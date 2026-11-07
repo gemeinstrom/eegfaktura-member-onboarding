@@ -14,6 +14,10 @@ Hat ein Mitglied bei einer PV-Anlage die Leistung des Wechselrichters angegeben,
 
 Im Registrierungsformular ist der Button **„Zählpunkt hinzufügen"** jetzt farbig und größer, und solange erst ein Zählpunkt eingetragen ist, weist ein kurzer Hinweis darauf hin, dass weitere Zählpunkte (z. B. für eine PV-Anlage) unten hinzugefügt werden können.
 
+**Rechtsdokumente in der Eingangsbestätigung mit Link**
+
+Die Eingangsbestätigung an das Mitglied führt jetzt jedes Rechtsdokument (z. B. Datenschutzerklärung, Satzung, ALB, Informationsblatt) mit **Link und sichtbarer Adresse** auf. So hat das Mitglied die Dokumente in seinem Postfach jederzeit wieder zur Hand, und die Übergabe ist dort dokumentiert — auch wenn die Mail ausgedruckt wird. Dokumente mit **„Nur zur Information"** heißen in der Mail jetzt korrekt **„Zur Kenntnis genommen am …"** statt „Zugestimmt am …". Es gilt der Link, der beim Absenden gespeichert wurde. Du musst dafür nichts einstellen.
+
 ## 2026-10-25
 
 **Abweichende Zählpunkt-Adresse wird jetzt nach eegFaktura übernommen**

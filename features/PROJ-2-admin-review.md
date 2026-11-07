@@ -277,7 +277,7 @@ PUT  /api/admin/applications/{id}
   → AdminHandler.UpdateApplication
       → AdminApplicationService.AdminUpdateApplication(id, req)
           → ApplicationRepository.GetByID(id)      [status check]
-          → MeteringPointRepository.ValidateUniqueMeteringPoints(points)
+          → validateUniqueMeteringPoints(points) (Paket application, seit Audit 2026-11-07 K8)
           → db.Begin()
               → ApplicationRepository.UpdateAdmin(tx, app)
               → MeteringPointRepository.CreateBulkTx(tx, id, points)  [if provided]

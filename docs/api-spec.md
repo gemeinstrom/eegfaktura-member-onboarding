@@ -312,10 +312,9 @@ Required-validation runs per-subfield: each name/email/phone is required only wh
 ```
 
 ### Errors
-- `400` validation error
+- `400` validation error (incl. duplicate metering point number in the same request, field `meteringPoints`)
 - `404` unknown `rcNumber`
 - `410` registration disabled (`is_active = false`)
-- `409` duplicate metering point number in the same request
 
 ---
 
@@ -432,7 +431,7 @@ Optional body with consent snapshots:
 }
 ```
 
-`consents` is optional. Each entry is a snapshot of the document title and URL at the time of submission. If not provided, no consent entries are stored. The backend does not validate consent entries against configured `legal_document` records — the frontend is responsible for sending the correct entries.
+`consents` is optional. Each entry names a document the member ticked; only `url` is used to match it against the EEG's configured `legal_document` records or the central privacy policy (when the EEG shows it). The stored snapshot (title, URL, central-policy flag, timestamp) is taken from that configuration, not from the request (PROJ-127). An entry whose URL matches no configured document rejects the submit with `400 validation_error` (field `consents`) — typically a stale form after the admin changed a document; reloading the form fixes it. Non-required documents that were not ticked are stored server-side as `informational`. On a re-submit after `needs_info`, documents already recorded keep their original row and timestamp.
 
 ### Rules
 Before submit, the following must be set:
@@ -497,7 +496,8 @@ Consumes the single-use token sent in the welcome mail. On success, transitions 
 
 ### Errors
 - `400` token missing, malformed, expired (>30 days old), or no matching application
-- All other failure modes are rendered as `400` with the generic German message "Der Bestätigungs-Link ist ungültig oder abgelaufen" — token enumeration is not possible from the response.
+- All other token failure modes are rendered as `400` with the generic German message "Der Bestätigungs-Link ist ungültig oder abgelaufen" — token enumeration is not possible from the response.
+- `409` valid token, but the application is no longer `submitted` (e.g. rejected by the admin before the click)
 
 ### Side effects on success
 - `application.email_confirmed_at = NOW()` and `application.email_confirmation_used_at = NOW()` (first click only)
