@@ -1,8 +1,8 @@
 # PROJ-85: ESLint v9 Flat-Config-Migration
 
-## Status: Planned
+## Status: In Review
 **Created:** 2026-06-08
-**Last Updated:** 2026-06-08
+**Last Updated:** 2026-11-07
 **Typ:** Dev-Tooling
 **Prio:** Niedrig (kein Production-Blocker)
 
@@ -63,20 +63,20 @@ deprecated zugunsten direktem ESLint-Aufruf.
 
 ## Akzeptanzkriterien (Skizze)
 
-- [ ] **AC-1** ESLint v9 Flat-Config in `eslint.config.js` (oder
+- [x] **AC-1** ESLint v9 Flat-Config in `eslint.config.js` (oder
   `eslint.config.mjs`) als Single source of truth
-- [ ] **AC-2** Alle bisherigen `.eslintrc.*`-Dateien entfernt
-- [ ] **AC-3** `npm run lint` führt `eslint .` aus, ohne `next lint`
+- [x] **AC-2** Alle bisherigen `.eslintrc.*`-Dateien entfernt
+- [x] **AC-3** `npm run lint` führt `eslint .` aus, ohne `next lint`
   (Next-Lint ist seit Next 15 deprecated)
-- [ ] **AC-4** Lint läuft clean über den bestehenden `src/`-Code (etwaige
+- [x] **AC-4** Lint läuft clean über den bestehenden `src/`-Code (etwaige
   Findings werden entweder gefixt oder bewusst per `// eslint-disable-next-line`-
   Kommentar mit Begründung markiert)
-- [ ] **AC-5** Wichtige Memory-Regeln als Lint-Pattern (wo möglich):
+- [x] **AC-5** Wichtige Memory-Regeln als Lint-Pattern (wo möglich):
   - `feedback_no_placeholders`: Custom-Regel oder Override für
     `placeholder=`-Attribut auf Input/Textarea/Select
-- [ ] **AC-6** CI-Workflow `CI Build & Test` führt `npm run lint` als
+- [x] **AC-6** CI-Workflow `CI Build & Test` führt `npm run lint` als
   Schritt vor `npm run build` aus
-- [ ] **AC-7** Doku in `docs/development.md` (oder analog) aktualisiert
+- [x] **AC-7** Doku in `docs/development.md` (oder analog) aktualisiert
 
 ## Edge Cases
 
@@ -160,6 +160,29 @@ Reine Dev-Tooling-Änderung. Kein Production-Code-Pfad berührt.
 
 ## Tech Design (Solution Architect)
 _To be added by /architecture_
+
+## Implementation Notes (2026-11-07, PR #115)
+
+Umgesetzt mit Abweichungen von der Skizze:
+
+- `eslint.config.mjs` (Flat-Config) mit dem Preset `eslint-config-next/core-web-vitals` — gleiches
+  Regelset wie die alte `.eslintrc.json`, statt einer eigenen Plugin-Liste. `.eslintrc.json` entfernt.
+- `npm run lint` = `eslint .`; CI-Schritt „Lint" im Frontend-Job vor dem Build. Build und Unit-Tests
+  laufen mit `if: !cancelled()` auch nach einem Lint-Fehler weiter.
+- **AC-4 anders gelöst:** statt Einzel-`eslint-disable`-Kommentaren sind die 63 Bestandsfunde über
+  ESLint-Bulk-Suppressions in `eslint-suppressions.json` eingefroren (36× `set-state-in-effect`,
+  12× `preserve-manual-memoization`, 7× `refs`, 1× `purity` — neue React-Compiler-Regeln aus
+  eslint-plugin-react-hooks 7 — und 7× Placeholder). Neuer Code muss sauber sein; Abbau als Follow-up
+  mit `npx eslint . --prune-suppressions`. 6 Warnungen (`exhaustive-deps`, `incompatible-library`)
+  bleiben Warnungen wie im Preset.
+- Direkt gefixt: `SortHeader` in der Antragsliste wurde bei jedem Render als neue Komponente angelegt
+  (Remount, Fokusverlust) → Render-Helfer; `<a>` → `next/link` auf `/agb/[version]` und
+  `/avv/[version]`; 5 veraltete `eslint-disable`-Kommentare entfernt.
+- `react/no-unescaped-entities` aus (Anführungszeichen in deutschen UI-Texten, 47 Funde ohne Nutzen).
+- AC-5: Placeholder-Verbot als `no-restricted-syntax` (Error) auf `Input`/`Textarea`/`input`/`textarea`;
+  `<SelectValue placeholder>` bleibt erlaubt.
+- AC-7: Doku im README (Abschnitt „Build & Test"); eine `docs/development.md` gibt es nicht.
+- `private/**` und `site/**` (MkDocs-Build) sind ignoriert.
 
 ## QA Test Results
 _To be added by /qa_

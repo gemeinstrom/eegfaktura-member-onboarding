@@ -237,6 +237,10 @@ npm run test:e2e     # E2E tests (Playwright)
 npm run test:all     # All test suites
 ```
 
+`npm run lint` runs ESLint with `eslint.config.mjs` and also runs in CI. Findings that
+existed when lint was switched on are frozen in `eslint-suppressions.json`; new code has to
+pass. After fixing old findings, run `npx eslint . --prune-suppressions` to shrink the file.
+
 ## Deployment
 
 ### Container Images

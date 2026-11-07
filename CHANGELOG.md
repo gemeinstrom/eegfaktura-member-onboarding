@@ -15,6 +15,15 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
 - **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
 
+## 2026-11-07
+
+### Lint läuft wieder und ist Teil der CI (PROJ-85)
+
+- `npm run lint` war seit Next 16 kaputt (`next lint` wurde entfernt), die CI hat nie gelintet. Jetzt: eslint-CLI mit Flat-Config (`eslint.config.mjs`, gleiches Regelset `next/core-web-vitals` wie vorher), neuer Schritt „Lint" im Frontend-Job.
+- Bestandsfunde (63, v. a. neue React-Compiler-Regeln aus eslint-plugin-react-hooks 7) sind in `eslint-suppressions.json` eingefroren — neuer Code muss sauber sein, Abbau als Follow-up.
+- Neue Regel: kein `placeholder` auf Eingabefeldern (Hint-Popover verwenden); `react/no-unescaped-entities` aus.
+- Behoben: Die Sortier-Köpfe der Antragsliste wurden bei jedem Render als neue Komponente angelegt und dadurch neu montiert; die Links „aktuelle Fassung" auf den archivierten AGB-/AVV-Seiten nutzen jetzt `next/link`.
+
 ## 2026-11-03
 
 ### Dependabot-Updates gesammelt
