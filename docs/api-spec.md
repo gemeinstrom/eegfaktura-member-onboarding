@@ -2027,11 +2027,11 @@ Keycloak JWT. Tenant-admin access is checked against the application's RC number
   ```json
   { "code": "filestore_unreachable", "message": "eegFaktura ist nicht erreichbar. …", "upload": { "id": "uuid", "result": "failed", "errorCode": "filestore_unreachable", … } }
   ```
-- `503 service_unavailable` — `FILESTORE_BASE_URL` empty, or no admin session token
+- `503 service_unavailable` — filestore not wired (`CORE_BASE_URL` empty, or neither https nor localhost/cluster-internal — the filestore is `{CORE_BASE_URL}/filestore`), or no admin session token
 
 ### GET `/api/admin/applications/{id}/eegfaktura-uploads`
 
-Upload protocol of the application, newest first. Same auth and tenant check; `404` for an unknown application, `503` when `FILESTORE_BASE_URL` is empty.
+Upload protocol of the application, newest first. Same auth and tenant check; `404` for an unknown application, `503` when the filestore is not wired (see POST).
 
 ```json
 { "uploads": [ { "id": "uuid", "documentType": "joining_confirmation", "trigger": "manual", "result": "failed", "fileName": "Beitrittsbestaetigung-A005.pdf", "errorCode": "participant_not_found", "createdAt": "…" } ] }

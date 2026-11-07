@@ -162,7 +162,7 @@ _Stand 2026-11-07. Owner-Entscheidungen zum Design: **nur Pro-Edition**; Upload-
 | Frage | Ergebnis |
 |---|---|
 | Anmeldung beim eegFaktura-Filestore | Kein Service-Konto nötig. Alle Wege, die hochladen, starten mit einem angemeldeten Admin — auch die „Batch"-Aktivierungsprüfung ist ein Admin-Klick. Verwendet wird dasselbe Core-Token wie beim Import (`CORE_AUTH_MODE`; in Prod das von eegFaktura geholte Token). Der Filestore prüft selbst, dass das Token zur EEG gehört. |
-| Wohin genau | Filestore von eegFaktura, Kategorie „Vertrag" am Mitglied, über dieselbe Upload-Schnittstelle, die eegfaktura-web nutzt. Neue Konfiguration: Filestore-Adresse je Zone (Test/Prod). Ohne Adresse ist die Funktion aus. |
+| Wohin genau | Filestore von eegFaktura, Kategorie „Vertrag" am Mitglied, über dieselbe Upload-Schnittstelle, die eegfaktura-web nutzt. Adresse = `{CORE_BASE_URL}/filestore` (gleiche Faktura-Basis-URL, keine eigene Konfiguration). |
 | Mitglied in eegFaktura finden | Nach regulärem Import ist die Core-Teilnehmer-ID gespeichert. Bei der manuellen Aktivierung ohne Import (PROJ-53) gibt es nur die Mitgliedsnummer — dann wird die ID über die vorhandene Teilnehmerliste des Cores gesucht. Nicht gefunden → Upload „fehlgeschlagen" mit Hinweis. |
 | Upload-Status speichern | Neue Tabelle (Upload-Protokoll), siehe Datenmodell. Schema-Änderung → Owner-Freigabe. |
 | Blockiert der Upload die Aktivierung? | Nein. Automatische Uploads starten erst **nach** erfolgreicher Aktivierung im Hintergrund; ihr Ergebnis landet im Protokoll. Der manuelle Upload läuft direkt, der Admin sieht das Ergebnis sofort. |
@@ -219,7 +219,7 @@ ist der letzte erfolgreiche Eintrag je Dokumentart. Dokumente selbst werden **ni
 ja/nein, Standard **nein** (auch für alle bestehenden EEGs). Läuft durch die volle Kette einer
 Admin-Einstellung (Typ, Formular, Speichern, Go-DTO, Service, Repo) **und** durch Konfigurations-Export/-Import.
 
-Neue Konfiguration: Filestore-Adresse je Zone (Helm-Wert in `values.yaml` + `values-env.yaml.example`).
+Filestore-Adresse = `{CORE_BASE_URL}/filestore` (keine eigene Konfiguration).
 
 `docs/domain-model.md` und `docs/api-spec.md` werden ergänzt (neue Tabelle ist sonst „undokumentiert").
 
@@ -257,7 +257,7 @@ shadcn-Komponenten: DropdownMenu, AlertDialog, Table, Switch).
    Token-Zielgruppe (`aud`); im Modus „direct" könnte das Onboarding-Token abgelehnt werden.
 2. Hochgeladenes Dokument erscheint in eegFaktura beim richtigen Mitglied unter den Dokumenten
    (wie ein manuell hochgeladener Vertrag).
-3. Filestore-Adresse hinter dem Reverse-Proxy je Zone (vgl. URL-Präfixe von eegfaktura.at).
+3. ~~Filestore-Adresse je Zone~~ — erledigt: `{CORE_BASE_URL}/filestore` (Owner 2026-11-07).
 
 ### F) Gates und Umsetzung
 
@@ -275,7 +275,7 @@ shadcn-Komponenten: DropdownMenu, AlertDialog, Table, Switch).
 - `internal/filestore`: GraphQL-Multipart-Client (Stdlib), gleicher Request wie eegfaktura-web (`addFile`, `contract`, `category_tag=user`, Bearer + `tenant`-Header); Tenant und Teilnehmer-ID als GraphQL-Variablen statt in den Query-String gespleißt. Fehler: `ErrUnreachable` (Netz/Timeout/5xx), `ErrUnauthorized` (401/403/„Tenant not allowed"), `ErrRejected` (sonst). Datei-Part mit `Content-Type: application/pdf` (Filestore lehnt andere Typen ab). Keine Response-Bodies in Fehlern/Logs.
 - `internal/application/document_upload_{service,repo}.go`: Pro-Prüfung (`eeg_edition = pro`, sonst 403 `pro_edition_required`), Status `imported`/`ready_for_activation`/`activated`, Beitrittserklärungs-Regel aus dem Download geteilt (`JoiningDeclarationUnavailableReason`, Download-Handler nutzt jetzt denselben Helper), Doppel-Guard (409 `already_uploaded` + `lastUploadedAt`, außer `confirmRepeat`), PDF über die bestehenden Download-Generatoren, Teilnehmer-ID aus `target_participant_id` oder (PROJ-53) per `ListParticipants` über die Mitgliedsnummer (kein/mehrdeutiger Treffer → `participant_not_found`), Protokoll für Erfolg und Fehler.
 - Endpunkte `POST`/`GET /api/admin/applications/{id}/eegfaktura-uploads` (`internal/http/admin_document_uploads.go`): `checkTenantAccess`, PROJ-71-Cool-Down-Gate (wie Downloads), Core-Token via `coreBearerToken`. Fehlversuch → 502 mit Code + protokolliertem Datensatz.
-- Config `FILESTORE_BASE_URL` (Helm `backend.filestoreBaseUrl`, values.yaml + values-env.yaml.example + `.env.local.example`); Timeout = `CORE_TIMEOUT_SECONDS`. Start-Prüfung `filestore.ValidateBaseURL`: https Pflicht, http nur für localhost/Cluster-interne Hosts (Security-Review Low, 2026-11-07) — sonst bricht der Start ab.
+- Filestore-Adresse = `{CORE_BASE_URL}/filestore` (Owner 2026-11-07: der Filestore liegt hinter derselben Faktura-Basis-URL, keine eigene Konfiguration; die zuerst eingeführte `FILESTORE_BASE_URL` wurde wieder entfernt). Timeout = `CORE_TIMEOUT_SECONDS`. `filestore.ValidateBaseURL`: https Pflicht, http nur für localhost/Cluster-interne Hosts (Security-Review Low) — sonst bleibt der Upload aus (Warnung im Log, Endpoints 503).
 
 Entscheidungen im Rahmen des Designs:
 - Fehlversuch antwortet 502 (nicht 200), damit die UI ohne Body-Inspektion Erfolg/Fehler unterscheidet; der protokollierte Datensatz liegt im Feld `upload`.
@@ -286,7 +286,7 @@ Entscheidungen im Rahmen des Designs:
 
 Offen / in der Test-Zone zu verifizieren:
 - Filestore akzeptiert das Admin-Token in `CORE_AUTH_MODE` `direct` und `exchange` (`aud`-Prüfung).
-- Dokument erscheint in eegFaktura beim richtigen Mitglied; Filestore-URL hinter dem Reverse-Proxy je Zone.
+- Dokument erscheint in eegFaktura beim richtigen Mitglied.
 - Strawberry nimmt `$userId: UUID` als Variable an (Abweichung von eegfaktura-web, das die ID in den Query-String schreibt).
 - Kein Schutz gegen zwei gleichzeitige Klicks (UI sperrt den Button, PR 2). Eine veraltete `target_participant_id` erkennt der Filestore nicht (er prüft die Teilnehmer-ID nicht).
 
@@ -310,6 +310,9 @@ Offen / in der Test-Zone zu verifizieren:
   das länger als `WRITE_TIMEOUT`, geht die Antwort verloren (Protokoll stimmt, Wiederholung → 409).
   Gleiches Muster wie beim Import.
 - **Keine Mengenbegrenzung** für „erneut hochladen" (jeder Versuch steht mit Admin im Protokoll).
+- **Kein eigener Schalter für die Funktion** (Owner-Entscheidung 2026-11-07): aktiv, sobald deployt und
+  `CORE_BASE_URL` https ist — auch bevor in der Test-Zone geprüft ist, ob eegFaktura das Admin-Token
+  annimmt. Absicherung: nur Pro-EEGs, manuell auslösen; Fehlversuche landen im Protokoll.
 
 ## QA Test Results
 
@@ -354,14 +357,13 @@ vor Upload-Logik, 400 ungültige ID).
 Geprüft ohne Befund: Auth/Tenant-Isolation (beide Endpunkte), SQL nur parametrisiert, keine
 Server-Requests an Nutzer-URLs (Filestore-Adresse nur aus Konfiguration), keine Secrets/PII in Logs
 oder Antworten, `documentType` gegen feste Liste validiert, Dateiname aus festen Präfixen + bereinigter
-Mitgliedsnummer (kein Path Traversal), Default `FILESTORE_BASE_URL` leer = Funktion aus, Pro-Gate serverseitig.
+Mitgliedsnummer (kein Path Traversal), ohne https-`CORE_BASE_URL` = Funktion aus, Pro-Gate serverseitig.
 
 **Offen vor Live-Nutzung (nicht vor Merge):** Test-Zone — akzeptiert der Filestore das Admin-Token
-(`aud`) in `CORE_AUTH_MODE` direct/exchange; erscheint das Dokument beim richtigen Mitglied;
-Filestore-Adresse je Zone hinter dem Reverse-Proxy.
+(`aud`) in `CORE_AUTH_MODE` direct/exchange; erscheint das Dokument beim richtigen Mitglied.
 
 **Ergebnis:** 0 Critical, 0 High, 0 Medium, 2 Low, 2 Info. Welle 1 ist **merge-bereit** (Funktion
-bleibt ohne `FILESTORE_BASE_URL` inaktiv). `/security-review` erforderlich (neue Core-Anbindung, Auth,
+bleibt ohne https-`CORE_BASE_URL` inaktiv). `/security-review` erforderlich (neue Core-Anbindung, Auth,
 Tenant-Isolation, Helm, Migration).
 
 ## Deployment

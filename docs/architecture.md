@@ -162,11 +162,11 @@ The onboarding backend speaks to the core over HTTP/JSON and (since PROJ-32) Gra
 | EEG master data (GraphQL scalar `Eeg`) | `POST /api/query` with `{"query":"query { eeg }"}` | PROJ-32 stammdaten sync |
 | Billing config (logo reference) | `GET /cash/api/billingConfigs/tenant/{rcNumber}` | PROJ-33 logo sync |
 | Logo bytes | `GET /cash/api/billingConfigs/{id}/logoImage` | PROJ-33 logo sync |
-| Upload PDF as member contract document (GraphQL multipart `addFile`, category `contract`) | `POST {FILESTORE_BASE_URL}/graphql` | PROJ-129 upload to eegFaktura |
+| Upload PDF as member contract document (GraphQL multipart `addFile`, category `contract`) | `POST /filestore/graphql` | PROJ-129 upload to eegFaktura |
 
-**Filestore (PROJ-129).** The eegFaktura filestore is a separate service with its own base URL `FILESTORE_BASE_URL` (incl. reverse-proxy prefix, e.g. `https://eegfaktura.example.at/filestore`; empty = upload disabled, endpoints 503). Client: `internal/filestore` (stdlib `mime/multipart`, same request as eegfaktura-web's `uploadContractFileMutation`, 64 KiB response cap, timeout `CORE_TIMEOUT_SECONDS`). Token: the same core token as the REST calls (`CORE_AUTH_MODE`); the filestore verifies RS256, `aud` and the tenant claim itself.
+**Filestore (PROJ-129).** The eegFaktura filestore is a separate service behind the same reverse proxy as the core, reached as `{CORE_BASE_URL}/filestore` (like eegfaktura-web's `/filestore`) — no own setting. Upload is disabled (endpoints 503) when `CORE_BASE_URL` is empty or not https (except localhost / cluster-internal hosts). Client: `internal/filestore` (stdlib `mime/multipart`, same request as eegfaktura-web's `uploadContractFileMutation`, 64 KiB response cap, timeout `CORE_TIMEOUT_SECONDS`). Token: the same core token as the REST calls (`CORE_AUTH_MODE`); the filestore verifies RS256, `aud` and the tenant claim itself.
 
-**URL model.** `CORE_BASE_URL` is the **hostname only** (e.g. `https://eegfaktura.at`). Path prefixes are hardcoded per call site in `internal/coreclient/` because the deployed reverse-proxy multiplexes several services under one host (`/api/...` → eegFaktura-backend, `/cash/api/...` → eegfaktura-billing).
+**URL model.** `CORE_BASE_URL` is the **hostname only** (e.g. `https://eegfaktura.at`). Path prefixes are hardcoded per call site in `internal/coreclient/` (and `/filestore` in `filestore.BaseURLFromCore`, PROJ-129) because the deployed reverse-proxy multiplexes several services under one host (`/api/...` → eegFaktura-backend, `/cash/api/...` → eegfaktura-billing).
 
 **Auth.** Every call forwards the **logged-in admin's Keycloak JWT verbatim** as `Authorization: Bearer ...`, with the EEG's RC number in the `tenant` header. No service account, no `client_credentials`. The core enforces tenant scoping via the JWT's `Tenants` claim. Rationale: audit trail attributes the change to the actual human, no extra Keycloak infra needed.
 

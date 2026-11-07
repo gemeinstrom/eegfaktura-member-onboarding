@@ -21,7 +21,7 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 - Neue Admin-Endpunkte `POST`/`GET /api/admin/applications/{id}/eegfaktura-uploads`: SEPA-Mandat, Beitrittsbestätigung oder (unsignierte) Beitrittserklärung werden mit denselben Generatoren wie „Herunterladen" erzeugt und als Vertragsdokument zum Mitglied in den eegFaktura-Filestore hochgeladen. Nur Pro-Edition, nur nach dem Import; Mitglied ohne Import-Referenz (manuelle Aktivierung) wird über die Mitgliedsnummer im Core gesucht.
 - Doppel-Upload nur mit Bestätigung (409 mit Datum des letzten Uploads); jeder Versuch landet im neuen Upload-Protokoll (Tabelle `document_upload`, Migration 000093) mit fester Fehlerkennung, ohne Statuswechsel.
-- Neue Konfiguration `FILESTORE_BASE_URL` (Helm `backend.filestoreBaseUrl`); leer = Funktion aus (503); muss https sein (http nur für localhost/Cluster-interne Hosts, sonst startet das Backend nicht). Neue EEG-Spalte `auto_upload_documents` (Default aus) — Einstellung, Automatik bei Aktivierung und Oberfläche folgen.
+- Keine eigene Konfiguration: Der Filestore wird unter `{CORE_BASE_URL}/filestore` angesprochen (wie eegfaktura-web). Ohne `CORE_BASE_URL` oder ohne https (außer localhost/Cluster-interne Hosts) ist der Upload aus (Endpoints 503, Warnung im Log). Neue EEG-Spalte `auto_upload_documents` (Default aus) — Einstellung, Automatik bei Aktivierung und Oberfläche folgen.
 
 ### Fehlerbehandlung: 409/400 statt 500 (Audit K6–K8)
 
