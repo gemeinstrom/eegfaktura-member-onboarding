@@ -1,6 +1,6 @@
 # PROJ-129: PDFs eines Antrags nach eegFaktura hochladen
 
-## Status: Planned
+## Status: Architected
 **Created:** 2026-11-07
 **Last Updated:** 2026-11-07
 
@@ -34,6 +34,7 @@ Owner-Entscheidungen 2026-11-07:
 
 ## User Stories
 
+- (Pro-Edition, Owner-Entscheidung 2026-11-07)
 - Als **EEG-Admin** möchte ich im Antrag ein Dokument (SEPA-Mandat, Beitrittsbestätigung,
   Beitrittserklärung) mit einem Klick nach eegFaktura hochladen, damit ich es nicht erst
   herunterladen und dort wieder hochladen muss.
@@ -151,7 +152,119 @@ Owner-Entscheidungen 2026-11-07:
 <!-- Sections below are added by subsequent skills -->
 
 ## Tech Design (Solution Architect)
-_To be added by /architecture_
+
+_Stand 2026-11-07. Owner-Entscheidungen zum Design: **nur Pro-Edition**; Upload-Versuche in einem
+**eigenen Bereich im Antrag** (nicht im Status-Log)._
+
+### Ergebnis der Klärung (offene Punkte aus der Spec)
+
+| Frage | Ergebnis |
+|---|---|
+| Anmeldung beim eegFaktura-Filestore | Kein Service-Konto nötig. Alle Wege, die hochladen, starten mit einem angemeldeten Admin — auch die „Batch"-Aktivierungsprüfung ist ein Admin-Klick. Verwendet wird dasselbe Core-Token wie beim Import (`CORE_AUTH_MODE`; in Prod das von eegFaktura geholte Token). Der Filestore prüft selbst, dass das Token zur EEG gehört. |
+| Wohin genau | Filestore von eegFaktura, Kategorie „Vertrag" am Mitglied, über dieselbe Upload-Schnittstelle, die eegfaktura-web nutzt. Neue Konfiguration: Filestore-Adresse je Zone (Test/Prod). Ohne Adresse ist die Funktion aus. |
+| Mitglied in eegFaktura finden | Nach regulärem Import ist die Core-Teilnehmer-ID gespeichert. Bei der manuellen Aktivierung ohne Import (PROJ-53) gibt es nur die Mitgliedsnummer — dann wird die ID über die vorhandene Teilnehmerliste des Cores gesucht. Nicht gefunden → Upload „fehlgeschlagen" mit Hinweis. |
+| Upload-Status speichern | Neue Tabelle (Upload-Protokoll), siehe Datenmodell. Schema-Änderung → Owner-Freigabe. |
+| Blockiert der Upload die Aktivierung? | Nein. Automatische Uploads starten erst **nach** erfolgreicher Aktivierung im Hintergrund; ihr Ergebnis landet im Protokoll. Der manuelle Upload läuft direkt, der Admin sieht das Ergebnis sofort. |
+
+### A) Komponenten
+
+```
+Antrags-Detailansicht (Admin)
++-- Aktionsleiste
+|   +-- „Herunterladen ▾" (unverändert)
+|   +-- „Nach eegFaktura hochladen ▾"            NEU — nur Pro, nur nach Import
+|       +-- SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung
+|           (gleiche Sichtbarkeitsregeln wie „Herunterladen")
++-- Rückfrage-Dialog „Bereits am … hochgeladen — erneut hochladen?"   NEU
++-- Bereich „Dokumente in eegFaktura"            NEU
+    +-- Liste: Dokument · Zeitpunkt · Ergebnis (hochgeladen/fehlgeschlagen) · manuell/automatisch · von wem
+    +-- leer: „Noch nichts nach eegFaktura hochgeladen"
+
+EEG-Einstellungen (Admin)
++-- Schalter „Dokumente bei Aktivierung automatisch nach eegFaktura hochladen"   NEU — nur Pro
+    +-- Hinweis: Bei Vorstands-Workflow wird die unsignierte Beitrittserklärung hochgeladen;
+        die signierte Fassung bitte selbst in eegFaktura ergänzen.
+
+Edition-Wechsel-Dialog (Owner)
++-- Downgrade-Block-Liste: neuer Eintrag „Automatischer Upload nach eegFaktura aktiv"
+```
+
+Backend (Go):
+- **Filestore-Client** (neues kleines Paket) — lädt eine PDF-Datei zu einer EEG und einem Mitglied hoch.
+- **Upload-Dienst** — erzeugt das gewünschte PDF mit den **bestehenden** Generatoren (identisch zu
+  „Herunterladen"), sucht das Mitglied in eegFaktura, lädt hoch, schreibt das Protokoll.
+- **Ein gemeinsamer Aktivierungs-Haken** für alle drei Aktivierungswege (manuell, Batch-Prüfung,
+  PROJ-53) — Lehre aus Audit-Fund K1, wo ein Weg eine Nebenwirkung vergessen hatte.
+- Zwei neue Admin-Endpunkte: Upload auslösen (mit „erneut hochladen bestätigt"-Kennzeichen) und
+  Protokoll eines Antrags lesen. Beide mit derselben EEG-Berechtigungsprüfung wie die übrigen
+  Antrags-Endpunkte.
+
+### B) Datenmodell
+
+**Neue Tabelle `member_onboarding.document_upload`** (ein Eintrag pro Upload-Versuch):
+- eindeutige ID, Antrag (Fremdschlüssel)
+- Dokumentart: SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung
+- Auslöser: manuell / automatisch bei Aktivierung
+- Ergebnis: hochgeladen / fehlgeschlagen
+- Datei-ID in eegFaktura (nur bei Erfolg), Dateiname
+- Fehlerart als feste Kennung (z. B. „Mitglied nicht gefunden", „eegFaktura nicht erreichbar") —
+  keine Texte aus fremden Systemen, keine personenbezogenen Daten
+- wer (Admin-Kennung), wann
+
+Index auf (Antrag, Dokumentart, Zeitpunkt). Die Detailansicht zeigt die Liste; „bereits hochgeladen am"
+ist der letzte erfolgreiche Eintrag je Dokumentart. Dokumente selbst werden **nicht** gespeichert.
+
+**Neue EEG-Einstellung** an `registration_entrypoint`: „automatisch bei Aktivierung hochladen",
+ja/nein, Standard **nein** (auch für alle bestehenden EEGs). Läuft durch die volle Kette einer
+Admin-Einstellung (Typ, Formular, Speichern, Go-DTO, Service, Repo) **und** durch Konfigurations-Export/-Import.
+
+Neue Konfiguration: Filestore-Adresse je Zone (Helm-Wert in `values.yaml` + `values-env.yaml.example`).
+
+`docs/domain-model.md` und `docs/api-spec.md` werden ergänzt (neue Tabelle ist sonst „undokumentiert").
+
+### C) Entscheidungen und Begründung
+
+- **Pro-only, doppelt abgesichert:** UI blendet Aktion und Schalter in Standard aus; der Server lehnt
+  Upload und Schalter-Änderung bei Standard-EEGs ab (UI allein reicht nicht). Beim Wechsel auf Standard
+  blockiert ein aktiver Auto-Schalter wie die übrigen Pro-Funktionen. Bereits hochgeladene Dokumente
+  bleiben in eegFaktura.
+- **Admin-Token statt Service-Konto:** Jede Aktion hat einen angemeldeten Admin; dessen eegFaktura-Rechte
+  gelten — ein Tenant-Admin kann nur zu seinen EEGs hochladen, der Filestore prüft das zusätzlich. Kein
+  neues Geheimnis in Helm.
+- **PDF on demand, nicht speichern:** gleiche Erzeugung wie beim Download → hochgeladen wird exakt, was
+  der Admin herunterladen würde (Akzeptanzkriterium AC-3); keine Dokumentenverwaltung im Onboarding
+  (Non-Goal V1).
+- **Eigenes Protokoll statt Status-Log:** Das Status-Log bleibt reine Statusübergänge; Uploads sind
+  Mehrfach-Ereignisse je Dokument und brauchen Ergebnis/Datei-ID.
+- **Hintergrund nach Aktivierung:** Aktivierung, Mails und Statuswechsel sind fertig, bevor hochgeladen
+  wird. Ein Fehler kann sie nicht rückgängig machen; das Protokoll zeigt „fehlgeschlagen", der Admin
+  holt es per Klick nach. Muster wie bei den asynchronen Mails: Start-Vermerk, Erfolg- und Fehler-Log.
+- **Kein stilles Duplikat:** Manuell fragt der Dialog nach; automatisch wird nur hochgeladen, wenn es
+  für diese Dokumentart noch keinen erfolgreichen Eintrag gibt (Re-Aktivierung nach „Aktivierung
+  zurücksetzen", AC-13).
+- **Kein automatischer Wiederholungs-Mechanismus:** einmal versuchen, Ergebnis protokollieren —
+  Nachholen ist bewusst ein Admin-Klick.
+
+### D) Abhängigkeiten
+
+Keine neuen Pakete (Go-Standardbibliothek für den Datei-Upload; Frontend nutzt vorhandene
+shadcn-Komponenten: DropdownMenu, AlertDialog, Table, Switch).
+
+### E) Vor dem Bau zu verifizieren (Test-Zone)
+
+1. Upload mit dem Admin-Token in beiden `CORE_AUTH_MODE`-Varianten — der Filestore prüft die
+   Token-Zielgruppe (`aud`); im Modus „direct" könnte das Onboarding-Token abgelehnt werden.
+2. Hochgeladenes Dokument erscheint in eegFaktura beim richtigen Mitglied unter den Dokumenten
+   (wie ein manuell hochgeladener Vertrag).
+3. Filestore-Adresse hinter dem Reverse-Proxy je Zone (vgl. URL-Präfixe von eegfaktura.at).
+
+### F) Gates und Umsetzung
+
+- Schema-Änderung (neue Tabelle + Spalte) → Owner-Freigabe; `/security-review` (neue Core-Anbindung,
+  Auth, Tenant-Isolation, Helm); Review 1 + Review 2 je PR.
+- Vorschlag in drei PRs: **(1) Backend** — Filestore-Client, Tabelle, Upload-Dienst, Endpunkte,
+  Pro-Prüfung; **(2) Frontend** — Aktion, Dialog, Protokoll-Bereich; **(3) Automatik** — EEG-Schalter
+  (volle Kette + Config-Export + Downgrade-Block), Aktivierungs-Haken, User-Guide.
 
 ## QA Test Results
 _To be added by /qa_

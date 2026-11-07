@@ -6,6 +6,10 @@
 
 ## 2026-11-07
 
+**Wechselrichter-Leistung geht beim Bearbeiten nicht mehr verloren**
+
+Hat ein Mitglied bei einer PV-Anlage die Leistung des Wechselrichters angegeben, wurde dieser Wert gelöscht, sobald ein Admin den Antrag bearbeitet und gespeichert hat. Das ist behoben: Die Wechselrichter-Leistung bleibt erhalten, lässt sich beim Bearbeiten neben der PV-Leistung ändern und wird in der Zählpunkt-Übersicht des Antrags angezeigt. Bereits verlorene Werte werden nicht wiederhergestellt — bei Bedarf bitte beim Mitglied nachfragen und neu eintragen.
+
 **Weitere Zählpunkte sind leichter zu finden**
 
 Im Registrierungsformular ist der Button **„Zählpunkt hinzufügen"** jetzt farbig und größer, und solange erst ein Zählpunkt eingetragen ist, weist ein kurzer Hinweis darauf hin, dass weitere Zählpunkte (z. B. für eine PV-Anlage) unten hinzugefügt werden können.

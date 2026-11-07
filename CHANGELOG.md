@@ -17,6 +17,11 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-07
 
+### Admin-Bearbeiten: Wechselrichter-Leistung bleibt erhalten (Audit K2)
+
+- Behoben: Das Admin-Bearbeiten-Formular kannte `inverterPowerKw` nicht; da das Backend beim Speichern alle Zählpunkte ersetzt, wurde die Wechselrichter-Leistung bei jedem Admin-Speichern genullt. Das Feld ist jetzt im Formular editierbar (neben PV-Leistung) und in der Zählpunkt-Tabelle der Detailansicht sichtbar.
+- Ursache behoben (Q-F1): Public-Form, Member-Edit und Admin-Edit nutzen ein gemeinsames Zählpunkt-Mapping `toMeteringPointRequest` (`src/lib/registration-form/payload.ts`) mit Test, statt zweier Kopien.
+
 ### „Zählpunkt hinzufügen" hervorgehoben (PROJ-128)
 
 - Registrierungsformular: Button „Zählpunkt hinzufügen" primär (farbig) und in Standardgröße statt klein und umrandet, Hinweis „Weitere Zählpunkte? Unten hinzufügen." solange nur ein Zählpunkt erfasst ist. Tester-Rückmeldung: mehrere Zählpunkte wurden übersehen.
