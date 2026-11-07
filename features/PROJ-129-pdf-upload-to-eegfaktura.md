@@ -31,6 +31,11 @@ Owner-Entscheidungen 2026-11-07:
 - Scheitert der Upload, laufen Import/Aktivierung trotzdem weiter; der Antrag zeigt den Upload-Status
   und der Upload lässt sich nachholen.
 - Erneutes Hochladen eines bereits hochgeladenen Dokuments: Hinweis mit Datum + Bestätigung.
+- **Nachtrag 2026-11-07 (PR 3):** Der automatische Upload wird **pro Dokument** eingestellt, nicht mit
+  einem Schalter — drei Pro-Einstellungen „SEPA-Mandat automatisch hochladen", „Beitrittsbestätigung
+  automatisch hochladen", „Beitrittserklärung (unsigniert) automatisch hochladen", jeweils Standard aus.
+  Beispiel: nur das SEPA-Mandat automatisch, die Beitrittserklärung später signiert von Hand.
+  Schema: neue Migration 000094 (drei Spalten, die ungenutzte `auto_upload_documents` entfällt).
 
 ## User Stories
 
@@ -78,17 +83,22 @@ Owner-Entscheidungen 2026-11-07:
   Owner-Entscheidung 2026-11-07 — nicht im Status-Log), ohne Statuswechsel.
 
 ### Automatischer Upload (pro EEG, Standard aus)
-- [ ] AC-9: In den EEG-Einstellungen gibt es den Schalter „Dokumente bei Aktivierung automatisch nach
-  eegFaktura hochladen", Standard **aus** — auch für alle bestehenden EEGs.
-- [ ] AC-10: Ist der Schalter an, werden beim Übergang auf „Aktiviert" automatisch hochgeladen:
-  das SEPA-Mandat (falls der Antrag eines hat) und das Beitrittsdokument, das bei dieser Aktivierung
-  entsteht — Beitrittsbestätigung, bzw. bei aktivem Vorstands-Workflow die unsignierte
-  Beitrittserklärung.
-- [ ] AC-11: Gilt für alle Aktivierungs-Wege: manuell „Als aktiv markieren", Activation-Check-Batch und
+- [x] AC-9: In den EEG-Einstellungen gibt es pro Dokument einen Schalter „SEPA-Mandat automatisch
+  hochladen", „Beitrittsbestätigung automatisch hochladen", „Beitrittserklärung (unsigniert) automatisch
+  hochladen" (Owner-Entscheidung 2026-11-07), jeweils Standard **aus** — auch für alle bestehenden EEGs.
+  Nur Pro-Edition; beim Schalter für die Beitrittserklärung der Hinweis, dass die signierte Fassung in
+  eegFaktura von Hand ergänzt wird.
+- [x] AC-10: Beim Übergang auf „Aktiviert" werden automatisch die Dokumente hochgeladen, deren Schalter
+  an ist **und** die es für den Antrag gibt (gleiche Regeln wie beim Download: SEPA-Mandat nur, wenn der
+  Antrag eines hat; Beitrittserklärung nur mit Vorstands-Workflow).
+- [x] AC-11: Gilt für alle Aktivierungs-Wege: manuell „Als aktiv markieren", Activation-Check-Batch und
   manuelle Aktivierung ohne Import (PROJ-53), sofern eine Core-Teilnehmer-Referenz vorhanden ist.
-- [ ] AC-12: Ein Fehler beim automatischen Upload bricht die Aktivierung nicht ab und verhindert keine
+  *Präzisiert (Security-Review PR 3):* Referenz = beim Import gespeicherte `target_participant_id`. Bei
+  einer Aktivierung ohne Import (nur Mitgliedsnummer) wird **nicht** automatisch hochgeladen — bitte
+  manuell mit Bestätigungsdialog.
+- [x] AC-12: Ein Fehler beim automatischen Upload bricht die Aktivierung nicht ab und verhindert keine
   Mails; der Antrag zeigt „Upload fehlgeschlagen", der manuelle Upload holt es nach (AC-7).
-- [ ] AC-13: Bei erneuter Aktivierung nach „Aktivierung zurücksetzen" wird nicht still erneut
+- [x] AC-13: Bei erneuter Aktivierung nach „Aktivierung zurücksetzen" wird nicht still erneut
   hochgeladen, wenn das Dokument bereits erfolgreich hochgeladen wurde (kein Duplikat ohne Rückfrage).
 
 ### Allgemein
@@ -108,9 +118,10 @@ Owner-Entscheidungen 2026-11-07:
   verknüpft" (Klärung in /architecture, ob die Referenz über die Mitgliedsnummer ermittelt werden kann).
 - **Kein SEPA-Mandat** (Einzugsart „kein SEPA") oder fehlende EEG-Stammdaten (z. B. Gläubiger-ID):
   SEPA-Eintrag fehlt bzw. zeigt denselben Hinweis wie beim Download.
-- **Vorstands-Workflow aktiv + Auto-Upload an:** die unsignierte Beitrittserklärung wird hochgeladen;
-  die signierte Fassung lädt die EEG weiterhin selbst in eegFaktura hoch (Hinweis im User-Guide und
-  beim Schalter).
+- **Vorstands-Workflow aktiv + Auto-Upload der Beitrittserklärung an:** die unsignierte
+  Beitrittserklärung wird hochgeladen; die signierte Fassung lädt die EEG weiterhin selbst in eegFaktura
+  hoch (Hinweis im User-Guide und beim Schalter). Wer nur die signierte Fassung in eegFaktura will, lässt
+  diesen Schalter aus.
 - **Import zurückgesetzt** (`reset-import`, `reset-to-review`): bereits hochgeladene Dokumente bleiben in
   eegFaktura liegen (Onboarding löscht dort nichts); Upload-Vermerke im Antrag bleiben zur
   Nachvollziehbarkeit erhalten.
@@ -182,7 +193,8 @@ Antrags-Detailansicht (Admin)
     +-- leer: „Noch nichts nach eegFaktura hochgeladen"
 
 EEG-Einstellungen (Admin)
-+-- Schalter „Dokumente bei Aktivierung automatisch nach eegFaktura hochladen"   NEU — nur Pro
++-- Schalter je Dokument (SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung)
+    „… automatisch hochladen"   NEU — nur Pro (Owner 2026-11-07: pro Dokument, siehe PR 3)
     +-- Hinweis: Bei Vorstands-Workflow wird die unsignierte Beitrittserklärung hochgeladen;
         die signierte Fassung bitte selbst in eegFaktura ergänzen.
 
@@ -211,12 +223,14 @@ Backend (Go):
 - Fehlerart als feste Kennung (z. B. „Mitglied nicht gefunden", „eegFaktura nicht erreichbar") —
   keine Texte aus fremden Systemen, keine personenbezogenen Daten
 - wer (Admin-Kennung), wann
+- Zielmitglied in eegFaktura (`participant_id`, seit Fix-Pass PR 3; NULL wenn nicht auflösbar)
 
 Index auf (Antrag, Dokumentart, Zeitpunkt). Die Detailansicht zeigt die Liste; „bereits hochgeladen am"
 ist der letzte erfolgreiche Eintrag je Dokumentart. Dokumente selbst werden **nicht** gespeichert.
 
-**Neue EEG-Einstellung** an `registration_entrypoint`: „automatisch bei Aktivierung hochladen",
-ja/nein, Standard **nein** (auch für alle bestehenden EEGs). Läuft durch die volle Kette einer
+**Neue EEG-Einstellungen** an `registration_entrypoint`: „automatisch bei Aktivierung hochladen",
+je Dokument ja/nein (seit PR 3, Migration 000094; vorher ein Schalter `auto_upload_documents`),
+Standard **nein** (auch für alle bestehenden EEGs). Läuft durch die volle Kette einer
 Admin-Einstellung (Typ, Formular, Speichern, Go-DTO, Service, Repo) **und** durch Konfigurations-Export/-Import.
 
 Filestore-Adresse = `{CORE_BASE_URL}/filestore` (keine eigene Konfiguration).
@@ -227,7 +241,8 @@ Filestore-Adresse = `{CORE_BASE_URL}/filestore` (keine eigene Konfiguration).
 
 - **Pro-only, doppelt abgesichert:** UI blendet Aktion und Schalter in Standard aus; der Server lehnt
   Upload und Schalter-Änderung bei Standard-EEGs ab (UI allein reicht nicht). Beim Wechsel auf Standard
-  blockiert ein aktiver Auto-Schalter wie die übrigen Pro-Funktionen. Bereits hochgeladene Dokumente
+  werden die Auto-Schalter ausgeschaltet (`SetEegEditionTx`, Fix-Pass PR 3; vorher war ein Block geplant,
+  der nirgends durchgesetzt wurde). Bereits hochgeladene Dokumente
   bleiben in eegFaktura.
 - **Admin-Token statt Service-Konto:** Jede Aktion hat einen angemeldeten Admin; dessen eegFaktura-Rechte
   gelten — ein Tenant-Admin kann nur zu seinen EEGs hochladen, der Filestore prüft das zusätzlich. Kein
@@ -241,7 +256,7 @@ Filestore-Adresse = `{CORE_BASE_URL}/filestore` (keine eigene Konfiguration).
   wird. Ein Fehler kann sie nicht rückgängig machen; das Protokoll zeigt „fehlgeschlagen", der Admin
   holt es per Klick nach. Muster wie bei den asynchronen Mails: Start-Vermerk, Erfolg- und Fehler-Log.
 - **Kein stilles Duplikat:** Manuell fragt der Dialog nach; automatisch wird nur hochgeladen, wenn es
-  für diese Dokumentart noch keinen erfolgreichen Eintrag gibt (Re-Aktivierung nach „Aktivierung
+  für diese Dokumentart und dieses Zielmitglied noch keinen erfolgreichen Eintrag gibt (Re-Aktivierung nach „Aktivierung
   zurücksetzen", AC-13).
 - **Kein automatischer Wiederholungs-Mechanismus:** einmal versuchen, Ergebnis protokollieren —
   Nachholen ist bewusst ein Admin-Klick.
@@ -314,16 +329,14 @@ Offen / in der Test-Zone zu verifizieren:
   meldet der Filestore trotzdem Erfolg (er prüft den Teilnehmer nicht). Seit Welle 2 fängt der
   Bestätigungsdialog das ab (Ziel-Endpunkt → 409 `participant_not_found`, sofern die Teilnehmerliste
   lesbar ist); der `POST` selbst prüft weiterhin nicht.
-- **Ziel kann sich zwischen Dialog und Upload ändern:** der Dialog zeigt das Ziel, der `POST` ermittelt es
-  erneut. Ändern sich Mitgliedsnummer oder Teilnehmer-ID dazwischen, kann der Upload an ein anderes
-  Mitglied gehen. Follow-up (PR 3): bestätigte `participantId` mitsenden, bei Abweichung ablehnen.
+- ~~**Ziel kann sich zwischen Dialog und Upload ändern**~~ — behoben in PR 3: der `POST` trägt die
+  bestätigte `participantId`, bei Abweichung 409 `target_changed`.
 - **Teilnehmerliste bei jedem Dialog-Öffnen:** jedes Öffnen des Bestätigungsdialogs liest die komplette
   Core-Teilnehmerliste der EEG (akzeptiert, wie im Import-Dialog).
 - **Spalte „Von":** zeigt nur eine gekürzte Keycloak-ID (ersten 8 Zeichen, voller Wert im Tooltip), keinen
   Admin-Namen.
-- **Zielmitglied wechselt nach Reset + erneutem Import:** die „bereits hochgeladen"-Prüfung kennt nur
-  (Antrag, Dokumentart), nicht das Zielmitglied → Rückfrage, obwohl das neue Mitglied das Dokument
-  noch nicht hat; „erneut hochladen" bestätigen genügt.
+- ~~**Zielmitglied wechselt nach Reset + erneutem Import**~~ — behoben im Fix-Pass PR 3: die
+  „bereits hochgeladen"-Prüfung gilt je (Antrag, Dokumentart, Zielmitglied).
 - **PROJ-53 mit vertippter Mitgliedsnummer:** existiert die Nummer in eegFaktura, landet das Dokument
   beim falschen Mitglied derselben EEG. Abhilfe in PR 2: Bestätigungsdialog nennt das gefundene Mitglied.
 - **Exchange-Modus ohne `X-Core-Authorization`:** fällt (wie der Import) auf das Onboarding-Token zurück;
@@ -335,6 +348,114 @@ Offen / in der Test-Zone zu verifizieren:
 - **Kein eigener Schalter für die Funktion** (Owner-Entscheidung 2026-11-07): aktiv, sobald deployt und
   `CORE_BASE_URL` https ist — auch bevor in der Test-Zone geprüft ist, ob eegFaktura das Admin-Token
   annimmt. Absicherung: nur Pro-EEGs, manuell auslösen; Fehlversuche landen im Protokoll.
+
+### PR 3 — Automatik bei Aktivierung (2026-11-07)
+
+- **Owner-Entscheidung 2026-11-07:** pro Dokument ein Schalter statt eines gemeinsamen. Migration
+  `000094_auto_upload_per_document` (up/down): `auto_upload_sepa_mandate`, `auto_upload_joining_confirmation`,
+  `auto_upload_joining_declaration` BOOLEAN NOT NULL DEFAULT FALSE; die nie gelesene Spalte
+  `auto_upload_documents` (000093) entfällt (down stellt sie wieder her, damit 000093-down weiter läuft).
+  000093 bleibt unverändert.
+- **Einstellungs-Kette:** `shared.RegistrationEntrypoint` (3 Felder), Repo `GetByRCNumber` +
+  `SaveAutoUploadSettings`, `SaveAllEEGSettingsTx` (Konfig-Import), `GET /settings/eeg` (+ read-only
+  `eegEdition`), `PUT /settings/eeg` mit Patch-Semantik je Feld (nil = unverändert; der
+  Rechtsdokumente-Editor, der nur seine Felder kennt, setzt sie so nicht zurück). Pro-Regel serverseitig
+  (`resolveAutoUploadSettings`): Einschalten bei Standard → 403 `pro_edition_required` vor jedem
+  Schreiben; Ausschalten und ein unverändertes TRUE bleiben erlaubt. Frontend: `EEGSettings`/Payload-Typ,
+  Editor-State + Snapshot/Dirty/Discard/Save/onSaved, Schalter nur in „Alle Optionen" und nur bei Pro
+  (bei Standard ausgeblendet — seit dem Fix-Pass schaltet der Wechsel auf Standard sie aus, ein TRUE bei
+  Standard kommt nicht mehr vor), Awareness-Banner (`settings-mode.ts`), Konfig-Export/-Import
+  (Pointer/omitempty; Import und Diff übernehmen TRUE nur bei Pro-Ziel-EEG). Der zunächst ergänzte
+  Eintrag in der Downgrade-Block-Liste (`edition-switch-dialog.tsx`) ist im Fix-Pass wieder entfernt:
+  der Dialog ist nirgends eingebunden, und der Wechsel auf Standard schaltet die Schalter jetzt aus.
+- **Aktivierungs-Haken:** `DocumentUploadService.StartActivationUploads(coreToken, actor, ids)` — ein Haken
+  für alle Wege. Aufgerufen in der HTTP-Schicht über `AdminHandler.startActivationUploads`, weil nur dort
+  das Core-Token des auslösenden Admins vorliegt (`coreBearerToken(r)`): `ChangeStatus` (Ziel
+  `activated`), `MarkActivated` (PROJ-53) und `CheckActivation` (Batch, nach `dispatchActivationMail`).
+  Damit keine Paket-Abhängigkeit `importing → application`-Service und keine Signaturänderung von
+  `ChangeStatus`/`MarkActivatedSkipImport`/`CheckActivations`. Die Massen-Aktion kann nicht aktivieren
+  (nur approve/reject/under_review). Der Upload-Dienst ist bereits über `SetDocumentUploadService` in
+  `cmd/server/main.go` verdrahtet; ohne ihn (nil) ist der Haken ein No-op.
+  - Läuft nach dem Commit (parallel zur Aktivierungs-Mail) in einer Goroutine (Anträge nacheinander,
+    1 min je Dokument), mit eigenem Kontext (der Request-Kontext endet mit der Antwort). Antwort, Aktivierung und Mails bleiben
+    unverändert.
+  - `UploadOnActivation`: lädt Antrag + EEG neu; überspringt ohne Protokoll, wenn der Antrag nicht mehr
+    `activated` ist (Vorstands-Mail im Batch gescheitert → Rollback), die EEG nicht Pro ist oder kein
+    Schalter an ist. Je eingeschaltetem Dokument `Upload` mit `trigger = activation`, ohne
+    `confirmRepeat` (AC-13: bereits hochgeladen → übersprungen) und mit denselben Verfügbarkeitsregeln
+    (kein Mandat / Beitrittserklärung ohne Vorstands-Workflow → übersprungen). Fehler werden wie beim
+    manuellen Upload protokolliert.
+  - **Ohne Core-Token:** nichts versuchen, nichts protokollieren, Warnung `activation upload: skipped, no
+    core token` (die Protokoll-Fehlercodes sind eine feste Liste; „kein Token" ist kein Upload-Versuch).
+    In der Praxis hat jeder dieser Handler ein Token (Keycloak-Middleware); der Admin kann manuell
+    nachladen.
+  - `actor_user_id` = Keycloak-Subject des auslösenden Admins (auch beim Batch).
+  - Logs ohne PII: `activation upload: dispatch`, je Dokument die Zeilen des Upload-Dienstes
+    (`dispatch`/`success`/`failed`) bzw. `activation upload: skipped` mit Refusal-Code.
+- **Ziel-Wechsel (Security-Review PR 2):** `POST …/eegfaktura-uploads` nimmt optional `participantId`;
+  weicht das jetzt ermittelte Mitglied ab → 409 `target_changed` („Das Zielmitglied hat sich geändert —
+  bitte erneut versuchen."), nichts protokolliert. Die Oberfläche sendet immer die im Dialog bestätigte
+  ID (auch beim „Erneut hochladen") und lädt bei 409 das Ziel neu und öffnet den Bestätigungsdialog wieder.
+- **Tests:** `internal/application/document_upload_activation_test.go` (alle Schalter / nur SEPA /
+  Vorstands-Workflow + Erklärung / Erklärung ohne Workflow / Standard / Schalter aus / nicht aktiviert /
+  kein Token / bereits hochgeladen / kein SEPA / Fehler protokolliert / Hintergrund-Lauf / nil-Dienst /
+  `target_changed`), `internal/http/admin_activation_upload_hook_test.go` (Quelltext-Prüfung per
+  `go/ast`, dass `ChangeStatus`, `MarkActivated`, `CheckActivation` den Haken aufrufen; Pro-Regel des
+  Speicherns; 409-Mapping), Konfig-Roundtrip + Diff (`configexport_test.go`), Vitest: Render-Test
+  `admin-application-detail.uploads.test.tsx` (Stand je Antrag, Liste bleibt bei fehlgeschlagenem
+  Neuladen, Fehlerkarte nur in Upload-Status, 503 blendet aus), `target_changed` im Upload-Menü,
+  Awareness-Banner, Downgrade-Liste; E2E (HTTP, ohne Filestore): `participantId` wird angenommen, Settings
+  liefern die drei Schalter + Edition, Einschalten bei Standard-EEG → 403.
+- **Nicht geprüft:** Migration 000094 lokal gegen Postgres (kein Postgres/Docker in dieser Umgebung) —
+  läuft in der CI-E2E-Umgebung. Automatischer Upload gegen einen echten Filestore (Test-Zone, wie PR 1).
+
+#### Fix-Pass nach QA, Reviews und Security-Review (2026-11-07)
+
+- **Token (High):** `changeApplicationStatus` und `markActivated` senden `X-Core-Authorization`
+  (`coreAuthHeader`) wie Import und Aktivierungs-Prüfung — sonst scheiterte im `CORE_AUTH_MODE=exchange`
+  jeder automatische Upload dieser Wege als `filestore_unauthorized`.
+- **Panic-Schutz (High):** der Hintergrund-Lauf läuft außerhalb von chis Recoverer; je Antrag
+  `recover()` mit Log (Typ + Stack, ohne Panic-Wert) und weiter mit dem nächsten Antrag.
+- **Kein Auto-Upload ohne bestätigtes Zielmitglied (Security-Review, Medium):** ohne gespeicherte
+  `target_participant_id` (Aktivierung ohne Import, nur Mitgliedsnummer) überspringt der Haken den Antrag
+  (`reason=participant_unconfirmed`); eine vertippte Nummer könnte sonst das SEPA-Mandat (IBAN) ohne
+  Rückfrage einem anderen Mitglied zuordnen. Der automatische Weg macht damit keine Core-Teilnehmer-Suche.
+- **Re-Import an anderes Mitglied (Medium):** neue Spalte `document_upload.participant_id` (in 000094,
+  noch nicht gemergt; Erfolgs-Bestand aus `target_participant_id` befüllt), bei jedem protokollierten
+  Versuch geschrieben (NULL wenn nicht auflösbar), „bereits hochgeladen" je (Antrag, Dokumentart,
+  Zielmitglied) — automatisch und manuell (409 `already_uploaded` nur fürs selbe Mitglied). Folge: das
+  Zielmitglied wird vor der Duplikat-Prüfung aufgelöst; ist es nicht auflösbar, wird der Fehlversuch
+  protokolliert statt 409 `already_uploaded` (vorher umgekehrt). Protokoll-Feld `participantId`.
+- **Vertrag ausgesetzt (PROJ-71, Medium):** der Dienst bekommt dieselbe Vertragsprüfung wie
+  `enforceCustomerContract` (`SetContractChecker`, verdrahtet in `main.go`); ausgesetzt → kein Upload,
+  Log `reason=contract_suspended`; Prüf-Fehler → weiter (gleicher Fallback wie der HTTP-Guard).
+- **Abgelehnter Token in langen Läufen:** der erste `filestore_unauthorized` beendet den Lauf; ein
+  Log-Eintrag nennt die Zahl der übersprungenen Anträge. Eine Teilnehmer-Suche (401) gibt es im
+  automatischen Weg nicht mehr (siehe oben).
+- **Zeitbudget:** 1 min je Dokument (eigener Kontext) statt 2 min für bis zu drei Dokumente.
+- **Effizienz:** `UploadOnActivation` lädt Antrag, EEG und Zielmitglied einmal je Antrag und ruft den
+  internen Helfer `uploadDocument`; der manuelle `Upload` nutzt denselben Helfer (Verhalten gleich bis auf
+  die Duplikat-Reihenfolge oben). `SaveEEGSettings` lädt die EEG einmal statt bis zu dreimal.
+- **Edition-Wechsel:** `SetEegEditionTx` (einziger Schreiber von `eeg_edition`) setzt die drei Schalter
+  bei Standard in derselben Anweisung auf FALSE; der UI-Zweig „Standard mit übrig gebliebenem TRUE nur
+  ausschaltbar" ist damit unerreichbar und entfernt. Berührt den Billing-/Edition-Pfad minimal (eine
+  SQL-Anweisung, kein neuer Endpunkt).
+- **Quelltext-Prüfung verschärft:** `admin_activation_upload_hook_test.go` sucht per `go/ast` alle
+  Nicht-Test-Aufrufer von `ChangeStatus`, `MarkActivatedSkipImport`, `CheckActivations` im Modul und
+  verlangt danach einen `startActivationUploads`-Aufruf; Ausnahme `BulkChangeStatus` (Massen-Aktionen
+  aktivieren nie — geprüft: kein Aufrufer nennt `StatusActivated`).
+- Kleinkram: Kommentar-Platzierung in `configexport/diff.go`.
+
+#### Bekannte Grenzen PR 3
+
+- **Pod-Shutdown:** die Uploads laufen in einer Goroutine ohne Warteschlange; endet der Pod mitten im
+  Lauf, gehen die restlichen Uploads verloren, **ohne** Protokoll-Eintrag. Nachholen manuell.
+- **Seltener Doppel-Upload:** ein manueller Upload, der gleichzeitig mit dem automatischen läuft, kann
+  die „bereits hochgeladen"-Prüfung ebenfalls passieren (keine Sperre) → Kopie in eegFaktura löschen.
+- **Token-Ablauf in langen Läufen:** der Lauf nutzt das Core-Token des auslösenden Admins; läuft es ab
+  oder passt es nicht zur EEG, endet der Lauf beim ersten `filestore_unauthorized` — die restlichen
+  Anträge werden nicht versucht (nur ein Log-Eintrag mit der Anzahl, kein Protokoll). Nachholen manuell.
+- **Aktivierung ohne Import:** kein automatischer Upload (bewusst, siehe oben).
 
 ## QA Test Results
 
@@ -417,6 +538,32 @@ Domain-Review sowie QA meldeten u. a. einen High-Fund (Exchange-Modus) und mehre
 Mitglied), Log-Helfer redigiert nur Core-HTTP-/Parse-Fehler (Timeout/Token/Netzwerk bleiben lesbar),
 Upload-Menü bei abgeschalteter Funktion ausgeblendet. Follow-up: Render-Test für das Status-Modell der
 Detailansicht; Upload (POST) prüft das gelöschte Mitglied nicht selbst (nur der Dialog).
+
+### Welle 3 — Automatik (PR #123), 2026-11-07
+
+**QA:** 0 Critical nach Behebung von BUG-1 (Token im Exchange-Modus fehlte beim Statuswechsel und bei
+der Aktivierung ohne Import). AC-9 bis AC-13 bestanden (AC-11 präzisiert: Aktivierung ohne Import lädt
+nicht automatisch hoch). Migration 000094 läuft erstmals in der CI (lokal kein Postgres/Docker). Keine
+Browser-/E2E-Läufe lokal; die Test-Zone-Prüfungen (Admin-Token beim Filestore, Dokument beim richtigen
+Mitglied) sind weiter offen. BUG-5 (Downgrade-Sperre behauptet, aber nicht durchgesetzt) im Fix-Pass
+behoben (Schalter werden beim Wechsel auf Standard ausgeschaltet, Doku angepasst).
+
+**Reviews / Security:** Review 1 (Korrektheit + Code-Qualität) und Review 2 (Domäne) mit Funden zu
+Token, Panic-Schutz, Re-Import, Vertrags-Suspendierung, Token-Ablauf, Zeitbudget, Mehrfach-Laden und
+Doku-Aussagen. `/security-review` **bedingt APPROVED** — Bedingung: kein automatischer Upload ohne
+bestätigtes Zielmitglied (Aktivierung ohne Import); im Fix-Pass umgesetzt.
+
+**Behoben im Fix-Pass:** siehe „Fix-Pass nach QA, Reviews und Security-Review" unter PR 3 (Token-Header,
+Panic-Schutz, `participant_unconfirmed`, `participant_id` + Duplikat je Zielmitglied, Vertragsprüfung,
+Abbruch bei abgelehntem Token, Zeitbudget je Dokument, einmaliges Laden, Edition-Wechsel schaltet aus,
+verschärfte Quelltext-Prüfung, Doku-Formulierungen und Bekannte Grenzen).
+
+**Abschluss-Review (2026-11-07):** behoben — automatischer Upload vertraut einer gespeicherten Teilnehmer-ID
+nur bei abgeschlossenem Import (`imported_at` gesetzt; `import_failed`-Waisen + spätere PROJ-53-Aktivierung
+werden übersprungen); ein abgelehntes Token stoppt nur die übrigen Anträge **derselben EEG**, andere EEGs im
+selben Batch laufen weiter; Alt-Erfolgseinträge ohne `participant_id` (PR-2-Uploads per Mitgliedsnummer,
+nicht vom Backfill erfasst) zählen weiter als „bereits hochgeladen". Follow-up: Hook-Test auf Verhalten statt
+Quelltext-Scan umstellen; die zwei Vertragsprüfer-Adapter in `main.go` teilen.
 
 ## Deployment
 _To be added by /deploy_

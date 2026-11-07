@@ -6,6 +6,10 @@
 
 ## 2026-11-07
 
+**Dokumente bei Aktivierung automatisch nach eegFaktura hochladen (Pro)**
+
+In den EEG-Einstellungen (Alle Optionen) legst du jetzt pro Dokument fest, ob es beim Wechsel auf „Aktiviert" automatisch beim Mitglied in eegFaktura abgelegt wird: SEPA-Mandat, Beitrittsbestätigung und — bei Vorstands-Genehmigung — die unsignierte Beitrittserklärung. Alle Schalter sind standardmäßig aus. Der Upload läuft im Hintergrund, bremst Aktivierung und E-Mails nicht und steht im Antrag unter **Dokumente in eegFaktura** mit dem Auslöser „automatisch". Bereits hochgeladene Dokumente werden nicht ein zweites Mal hochgeladen. Bei einer Aktivierung ohne Import wird nicht automatisch hochgeladen — dort lädst du die Dokumente bitte manuell hoch und bestätigst das Mitglied im Dialog. Die vom Vorstand unterschriebene Beitrittserklärung ergänzt du weiterhin selbst in eegFaktura — willst du dort nur die signierte Fassung, lass ihren Schalter aus. Verfügbar in der Pro-Edition; beim Wechsel auf Standard werden die Schalter ausgeschaltet.
+
 **PDFs direkt nach eegFaktura hochladen (Pro)**
 
 In der Antrags-Detailansicht gibt es nach dem Import das neue Menü **Nach eegFaktura hochladen ▾**: SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung landen damit beim Mitglied in eegFaktura unter den Dokumenten. Vor jedem Upload nennt ein Dialog das Mitglied in eegFaktura, an das das Dokument geht; ein zweiter Upload desselben Dokuments braucht eine eigene Bestätigung. Der neue Bereich **Dokumente in eegFaktura** zeigt, was wann hochgeladen wurde oder warum ein Upload fehlgeschlagen ist. Die vom Vorstand unterschriebene Beitrittserklärung musst du weiterhin selbst in eegFaktura ergänzen. Verfügbar in der Pro-Edition.

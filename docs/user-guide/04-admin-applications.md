@@ -126,6 +126,8 @@ Der Bereich **Dokumente in eegFaktura** listet jeden Versuch mit Dokument, Zeitp
 
 Hochgeladen wird immer die **unsignierte** Beitrittserklärung. Die vom Vorstand unterschriebene Fassung musst du weiterhin selbst in eegFaktura beim Mitglied ergänzen.
 
+**Automatisch bei Aktivierung:** Sind in den EEG-Einstellungen Dokumente für den automatischen Upload eingeschaltet, lädt das Tool sie nach der Aktivierung im Hintergrund hoch. Diese Einträge erscheinen im Bereich **Dokumente in eegFaktura** mit Auslöser **automatisch**; als Admin steht dort, wer die Aktivierung ausgelöst hat. Ein Fehlschlag steht dort als *fehlgeschlagen* — lade das Dokument dann manuell nach. Bereits erfolgreich hochgeladene Dokumente lädt die Automatik nicht erneut hoch. Ändert sich das Mitglied in eegFaktura zwischen Bestätigungsdialog und Upload, bricht der Upload mit „Das Zielmitglied hat sich geändert — bitte erneut versuchen." ab und der Dialog fragt mit dem aktuellen Mitglied erneut.
+
 ## Antrag bearbeiten
 
 Als Admin kannst du folgende Felder direkt korrigieren:

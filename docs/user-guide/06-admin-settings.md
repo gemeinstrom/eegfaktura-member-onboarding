@@ -244,6 +244,24 @@ Standardmäßig bekommt das Mitglied beim Aktivieren die Beitrittsbestätigung a
 
 > Dieser Schalter ist unabhängig vom **Vorstands-Genehmigungs-Workflow** weiter oben. Dort geht eine *Beitrittserklärung* (Dokument zum Unterschreiben) an die EEG; hier geht die fertige *Beitrittsbestätigung* zum Weiterleiten an die EEG. Beide lassen sich getrennt voneinander ein- und ausschalten.
 
+### Dokumente bei Aktivierung automatisch nach eegFaktura hochladen *(Alle Optionen, nur Pro-Edition)*
+
+Mit drei Schaltern legst du fest, welche Dokumente beim Wechsel auf „Aktiviert" automatisch beim Mitglied in eegFaktura abgelegt werden — jedes Dokument einzeln:
+
+- **SEPA-Mandat automatisch hochladen**
+- **Beitrittsbestätigung automatisch hochladen**
+- **Beitrittserklärung (unsigniert) automatisch hochladen**
+
+Alle drei sind standardmäßig **aus**. Hochgeladen wird nur, was es für den Antrag auch gibt — ohne SEPA-Mandat (z. B. Mitglied ohne Lastschrift) fällt das SEPA-Mandat weg, die Beitrittserklärung gibt es nur mit **Vorstands-Genehmigung**. Das gilt, wenn du „Aktiviert" setzt und bei der Aktivierungs-Prüfung gegen eegFaktura. **Bei einer Aktivierung ohne Import wird nicht automatisch hochgeladen:** Dort wird das Mitglied nur über die eingetragene Mitgliedsnummer gefunden, und eine vertippte Nummer würde die Dokumente einem anderen Mitglied zuordnen. Lade sie bitte über **Nach eegFaktura hochladen ▾** hoch — der Dialog zeigt dir vorher das Mitglied zur Bestätigung.
+
+**Wichtig bei Vorstands-Genehmigung:** Hochgeladen wird die **unsignierte** Beitrittserklärung. Die vom Vorstand unterschriebene Fassung musst du selbst in eegFaktura beim Mitglied ergänzen. Willst du in eegFaktura nur die signierte Fassung haben, lass diesen Schalter aus und schalte zum Beispiel nur das SEPA-Mandat ein.
+
+Der Upload läuft im Hintergrund nach der Aktivierung, parallel zur Aktivierungs-Mail: Aktivierung und E-Mails warten nicht darauf, und ein Fehler macht die Aktivierung nicht rückgängig. Das Ergebnis siehst du im Antrag unter **Dokumente in eegFaktura** (Auslöser „automatisch"); einen fehlgeschlagenen Upload holst du dort mit **Nach eegFaktura hochladen ▾** nach. Ein Dokument, das schon einmal erfolgreich an dasselbe Mitglied hochgeladen wurde, wird nicht automatisch ein zweites Mal hochgeladen — auch nicht nach „Aktivierung zurücksetzen" und erneuter Aktivierung. Wurde der Antrag zurückgesetzt und an ein anderes Mitglied in eegFaktura neu importiert, geht das Dokument an das neue Mitglied.
+
+Ist der Plattform-Vertrag der EEG ausgesetzt, wird nicht automatisch hochgeladen. Lehnt eegFaktura deine Anmeldung ab (z. B. weil sie während einer langen Aktivierungs-Prüfung abgelaufen ist), bricht der automatische Upload für die übrigen Anträge ab — prüfe dann unter **Dokumente in eegFaktura**, was fehlt, und lade es manuell nach.
+
+Die Schalter gibt es nur in der Pro-Edition; in der Standard-Edition sind sie ausgeblendet. Beim Wechsel auf Standard werden sie ausgeschaltet — nach einem Wechsel zurück auf Pro musst du sie wieder einschalten.
+
 ### Genossenschaftsanteile *(Alle Optionen)*
 
 > Diese Sektion ist nur in **Alle Optionen** sichtbar.
@@ -687,7 +705,7 @@ In jeder EEG-Settings-Ansicht findest du seit dem Plattform-Abrechnungs-Update e
 Im erweiterten Modus findest du in den Stammdaten-Einstellungen einen Switch zwischen den Editionen **Standard** und **Pro**. Wichtig zu wissen:
 
 - **Snapshot-Pattern**: bestehende Aktivierungen behalten ihren ursprünglichen Tarif, auch wenn du switchst. Nur **neue** Mitglieder-Aktivierungen ab dem Switch-Zeitpunkt tragen die neue Edition. So kannst du jederzeit problemlos wechseln, ohne dass alte Buchungen rückwirkend teurer werden.
-- **Pro → Standard Downgrade-Block**: ein Downgrade ist nur möglich, wenn keine Pro-only-Features mehr aktiv sind (Externe API-Key, Datenweiterleitung, Reconciliation-Backstop, Vorstands-Workflow, SEPA-Mandat-Audit, eigenes Brand-Theme). Der Dialog zeigt dir die Liste der aktiven Sperren mit Direktlinks zum jeweiligen Setting.
+- **Pro → Standard Downgrade-Block**: ein Downgrade ist nur möglich, wenn keine Pro-only-Features mehr aktiv sind (Externe API-Key, Datenweiterleitung, Reconciliation-Backstop, Vorstands-Workflow, SEPA-Mandat-Audit, eigenes Brand-Theme). Der Dialog zeigt dir die Liste der aktiven Sperren mit Direktlinks zum jeweiligen Setting. Der automatische Upload nach eegFaktura sperrt den Wechsel nicht: seine Schalter werden beim Wechsel auf Standard ausgeschaltet.
 - **Wirkungs-Zeitpunkt**: der Switch wirkt **sofort**. Du musst keine zusätzlichen Schritte machen — die nächste Mitglieder-Aktivierung in deiner EEG wird mit der neuen Edition versiegelt.
 
 ### Fragen?

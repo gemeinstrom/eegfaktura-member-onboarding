@@ -1572,6 +1572,10 @@ Returns the EEG settings — the eight Core-mastered fields (PROJ-32) plus the o
   "cooperativeShareAmountCents": 10000,
   "boardApprovalWorkflowEnabled": false,
   "joiningConfirmationToEEG": false,
+  "autoUploadSepaMandate": false,
+  "autoUploadJoiningConfirmation": false,
+  "autoUploadJoiningDeclaration": false,
+  "eegEdition": "pro",
   "sepaMandateCoreAuditEnabled": false,
   "sepaMandateB2BAuditEnabled": false,
   "sepaOptionalEnabled": false,
@@ -1588,6 +1592,8 @@ Returns the EEG settings — the eight Core-mastered fields (PROJ-32) plus the o
 `boardApprovalWorkflowEnabled` (PROJ-76) defaults to `false`. When `true`, the `→ activated` transition sends a **Beitrittserklärung** (with Vorstands-Signaturblock) to the EEG contact instead of an automatic Beitrittsbestätigung to the member. The board signs manually and forwards the document; the member is informed via the regular eegFaktura-Core activation mail. Status transition is sync hard-fail: missing `contact_email` or SMTP failure rolls back the activation.
 
 `joiningConfirmationToEEG` (PROJ-114) defaults to `false`. When `true`, the `→ activated` transition sends the **Beitrittsbestätigung** (the PDF the member would normally receive) as a single forward-framed mail to the EEG `contact_email` (subject „Beitrittsbestätigung für … – bitte weiterleiten", Reply-To = member) instead of mailing the member; the member receives **nothing** and the usual separate EEG copy is suppressed. The board forwards the mail to the member, optionally adding a personal note. Independent of `boardApprovalWorkflowEnabled` — that toggle routes the *Beitrittserklärung* (a document to sign), this one the finished *Beitrittsbestätigung* (to forward); both can be on or off independently. Send-time fallback: if `contact_email` is empty when the mail is built, it falls back to the member and logs a warning (defense-in-depth behind the save-time validation below).
+
+`autoUploadSepaMandate`, `autoUploadJoiningConfirmation`, `autoUploadJoiningDeclaration` (PROJ-129) default to `false`. One switch per document: when `true` (Pro edition only), the document is uploaded automatically to eegFaktura when an application is activated — see §6.16a „Automatic upload at activation". `eegEdition` (read-only, `standard`/`pro`) lets the admin UI offer the switches only for Pro EEGs.
 
 `sepaMandateCoreAuditEnabled` and `sepaMandateB2BAuditEnabled` (PROJ-78) both default to `false`. When `true` for the matching mandate type (`einzugsart=core` resp. `einzugsart=b2b`), the SEPA-mandate PDF renders the electronic audit-trail block (formfreie Willenserklärung gem. § 76 (3) EIWOG 2010 — Tenant, Zustimmungs-Zeitstempel, IP-Adresse) **in place of** the classic Datum/Unterschrift-Block. When `false`, the classic block is always rendered, even if the audit data is fully populated. The two toggles are independent: a single EEG can opt into the electronic variant for B2B (Geschäftsleute) while keeping CORE (Verbraucher) on the classic signature workflow, or vice versa. Audit fallback (PROJ-77): even with the toggle on, the renderer falls back to the classic block if any of the three audit data fields (`AuditTenant`, `sepa_mandate_accepted_at`, `sepa_mandate_accepted_ip`) is empty — relevant for legacy applications without IP capture.
 
@@ -1622,6 +1628,9 @@ Writes the onboarding-only editable fields. The Core-mastered fields (`eegId`, `
   "cooperativeShareAmountCents": 10000,
   "boardApprovalWorkflowEnabled": false,
   "joiningConfirmationToEEG": false,
+  "autoUploadSepaMandate": true,
+  "autoUploadJoiningConfirmation": true,
+  "autoUploadJoiningDeclaration": false,
   "sepaMandateCoreAuditEnabled": false,
   "sepaMandateB2BAuditEnabled": false,
   "sepaOptionalEnabled": false,
@@ -1630,6 +1639,8 @@ Writes the onboarding-only editable fields. The Core-mastered fields (`eegId`, `
 ```
 
 `joiningConfirmationToEEG` (PROJ-114): when `true`, the activation Beitrittsbestätigung is forwarded to the EEG `contact_email` instead of the member (see the GET section above for the full routing). **Cross-field validation:** if the body sets `joiningConfirmationToEEG = true` while the synchronised (Core-mastered) `contact_email` is empty, the save returns `400` with field `joiningConfirmationToEEG` and message „Bitte zuerst in eegFaktura eine Kontakt-E-Mail hinterlegen und die Stammdaten synchronisieren." (the value is validated against the stored Core value, not against the request body, because `contact_email` is read-only in onboarding).
+
+`autoUploadSepaMandate`, `autoUploadJoiningConfirmation`, `autoUploadJoiningDeclaration` (PROJ-129) are optional, each with patch semantics (`null`/omitted leaves the stored value unchanged — callers that do not know the fields, e.g. the legal-documents editor, do not reset them). Pro-only: switching one of them **on** for an EEG whose `eeg_edition` is not `pro` returns `403 pro_edition_required` („Der automatische Upload nach eegFaktura ist eine Funktion der Pro-Edition.") before anything is saved. Switching off and re-sending an already stored `true` are always allowed.
 
 `activationMode` (PROJ-53) is optional in the request — `null`/omitted leaves the existing value unchanged (patch semantics). Allowed values: `participant_active` (default for new EEGs — Core-Teilnehmer-Status `ACTIVE` löst Activation aus) or `any_meter_registration_started` (mind. ein Zählpunkt mit `processState ∈ {PENDING, APPROVED, ACTIVE}`). Invalid values return `400`.
 
@@ -1992,10 +2003,11 @@ Keycloak JWT. Tenant-admin access is checked against the application's RC number
 
 ### Request
 ```json
-{ "documentType": "sepa_mandate", "confirmRepeat": false }
+{ "documentType": "sepa_mandate", "confirmRepeat": false, "participantId": "uuid" }
 ```
 - `documentType` — `sepa_mandate` (like `sepa-mandate.pdf`), `joining_confirmation` (Beitrittsbestätigung, like `approval-pdf`), `joining_declaration` (unsigned Beitrittserklärung, like `joining-declaration.pdf`: only `activated` + board workflow).
 - `confirmRepeat` — must be `true` to upload a document that was already uploaded successfully.
+- `participantId` — optional: the eegFaktura participant the admin confirmed in the dialog (`participantId` from `GET …/target`). The admin UI always sends it. If the participant resolved at upload time differs (case-insensitive), the upload is refused with `409 target_changed` and nothing is recorded.
 
 ### Rules
 - EEG edition must be `pro` (`registration_entrypoint.eeg_edition`).
@@ -2010,9 +2022,10 @@ Keycloak JWT. Tenant-admin access is checked against the application's RC number
   "id": "uuid", "applicationId": "uuid", "documentType": "sepa_mandate",
   "trigger": "manual", "result": "success", "filestoreFileId": "uuid",
   "fileName": "SEPA-Mandat-A005.pdf", "actorUserId": "keycloak-subject",
-  "createdAt": "2026-11-07T10:00:00Z"
+  "participantId": "uuid", "createdAt": "2026-11-07T10:00:00Z"
 }
 ```
+`participantId` — the eegFaktura participant the upload went to or was attempted for; omitted when the participant could not be resolved.
 
 ### Errors
 - `400 validation_error` — body invalid or unknown `documentType`
@@ -2021,13 +2034,25 @@ Keycloak JWT. Tenant-admin access is checked against the application's RC number
 - `404 not_found` — application not found
 - `409 not_imported` — status not `imported`/`ready_for_activation`/`activated`
 - `409 document_not_available` — same condition as the download (no SEPA mandate / Beitrittserklärung not available); message from the generator
-- `409 already_uploaded` — successful upload exists and `confirmRepeat` is not `true`; body carries `lastUploadedAt` (newest successful upload)
+- `409 already_uploaded` — a successful upload of this document **to the same eegFaktura participant** exists and `confirmRepeat` is not `true`; body carries `lastUploadedAt` (newest successful upload). Uploads to another participant (before a reset and re-import) do not count. Not checked when the participant cannot be resolved (the failure is recorded instead).
+- `409 target_changed` — `participantId` was sent and differs from the member resolved now; message „Das Zielmitglied hat sich geändert — bitte erneut versuchen." The UI reloads the target and asks again.
 - `423 contract_suspended` — PROJ-71 cool-down
 - `502` — the attempt failed and was recorded; `code` is the stored error code (`participant_not_found`, `participant_lookup_failed`, `filestore_unreachable`, `filestore_unauthorized`, `filestore_rejected`), `message` a German admin text, `upload` the recorded failure:
   ```json
   { "code": "filestore_unreachable", "message": "eegFaktura ist nicht erreichbar. …", "upload": { "id": "uuid", "result": "failed", "errorCode": "filestore_unreachable", … } }
   ```
 - `503 service_unavailable` — filestore not wired (`CORE_BASE_URL` empty, or neither https nor localhost/cluster-internal — the filestore is `{CORE_BASE_URL}/filestore`), or no admin session token
+
+### Automatic upload at activation
+
+Per EEG, three Pro-only switches (`autoUploadSepaMandate`, `autoUploadJoiningConfirmation`, `autoUploadJoiningDeclaration`, see `PUT /api/admin/settings/eeg`; default off). When an application reaches `activated`, the backend uploads every document whose switch is on — through the same upload service as the `POST` above, with `trigger: "activation"`:
+
+- Activation paths: status change to `activated` (`POST …/status`) and activation check batch (`POST /api/admin/applications/check-activation`); `POST …/mark-activated` calls the hook too, but see the skip rule for applications without a stored participant. The handlers hand the activated ids to one shared hook after the activation was committed (in parallel to the activation mail). The frontend sends `X-Core-Authorization` on `…/status`, `…/mark-activated` and `check-activation` (exchange mode).
+- Runs in the background (one goroutine per request, applications one after the other, 1 min per document). A panic in one application is logged (type + stack, no value) and the run continues. It never blocks, delays or rolls back the activation or the mails; the HTTP response is unchanged.
+- Uses the core token and Keycloak subject of the admin who triggered the activation (`actorUserId` in the protocol). Without a core token nothing is attempted (warning in the log); the admin can upload manually. The first `filestore_unauthorized` (token expired or not valid for the EEG) stops the run; the log line `activation upload: core token rejected — remaining applications skipped` carries the number of skipped applications.
+- Skipped without a protocol row: EEG not `pro`; platform contract suspended (PROJ-71, reason `contract_suspended` in the log; a failing contract check falls back to uploading, like the HTTP guard); application has no stored `target_participant_id` (activation without import, PROJ-53 — reason `participant_unconfirmed`: the member-number lookup has no confirmation, the admin uploads manually with the confirm dialog); application no longer `activated` (e.g. a board-mode batch activation rolled back because the board mail failed); document not available for the application (same rule as the download: no SEPA mandate, Beitrittserklärung only with board workflow); document already uploaded successfully to the same participant (no automatic repeat — re-activation after `reset-activation` does not upload a second copy; after a re-import to a different participant it is uploaded to the new one).
+- Failed attempts are recorded like manual ones (`result: "failed"` + error code) and can be repeated with the `POST`.
+- Logs (no PII): `activation upload: dispatch`, per document the upload service's `dispatch`/`success`/`failed` lines or `activation upload: skipped` with the refusal code.
 
 ### GET `/api/admin/applications/{id}/eegfaktura-uploads`
 
