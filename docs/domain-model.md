@@ -42,6 +42,7 @@ Fields:
 - `intro_text` — nullable, sanitized HTML string for the public registration form
 - `board_approval_workflow_enabled` — boolean, default false (PROJ-76); when true, the `→ activated` transition sends a **Beitrittserklärung** (with Vorstands-Signaturblock) to the EEG contact instead of an automatic Beitrittsbestätigung to the member. The board signs manually and forwards to the member. The member is informed via the regular eegFaktura-Core activation mail (outside this codebase). Sync hard-fail: a missing `contact_email` or SMTP outage rolls back the status transition. Idempotent via `application.board_declaration_sent_at`.
 - `joining_confirmation_to_eeg` *(PROJ-114)* — BOOLEAN NOT NULL DEFAULT FALSE (Migration 000090); when TRUE, the `→ activated` transition forwards the **Beitrittsbestätigung** PDF as a single mail to the EEG `contact_email` (Reply-To = member) instead of mailing the member — the member gets nothing and the separate EEG copy is suppressed. Save-time validation rejects TRUE with empty (Core-mastered) `contact_email` (400); send-time NULL-fallback mails the member + logs a warning. Independent of `board_approval_workflow_enabled` (different document). Included in the configexport EEG-settings bundle (pointer / omitempty, like board_approval).
+- `auto_upload_documents` *(PROJ-129)* — BOOLEAN NOT NULL DEFAULT FALSE (Migration 000093); per-EEG-Schalter „Dokumente bei Aktivierung automatisch nach eegFaktura hochladen". Default FALSE, auch für alle bestehenden EEGs. Bisher nur die Spalte — Einstellungs-Kette (DTO/UI/Config-Export) und Aktivierungs-Haken folgen; bis dahin liest der Code die Spalte nicht.
 - `sepa_mandate_enabled` — *entfernt durch PROJ-80 (2026-06-08, Migration 000071).* Vorher: boolean (default false), steuerte, ob das CORE-SEPA-Mandat-PDF erzeugt wird. Seit PROJ-80 wird das PDF für jedes SEPA-Mitglied (`einzugsart != kein_sepa`) automatisch erzeugt; die Variante wird über `sepa_mandate_core_audit_enabled` / `sepa_mandate_b2b_audit_enabled` (PROJ-78) gesteuert. Migration-Backfill: EEGs mit altem Wert `false` (= „nur Online-Zustimmung") bekommen `sepa_mandate_core_audit_enabled = TRUE` UND `sepa_mandate_at_import = TRUE`, damit das neue Mandat-PDF im Audit-Trail-Variante mit Mitgliedsnummer als Mandatsreferenz versandt wird. Cross-Field-Coupling: `sepa_mandate_core_audit_enabled = TRUE` erzwingt `sepa_mandate_at_import = TRUE` (Backend-Validation in `SaveEEGSettings`). PROJ-74 (2026-06-06): B2B-Mandate (`einzugsart=b2b`) werden in jedem Fall als PDF beim Import generiert, weil das SEPA-Regelwerk eine unterschriebene Mandatsvorlage für Firmenlastschriften verlangt. Fehlende EEG-Stammdaten brechen den B2B-Import hart ab (Hart-Fail). PROJ-73 (2026-06-06) entfernte zudem den obsoleten `use_company_sepa_mandate`-Toggle, der seit PROJ-48 funktionslos war.
 - `sepa_mandate_at_import` *(PROJ-48)* — boolean, default false; when true, SEPA mandate PDFs are generated at import time (with assigned `member_number` printed as Mandatsreferenz) instead of submit time. Use for digital-signature workflows where the signed PDF cannot be modified afterwards.
 - `show_central_policy` — boolean, default true; when false, the central operator privacy policy is not shown in the public registration form (for EEGs that configure their own policy as a legal document)
@@ -509,6 +510,32 @@ Indexes:
 Rules:
 - Audit-trail only — no admin-UI surface in V1 (psql-inspection only). EEG-decommissioning cascades the run + details away with the parent `registration_entrypoint` row; intentional accept (no separate retention table).
 - Service writes via the repo's `InsertMatchDetail`; mock-friendly via the `ReconciliationServiceRepo` interface.
+
+### 3.14 `member_onboarding.document_upload` *(PROJ-129)*
+
+Upload-Protokoll: ein Eintrag pro Versuch, ein Antrags-PDF als Vertragsdokument
+zum Mitglied in den eegFaktura-Filestore hochzuladen (Migration 000093). Das PDF
+selbst wird nicht gespeichert (on demand erzeugt wie beim Download).
+
+- `id` — UUID PRIMARY KEY DEFAULT `gen_random_uuid()`
+- `application_id` — UUID NOT NULL, FK → `application(id)` ON DELETE CASCADE
+- `document_type` — TEXT NOT NULL CHECK IN (`'sepa_mandate'`, `'joining_confirmation'` = Beitrittsbestätigung, `'joining_declaration'` = Beitrittserklärung unsigniert)
+- `trigger_source` — TEXT NOT NULL CHECK IN (`'manual'`, `'activation'` — automatischer Upload bei Aktivierung, folgt)
+- `result` — TEXT NOT NULL CHECK IN (`'success'`, `'failed'`)
+- `filestore_file_id` — UUID NULL; Datei-ID im Filestore, nur bei Erfolg
+- `file_name` — TEXT NOT NULL; Dateiname in eegFaktura, z. B. `SEPA-Mandat-A005.pdf`
+- `error_code` — TEXT NULL CHECK IN (`'participant_not_found'`, `'participant_lookup_failed'`, `'filestore_unreachable'`, `'filestore_unauthorized'`, `'filestore_rejected'`); nur bei Fehler. Feste Kennung, kein Text aus dem Fremdsystem, keine PII.
+- `actor_user_id` — TEXT NULL; Keycloak-Subject des Admins (wie `status_log.changed_by_user_id`)
+- `created_at` — TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+Constraints / Indexes:
+- CHECK `document_upload_result_shape_check`: `success` ⇒ `filestore_file_id` gesetzt und `error_code` NULL; `failed` ⇒ umgekehrt.
+- `(application_id, document_type, created_at)`
+
+Rules:
+- „Bereits hochgeladen am" = jüngster Eintrag mit `result='success'` je (Antrag, Dokumentart).
+- Geschrieben wird jeder Versuch, der die Mitglieds-Suche bzw. den Filestore-Aufruf erreicht. Abweisungen davor (falscher Status, Standard-Edition, Dokument nicht verfügbar, bereits hochgeladen ohne Bestätigung) schreiben nichts.
+- Reset-Pfade (`reset-import`, `reset-to-review`, `reset-activation`) lassen das Protokoll unverändert; in eegFaktura hochgeladene Dateien bleiben dort liegen.
 
 ---
 

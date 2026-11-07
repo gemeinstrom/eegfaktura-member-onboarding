@@ -1,6 +1,6 @@
 # PROJ-129: PDFs eines Antrags nach eegFaktura hochladen
 
-## Status: Architected
+## Status: In Review
 **Created:** 2026-11-07
 **Last Updated:** 2026-11-07
 
@@ -73,8 +73,9 @@ Owner-Entscheidungen 2026-11-07:
 - [ ] AC-7: Schlägt der Upload fehl, zeigt die UI eine verständliche Fehlermeldung (ohne technische
   Details/PII); im Antrag steht „Upload fehlgeschlagen am {Datum}", und die Aktion bleibt zum
   erneuten Versuch verfügbar.
-- [ ] AC-8: Jeder Upload-Versuch (manuell oder automatisch, Erfolg oder Fehler) erscheint im
-  Verlauf des Antrags (Status-Log bzw. Aktivitäts-Historie), ohne Statuswechsel.
+- [ ] AC-8: Jeder Upload-Versuch (manuell oder automatisch, Erfolg oder Fehler), der eegFaktura
+  erreicht, erscheint im eigenen Bereich „Dokumente in eegFaktura" des Antrags (Upload-Protokoll,
+  Owner-Entscheidung 2026-11-07 — nicht im Status-Log), ohne Statuswechsel.
 
 ### Automatischer Upload (pro EEG, Standard aus)
 - [ ] AC-9: In den EEG-Einstellungen gibt es den Schalter „Dokumente bei Aktivierung automatisch nach
@@ -266,8 +267,102 @@ shadcn-Komponenten: DropdownMenu, AlertDialog, Table, Switch).
   Pro-Prüfung; **(2) Frontend** — Aktion, Dialog, Protokoll-Bereich; **(3) Automatik** — EEG-Schalter
   (volle Kette + Config-Export + Downgrade-Block), Aktivierungs-Haken, User-Guide.
 
+## Implementation Notes
+
+### PR 1 — Backend (2026-11-07)
+
+- Migration `000093_document_upload` (up/down): Tabelle `document_upload` (CHECKs für `document_type`, `trigger_source`, `result`, `error_code`, Ergebnis-Form; Index `(application_id, document_type, created_at)`) + Spalte `registration_entrypoint.auto_upload_documents BOOLEAN NOT NULL DEFAULT FALSE` (noch ungelesen). Lokal gegen Postgres 18.6 alle Migrationen 000001–000093 angewendet, 000093 down/up getestet.
+- `internal/filestore`: GraphQL-Multipart-Client (Stdlib), gleicher Request wie eegfaktura-web (`addFile`, `contract`, `category_tag=user`, Bearer + `tenant`-Header); Tenant und Teilnehmer-ID als GraphQL-Variablen statt in den Query-String gespleißt. Fehler: `ErrUnreachable` (Netz/Timeout/5xx), `ErrUnauthorized` (401/403/„Tenant not allowed"), `ErrRejected` (sonst). Datei-Part mit `Content-Type: application/pdf` (Filestore lehnt andere Typen ab). Keine Response-Bodies in Fehlern/Logs.
+- `internal/application/document_upload_{service,repo}.go`: Pro-Prüfung (`eeg_edition = pro`, sonst 403 `pro_edition_required`), Status `imported`/`ready_for_activation`/`activated`, Beitrittserklärungs-Regel aus dem Download geteilt (`JoiningDeclarationUnavailableReason`, Download-Handler nutzt jetzt denselben Helper), Doppel-Guard (409 `already_uploaded` + `lastUploadedAt`, außer `confirmRepeat`), PDF über die bestehenden Download-Generatoren, Teilnehmer-ID aus `target_participant_id` oder (PROJ-53) per `ListParticipants` über die Mitgliedsnummer (kein/mehrdeutiger Treffer → `participant_not_found`), Protokoll für Erfolg und Fehler.
+- Endpunkte `POST`/`GET /api/admin/applications/{id}/eegfaktura-uploads` (`internal/http/admin_document_uploads.go`): `checkTenantAccess`, PROJ-71-Cool-Down-Gate (wie Downloads), Core-Token via `coreBearerToken`. Fehlversuch → 502 mit Code + protokolliertem Datensatz.
+- Config `FILESTORE_BASE_URL` (Helm `backend.filestoreBaseUrl`, values.yaml + values-env.yaml.example + `.env.local.example`); Timeout = `CORE_TIMEOUT_SECONDS`. Start-Prüfung `filestore.ValidateBaseURL`: https Pflicht, http nur für localhost/Cluster-interne Hosts (Security-Review Low, 2026-11-07) — sonst bricht der Start ab.
+
+Entscheidungen im Rahmen des Designs:
+- Fehlversuch antwortet 502 (nicht 200), damit die UI ohne Body-Inspektion Erfolg/Fehler unterscheidet; der protokollierte Datensatz liegt im Feld `upload`.
+- Abweisungen vor dem Upload (Status, Edition, Dokument nicht verfügbar, Doppel-Upload) und interne PDF-Fehler werden nicht protokolliert — das Protokoll zeigt echte Upload-Versuche.
+- Spaltenname `trigger_source` statt `trigger` (SQL-Schlüsselwort vermeiden); `actor_user_id` analog `status_log.changed_by_user_id`.
+- Upload unterliegt dem PROJ-71-Cool-Down-Gate auch für die Beitrittserklärung (deren Download-Endpoint hat das Gate nicht).
+- Kein eigener Filestore-Timeout-Wert; `CORE_TIMEOUT_SECONDS` gilt.
+
+Offen / in der Test-Zone zu verifizieren:
+- Filestore akzeptiert das Admin-Token in `CORE_AUTH_MODE` `direct` und `exchange` (`aud`-Prüfung).
+- Dokument erscheint in eegFaktura beim richtigen Mitglied; Filestore-URL hinter dem Reverse-Proxy je Zone.
+- Strawberry nimmt `$userId: UUID` als Variable an (Abweichung von eegfaktura-web, das die ID in den Query-String schreibt).
+- Kein Schutz gegen zwei gleichzeitige Klicks (UI sperrt den Button, PR 2). Eine veraltete `target_participant_id` erkennt der Filestore nicht (er prüft die Teilnehmer-ID nicht).
+
+### Bekannte Grenzen Welle 1 (Reviews 2026-11-07, bewusst akzeptiert bzw. Folge-PRs)
+
+- **Doppelte Kopie in eegFaktura ohne Rückfrage** möglich, wenn (a) zwei Requests gleichzeitig laufen
+  (Prüfen-dann-Schreiben ohne Sperre), (b) der Filestore gespeichert hat, das Protokoll-Insert aber
+  scheitert (500, lauter Fehler-Log mit Datei-ID), oder (c) der Client-Timeout greift, nachdem der
+  Filestore schon gespeichert hat (als `filestore_unreachable` protokolliert). Abhilfe (a): PR 2 sperrt
+  den Button während des Uploads; in eegFaktura lässt sich eine Kopie löschen.
+- **Gelöschtes Mitglied in eegFaktura:** zeigt `target_participant_id` auf ein dort gelöschtes Mitglied,
+  meldet der Filestore trotzdem Erfolg (er prüft den Teilnehmer nicht).
+- **Zielmitglied wechselt nach Reset + erneutem Import:** die „bereits hochgeladen"-Prüfung kennt nur
+  (Antrag, Dokumentart), nicht das Zielmitglied → Rückfrage, obwohl das neue Mitglied das Dokument
+  noch nicht hat; „erneut hochladen" bestätigen genügt.
+- **PROJ-53 mit vertippter Mitgliedsnummer:** existiert die Nummer in eegFaktura, landet das Dokument
+  beim falschen Mitglied derselben EEG. Abhilfe in PR 2: Bestätigungsdialog nennt das gefundene Mitglied.
+- **Exchange-Modus ohne `X-Core-Authorization`:** fällt (wie der Import) auf das Onboarding-Token zurück;
+  der Filestore lehnt es ab → protokolliert als `filestore_unauthorized`.
+- **Timeouts:** PROJ-53-Uploads machen bis zu zwei ausgehende Aufrufe à `CORE_TIMEOUT_SECONDS`; dauert
+  das länger als `WRITE_TIMEOUT`, geht die Antwort verloren (Protokoll stimmt, Wiederholung → 409).
+  Gleiches Muster wie beim Import.
+- **Keine Mengenbegrenzung** für „erneut hochladen" (jeder Versuch steht mit Admin im Protokoll).
+
 ## QA Test Results
-_To be added by /qa_
+
+### Welle 1 — Backend (PR #120), 2026-11-07
+
+**Scope:** Backend-Anteil von AC-2 bis AC-8, AC-14, AC-15. Frontend (PR 2) und Automatik/EEG-Schalter
+(PR 3) sind noch nicht gebaut. Kein UI → keine Browser-/Responsive-Tests in dieser Welle.
+
+| AC | Ergebnis | Nachweis |
+|---|---|---|
+| AC-1 | nicht im Scope (UI, PR 2) | — |
+| AC-2 | ✅ Backend | Status-Whitelist imported/ready_for_activation/activated → sonst 409 `not_imported`; Unit-Test |
+| AC-3 | ✅ | `generatePDF` ruft dieselben Generatoren wie die Download-Endpunkte; nicht verfügbare Dokumente → 409 mit Download-Begründung |
+| AC-4 | ✅ Backend / ⏳ Live | Kategorie `contract`, Tenant = RC des Antrags, Dateinamen `SEPA-Mandat-<Nr>.pdf` usw.; Sichtbarkeit in eegFaktura erst in der Test-Zone prüfbar |
+| AC-5 | ✅ Backend | 200 mit Upload-Datensatz; „hochgeladen am" aus dem Protokoll (UI in PR 2) |
+| AC-6 | ✅ Backend | 409 `already_uploaded` + `lastUploadedAt` ohne `confirmRepeat`; Unit-Test |
+| AC-7 | ✅ Backend | 502 mit fester Fehlerkennung + deutscher Meldung, Fehler im Protokoll; erneuter Versuch möglich |
+| AC-8 | ✅ Backend | Protokoll-Tabelle + `GET …/eegfaktura-uploads` (AC-Text an Owner-Entscheidung angepasst) |
+| AC-9 bis AC-13 | nicht im Scope (PR 3) | Spalte `auto_upload_documents` angelegt, wird noch nicht gelesen |
+| AC-14 | ✅ | `checkTenantAccess` vor jeder Logik; Filestore prüft Tenant zusätzlich; E2E 401/404/400 |
+| AC-15 | ✅ | Logs nur Antrags-ID, Dokumentart, Ergebnis, Fehlerkennung; Client-Fehler ohne Antworttext |
+| AC-16 | nicht im Scope (User-Guide mit PR 2/3) | — |
+
+**Automatisierte Tests:** `go vet` sauber, `go test ./... -count=1` grün (inkl. neuer Unit-Tests für
+Filestore-Client und Upload-Dienst); Migration 000093 up/down/up gegen Postgres 18.6 geprüft (Backend-PR);
+`helm lint` ok (kubeconform lokal nicht installiert — Trivy IaC läuft in der CI). Neu:
+`tests/PROJ-129-eegfaktura-upload.spec.ts` (401 ohne Auth für POST/GET, 404 unbekannter Antrag
+vor Upload-Logik, 400 ungültige ID).
+
+**Regression:** Download der Beitrittserklärung nutzt jetzt den gemeinsamen Helfer
+`JoiningDeclarationUnavailableReason` — Meldungen und 404 `not_available` identisch (Diff geprüft).
+
+**Security-Smoke-Test:**
+
+| Severity | Datei | Funktion | Risiko | Exploit-Szenario | Fix-Empfehlung | Confidence |
+|---|---|---|---|---|---|---|
+| Low | internal/application/document_upload_service.go | Upload | Doppelter Upload bei gleichzeitigen Requests | Zwei Klicks im selben Moment passieren beide die „bereits hochgeladen"-Prüfung → Dokument liegt zweimal in eegFaktura | Button in PR 2 während des Uploads sperren; optional Advisory-Lock je (Antrag, Dokumentart) | High |
+| Low | internal/application/document_upload_service.go | resolveParticipantID | Upload an verwaistes Mitglied | `target_participant_id` zeigt auf ein in eegFaktura gelöschtes Mitglied; der Filestore prüft den Teilnehmer nicht → „hochgeladen", aber unsichtbar | Hinnehmen (Reset-Pfade halten die ID aktuell) oder vor dem Upload per Teilnehmerliste prüfen | Medium |
+| Info | internal/http/admin_document_uploads.go | — | Swagger-Dateien nicht regeneriert | — | Mit Q-B13 `swag init` | High |
+| Info | go.mod | — | excelize v2.11.0: 6 bekannte Lücken (Bestand, nicht aus diesem PR) | — | Eigenes Dependency-Update | High |
+
+Geprüft ohne Befund: Auth/Tenant-Isolation (beide Endpunkte), SQL nur parametrisiert, keine
+Server-Requests an Nutzer-URLs (Filestore-Adresse nur aus Konfiguration), keine Secrets/PII in Logs
+oder Antworten, `documentType` gegen feste Liste validiert, Dateiname aus festen Präfixen + bereinigter
+Mitgliedsnummer (kein Path Traversal), Default `FILESTORE_BASE_URL` leer = Funktion aus, Pro-Gate serverseitig.
+
+**Offen vor Live-Nutzung (nicht vor Merge):** Test-Zone — akzeptiert der Filestore das Admin-Token
+(`aud`) in `CORE_AUTH_MODE` direct/exchange; erscheint das Dokument beim richtigen Mitglied;
+Filestore-Adresse je Zone hinter dem Reverse-Proxy.
+
+**Ergebnis:** 0 Critical, 0 High, 0 Medium, 2 Low, 2 Info. Welle 1 ist **merge-bereit** (Funktion
+bleibt ohne `FILESTORE_BASE_URL` inaktiv). `/security-review` erforderlich (neue Core-Anbindung, Auth,
+Tenant-Isolation, Helm, Migration).
 
 ## Deployment
 _To be added by /deploy_

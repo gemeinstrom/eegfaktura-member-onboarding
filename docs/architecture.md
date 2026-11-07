@@ -162,6 +162,9 @@ The onboarding backend speaks to the core over HTTP/JSON and (since PROJ-32) Gra
 | EEG master data (GraphQL scalar `Eeg`) | `POST /api/query` with `{"query":"query { eeg }"}` | PROJ-32 stammdaten sync |
 | Billing config (logo reference) | `GET /cash/api/billingConfigs/tenant/{rcNumber}` | PROJ-33 logo sync |
 | Logo bytes | `GET /cash/api/billingConfigs/{id}/logoImage` | PROJ-33 logo sync |
+| Upload PDF as member contract document (GraphQL multipart `addFile`, category `contract`) | `POST {FILESTORE_BASE_URL}/graphql` | PROJ-129 upload to eegFaktura |
+
+**Filestore (PROJ-129).** The eegFaktura filestore is a separate service with its own base URL `FILESTORE_BASE_URL` (incl. reverse-proxy prefix, e.g. `https://eegfaktura.example.at/filestore`; empty = upload disabled, endpoints 503). Client: `internal/filestore` (stdlib `mime/multipart`, same request as eegfaktura-web's `uploadContractFileMutation`, 64 KiB response cap, timeout `CORE_TIMEOUT_SECONDS`). Token: the same core token as the REST calls (`CORE_AUTH_MODE`); the filestore verifies RS256, `aud` and the tenant claim itself.
 
 **URL model.** `CORE_BASE_URL` is the **hostname only** (e.g. `https://eegfaktura.at`). Path prefixes are hardcoded per call site in `internal/coreclient/` because the deployed reverse-proxy multiplexes several services under one host (`/api/...` → eegFaktura-backend, `/cash/api/...` → eegfaktura-billing).
 

@@ -1981,6 +1981,64 @@ The endpoint writes nothing — Mandatsreferenz and Mandatsdatum are only persis
 
 ---
 
+## 6.16a Upload PDFs to eegFaktura (PROJ-129)
+
+### POST `/api/admin/applications/{id}/eegfaktura-uploads`
+
+Generates one PDF with the same service function as the matching download endpoint and uploads it to the eegFaktura filestore as contract document (`fileCategory: "contract"`, attribute `category_tag=user`) of the member. The PDF is not stored in the onboarding.
+
+### Auth
+Keycloak JWT. Tenant-admin access is checked against the application's RC number. Blocked while the EEG's platform contract is suspended (PROJ-71 cool-down, 423), like the PDF downloads. The filestore is called with the same core token as the import (`CORE_AUTH_MODE`: session token in `direct`, `X-Core-Authorization` token in `exchange`) and the RC number as tenant; the filestore checks the tenant itself.
+
+### Request
+```json
+{ "documentType": "sepa_mandate", "confirmRepeat": false }
+```
+- `documentType` — `sepa_mandate` (like `sepa-mandate.pdf`), `joining_confirmation` (Beitrittsbestätigung, like `approval-pdf`), `joining_declaration` (unsigned Beitrittserklärung, like `joining-declaration.pdf`: only `activated` + board workflow).
+- `confirmRepeat` — must be `true` to upload a document that was already uploaded successfully.
+
+### Rules
+- EEG edition must be `pro` (`registration_entrypoint.eeg_edition`).
+- Application status must be `imported`, `ready_for_activation` or `activated`.
+- Core participant: `application.target_participant_id`; if empty (activation without import, PROJ-53) the participant is looked up in the core participant list (`GET /api/participant`) by `member_number`. No or more than one match → `participant_not_found`.
+- File name in eegFaktura: `SEPA-Mandat-<Mitgliedsnummer>.pdf`, `Beitrittsbestaetigung-<…>.pdf`, `Beitrittserklaerung-<…>.pdf` (reference number if no member number; characters outside `[A-Za-z0-9_-]` become `-`).
+- Every attempt that reaches the participant lookup / filestore call is written to `document_upload` (success and failure). No status change, no `status_log` entry. No automatic retry.
+
+### Response 200 — upload record
+```json
+{
+  "id": "uuid", "applicationId": "uuid", "documentType": "sepa_mandate",
+  "trigger": "manual", "result": "success", "filestoreFileId": "uuid",
+  "fileName": "SEPA-Mandat-A005.pdf", "actorUserId": "keycloak-subject",
+  "createdAt": "2026-11-07T10:00:00Z"
+}
+```
+
+### Errors
+- `400 validation_error` — body invalid or unknown `documentType`
+- `403 forbidden` — tenant mismatch
+- `403 pro_edition_required` — EEG is on Standard edition
+- `404 not_found` — application not found
+- `409 not_imported` — status not `imported`/`ready_for_activation`/`activated`
+- `409 document_not_available` — same condition as the download (no SEPA mandate / Beitrittserklärung not available); message from the generator
+- `409 already_uploaded` — successful upload exists and `confirmRepeat` is not `true`; body carries `lastUploadedAt` (newest successful upload)
+- `423 contract_suspended` — PROJ-71 cool-down
+- `502` — the attempt failed and was recorded; `code` is the stored error code (`participant_not_found`, `participant_lookup_failed`, `filestore_unreachable`, `filestore_unauthorized`, `filestore_rejected`), `message` a German admin text, `upload` the recorded failure:
+  ```json
+  { "code": "filestore_unreachable", "message": "eegFaktura ist nicht erreichbar. …", "upload": { "id": "uuid", "result": "failed", "errorCode": "filestore_unreachable", … } }
+  ```
+- `503 service_unavailable` — `FILESTORE_BASE_URL` empty, or no admin session token
+
+### GET `/api/admin/applications/{id}/eegfaktura-uploads`
+
+Upload protocol of the application, newest first. Same auth and tenant check; `404` for an unknown application, `503` when `FILESTORE_BASE_URL` is empty.
+
+```json
+{ "uploads": [ { "id": "uuid", "documentType": "joining_confirmation", "trigger": "manual", "result": "failed", "fileName": "Beitrittsbestaetigung-A005.pdf", "errorCode": "participant_not_found", "createdAt": "…" } ] }
+```
+
+---
+
 ## 6.17 Legal documents — Admin CRUD
 
 Manages the list of EEG-specific legal documents shown in the public registration form.
@@ -2826,14 +2884,15 @@ aus den persistierten Submission-Daten regeneriert.
 
 ## 9.7 Soft-Suspend guard *(PROJ-71)*
 
-Sieben bestehende Admin-Endpoints sind Soft-Suspend-geschützt. Wenn der
-Vertrag der adressierten EEG aktuell `suspended` ist, antworten sie mit `403`
+Acht Admin-Endpoints sind Soft-Suspend-geschützt. Wenn der
+Vertrag der adressierten EEG aktuell `suspended` ist, antworten sie mit `423 Locked`
 und einer generischen Fehlermeldung:
 
 - `POST /api/admin/applications/{id}/import`
 - `GET  /api/admin/applications/export` (Excel)
 - `GET  /api/admin/applications/{id}/approval-pdf`
 - `GET  /api/admin/applications/{id}/sepa-mandate.pdf` (PROJ-124)
+- `POST /api/admin/applications/{id}/eegfaktura-uploads` (PROJ-129)
 - `POST /api/admin/reconciliation/run` (PROJ-69)
 - `POST /api/admin/eeg/resync-from-core` (PROJ-32)
 - `POST /api/admin/sepa-mandate/renewal`

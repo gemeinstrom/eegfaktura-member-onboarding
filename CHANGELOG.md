@@ -17,6 +17,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-07
 
+### PDFs nach eegFaktura hochladen — Backend (PROJ-129, Teil 1)
+
+- Neue Admin-Endpunkte `POST`/`GET /api/admin/applications/{id}/eegfaktura-uploads`: SEPA-Mandat, Beitrittsbestätigung oder (unsignierte) Beitrittserklärung werden mit denselben Generatoren wie „Herunterladen" erzeugt und als Vertragsdokument zum Mitglied in den eegFaktura-Filestore hochgeladen. Nur Pro-Edition, nur nach dem Import; Mitglied ohne Import-Referenz (manuelle Aktivierung) wird über die Mitgliedsnummer im Core gesucht.
+- Doppel-Upload nur mit Bestätigung (409 mit Datum des letzten Uploads); jeder Versuch landet im neuen Upload-Protokoll (Tabelle `document_upload`, Migration 000093) mit fester Fehlerkennung, ohne Statuswechsel.
+- Neue Konfiguration `FILESTORE_BASE_URL` (Helm `backend.filestoreBaseUrl`); leer = Funktion aus (503); muss https sein (http nur für localhost/Cluster-interne Hosts, sonst startet das Backend nicht). Neue EEG-Spalte `auto_upload_documents` (Default aus) — Einstellung, Automatik bei Aktivierung und Oberfläche folgen.
+
 ### Fehlerbehandlung: 409/400 statt 500 (Audit K6–K8)
 
 - Klick auf den Bestätigungs-Link, nachdem der Antrag schon abgelehnt oder weiterbearbeitet wurde, liefert jetzt 409 (Konflikt, Antrag wartet nicht mehr auf Bestätigung) statt eines Serverfehlers.
