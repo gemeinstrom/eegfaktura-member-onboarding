@@ -17,6 +17,10 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-07
 
+### „Zählpunkt hinzufügen" hervorgehoben (PROJ-128)
+
+- Registrierungsformular: Button „Zählpunkt hinzufügen" primär (farbig) und in Standardgröße statt klein und umrandet, Hinweis „Weitere Zählpunkte? Unten hinzufügen." solange nur ein Zählpunkt erfasst ist. Tester-Rückmeldung: mehrere Zählpunkte wurden übersehen.
+
 ### Lint läuft wieder und ist Teil der CI (PROJ-85)
 
 - `npm run lint` war seit Next 16 kaputt (`next lint` wurde entfernt), die CI hat nie gelintet. Jetzt: eslint-CLI mit Flat-Config (`eslint.config.mjs`, gleiches Regelset `next/core-web-vitals` wie vorher), neuer Schritt „Lint" im Frontend-Job.

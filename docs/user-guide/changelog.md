@@ -4,6 +4,12 @@
 
 ---
 
+## 2026-11-07
+
+**Weitere Zählpunkte sind leichter zu finden**
+
+Im Registrierungsformular ist der Button **„Zählpunkt hinzufügen"** jetzt farbig und größer, und solange erst ein Zählpunkt eingetragen ist, weist ein kurzer Hinweis darauf hin, dass weitere Zählpunkte (z. B. für eine PV-Anlage) unten hinzugefügt werden können.
+
 ## 2026-10-25
 
 **Abweichende Zählpunkt-Adresse wird jetzt nach eegFaktura übernommen**
