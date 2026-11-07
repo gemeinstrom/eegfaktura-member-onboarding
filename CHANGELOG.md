@@ -17,6 +17,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-07
 
+### Dependabot-Updates gesammelt
+
+- Go: `github.com/go-playground/validator/v10` 10.30.5 → 10.30.6 (transitiv `golang.org/x/crypto`, `golang.org/x/sys` u. a. per `go mod tidy`).
+- Frontend: `vitest` + `@vitest/ui` 4.1.12 → 5.1.0, `@hookform/resolvers` 6.0.2 → 7.0.3, `lucide-react` 1.16.0 → 1.70.0, `@vitejs/plugin-react` 6.0.2 → 6.2.1, `autoprefixer` 10.6.1 → 10.6.2.
+- CI: `actions/setup-python` v7.0.0 → v7.1.0 (SHA-Pin gegen Upstream-Tag geprüft).
+- Keine Code-Anpassung nötig: Der rote CI-Lauf von #110 kam nur daher, dass `@vitest/ui` auf 4.x stehen blieb (Peer `vitest@4.1.12`). Der Breaking Change von resolvers 7 betrifft nur den TypeBox-Resolver, nicht `zodResolver`.
+- minimatch-Alert (GHSA-g3hv-75wg-m249, nur dev über eslint) bleibt offen: die eslint-Plugins von `eslint-config-next` verlangen weiter minimatch 3.x, eslint selbst 10.x; behoben ist es erst in 11.
+
 ### PDFs nach eegFaktura hochladen — Automatik bei Aktivierung (PROJ-129, Teil 3)
 
 - Drei neue Pro-EEG-Einstellungen (Owner-Entscheidung: pro Dokument statt eines Schalters) `auto_upload_sepa_mandate`, `auto_upload_joining_confirmation`, `auto_upload_joining_declaration` (Migration 000094, Default aus; entfernt die nie gelesene Spalte `auto_upload_documents` aus 000093). Volle Kette: `GET/PUT /api/admin/settings/eeg` (Patch-Semantik je Feld, Einschalten bei Standard-EEG → 403 `pro_edition_required`; `GET` liefert zusätzlich `eegEdition`), EEG-Einstellungs-Editor (nur „Alle Optionen" und nur bei Pro), Awareness-Banner, Konfig-Export/-Import (Import übernimmt TRUE nur bei Pro-Ziel-EEG). Der Wechsel auf Standard (`SetEegEditionTx`, Owner-Endpunkt `POST /api/admin/billing/eegs/{rc}/edition`) schaltet die drei Schalter in derselben Anweisung aus; ein Downgrade wird dadurch nicht gesperrt.

@@ -1,6 +1,6 @@
 # PROJ-129: PDFs eines Antrags nach eegFaktura hochladen
 
-## Status: In Review
+## Status: Approved
 **Created:** 2026-11-07
 **Last Updated:** 2026-11-07
 

@@ -1,6 +1,6 @@
 # PROJ-128: „Zählpunkt hinzufügen" im Registrierungsformular hervorheben
 
-## Status: In Progress
+## Status: Approved
 **Created:** 2026-11-07
 **Last Updated:** 2026-11-07
 

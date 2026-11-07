@@ -1,6 +1,6 @@
 # PROJ-85: ESLint v9 Flat-Config-Migration
 
-## Status: In Review
+## Status: Approved
 **Created:** 2026-06-08
 **Last Updated:** 2026-11-07
 **Typ:** Dev-Tooling

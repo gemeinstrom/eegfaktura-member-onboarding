@@ -1,6 +1,6 @@
 # PROJ-127: Rechtsdokument-Links in der Eingangsbestätigung an das Mitglied
 
-## Status: In Progress
+## Status: Approved
 **Created:** 2026-10-13
 **Last Updated:** 2026-11-07
 
