@@ -584,6 +584,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dokumente-nach-eegfaktura-hochladen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dokumente nach eegFaktura hochladen
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#antrag-bearbeiten" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -858,7 +869,7 @@
 <h2 id="detailansicht">Detailansicht<a class="headerlink" href="#detailansicht" title="Permanent link">&para;</a></h2>
 <p><img alt="Antragsdetail oben" src="../images/admin-application-detail-1.png" /></p>
 <p><img alt="Antragsdetail unten" src="../images/admin-application-detail-2.png" /></p>
-<p>Die Aktionsleiste oben rechts gruppiert Aktionen in zwei Dropdowns plus einzelne Top-Level-Buttons. Sichtbarkeit hängt vom aktuellen Status ab:</p>
+<p>Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne Top-Level-Buttons. Sichtbarkeit hängt vom aktuellen Status ab:</p>
 <table>
 <thead>
 <tr>
@@ -882,6 +893,11 @@
 <td><strong>Beitrittserklärung</strong></td>
 <td>Herunterladen</td>
 <td>Status <em>Aktiviert</em> + Vorstands-Genehmigungs-Workflow der EEG aktiv</td>
+</tr>
+<tr>
+<td><strong>SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung</strong></td>
+<td>Nach eegFaktura hochladen</td>
+<td>Pro-Edition, ab Status <em>Importiert</em> (gleiche Dokumente wie unter „Herunterladen"), siehe <a href="#dokumente-nach-eegfaktura-hochladen">unten</a></td>
 </tr>
 <tr>
 <td><strong>Bestätigungs-Mail</strong> <em>(oder „Bestätigungs-Link" bei pendender E-Mail-Bestätigung)</em></td>
@@ -942,7 +958,19 @@
 - <strong>Antragsdaten</strong> — Referenznummer, RC-Nummer, Mitgliedsnummer (nach erfolgreichem Import), Zeitstempel
 - <strong>Zählpunkte</strong> — alle angegebenen Zählpunkte mit Richtung und Teilnahmefaktor
 - <strong>Admin-Notiz</strong> — interne Notizen (nur für Admins sichtbar)
-- <strong>Statusverlauf</strong> — chronologische Historie aller Statusänderungen</p>
+- <strong>Statusverlauf</strong> — chronologische Historie aller Statusänderungen
+- <strong>Dokumente in eegFaktura</strong> — welche PDFs nach eegFaktura hochgeladen wurden (nur Pro-Edition, siehe nächster Abschnitt)</p>
+<h2 id="dokumente-nach-eegfaktura-hochladen">Dokumente nach eegFaktura hochladen<a class="headerlink" href="#dokumente-nach-eegfaktura-hochladen" title="Permanent link">&para;</a></h2>
+<p>In der <strong>Pro-Edition</strong> kannst du SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über <strong>Herunterladen ▾</strong> bekommst.</p>
+<p>Das geht erst, wenn das Mitglied in eegFaktura existiert, also ab Status <em>Importiert</em> (auch <em>Bereit zur Aktivierung</em> und <em>Aktiviert</em>). Vorher ist das Menü <strong>Nach eegFaktura hochladen ▾</strong> nicht sichtbar. In der Standard-Edition gibt es die Funktion nicht.</p>
+<ol>
+<li>Menü <strong>Nach eegFaktura hochladen ▾</strong> öffnen und das Dokument wählen.</li>
+<li>Der Bestätigungsdialog nennt das Mitglied in eegFaktura, z. B. „Hochladen an Mitglied A015 · Max Mustermann in eegFaktura?". Prüfe den Namen — vor allem nach einer manuellen Aktivierung ohne Import, bei der das Mitglied über die eingetragene Mitgliedsnummer gesucht wird. Kann das Mitglied nicht gefunden werden, zeigt der Dialog den Grund und bietet kein Hochladen an.</li>
+<li><strong>Hochladen</strong> klicken. Während der Upload läuft, ist das Menü gesperrt. Danach erscheint eine Erfolgs- oder Fehlermeldung.</li>
+</ol>
+<p>Wurde das Dokument schon einmal hochgeladen, fragt ein zweiter Dialog <strong>Erneut hochladen?</strong> nach und nennt das Datum des letzten Uploads. Bestätigst du, liegt das Dokument danach zweimal in eegFaktura; eine überzählige Kopie kannst du dort löschen.</p>
+<p>Der Bereich <strong>Dokumente in eegFaktura</strong> listet jeden Versuch mit Dokument, Zeitpunkt, Ergebnis (<em>hochgeladen</em> oder <em>fehlgeschlagen</em> mit Grund, z. B. „eegFaktura nicht erreichbar"), Auslöser und Admin. Fehlgeschlagene Uploads werden nicht automatisch wiederholt — lade das Dokument später einfach erneut hoch.</p>
+<p>Hochgeladen wird immer die <strong>unsignierte</strong> Beitrittserklärung. Die vom Vorstand unterschriebene Fassung musst du weiterhin selbst in eegFaktura beim Mitglied ergänzen.</p>
 <h2 id="antrag-bearbeiten">Antrag bearbeiten<a class="headerlink" href="#antrag-bearbeiten" title="Permanent link">&para;</a></h2>
 <p>Als Admin kannst du folgende Felder direkt korrigieren:</p>
 <ul>
