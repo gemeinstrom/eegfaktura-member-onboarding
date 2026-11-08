@@ -13,6 +13,18 @@ Tester-Wunsch 2026-10-30 (WhatsApp): Viele regionale EEGs kooperieren mit einer 
 
 Ausdrücklich **nicht** nötig: das Mitglied automatisch auch in der zweiten eegFaktura-Gemeinschaft anzulegen. Die EEG kopiert das selbst mit einem eigenen Werkzeug, das die Antwort aus dem Export liest.
 
+## Rückmeldung der Tester zur Spezifikation (WhatsApp 2026-11-08)
+
+- **Umfang bestätigt:** Die Doppel-Anlage in der zweiten Gemeinschaft und die Regelung des Teilnahmefaktors sollen
+  organisatorisch erfolgen, nicht im Member-Onboarding. Die anfragende EEG hat dafür ein eigenes Werkzeug gebaut, das
+  sie auch anderen EEGs zur Verfügung stellen würde. Start mit dieser Anforderungsdefinition. Das bestätigt die
+  Owner-Entscheidungen O1–O7 und „Out of Scope“.
+- **Nebenbefund zum Dokumenten-Upload (PROJ-129, nicht Teil dieser Spec):** Bei einer EEG kommt die
+  Beitrittserklärung erst in eegFaktura, wenn der Vorstand sie unterschrieben hat. Die automatisch hochgeladene,
+  unsignierte Beitrittserklärung würde dort später durch die signierte Fassung ersetzt. Der Schalter je Dokument
+  (Einstellungen → „Dokumente bei Aktivierung automatisch nach eegFaktura hochladen“) deckt das ab: Die EEG lässt
+  „Beitrittserklärung (unsigniert)“ aus. Kein Handlungsbedarf, solange keine weitere EEG das anders braucht.
+
 ## Owner-Entscheidungen (2026-11-08)
 
 | # | Entscheidung |

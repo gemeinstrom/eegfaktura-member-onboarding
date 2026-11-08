@@ -246,9 +246,6 @@ Standardmäßig bekommt das Mitglied beim Aktivieren die Beitrittsbestätigung a
 
 ### Dokumente bei Aktivierung automatisch nach eegFaktura hochladen *(Alle Optionen)*
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Mit drei Schaltern legst du fest, welche Dokumente beim Wechsel auf „Aktiviert" automatisch beim Mitglied in eegFaktura abgelegt werden — jedes Dokument einzeln:
 
 - **SEPA-Mandat automatisch hochladen**

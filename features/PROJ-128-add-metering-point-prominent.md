@@ -1,6 +1,6 @@
 # PROJ-128: „Zählpunkt hinzufügen" im Registrierungsformular hervorheben
 
-## Status: Approved
+## Status: Deployed
 **Created:** 2026-11-07
 **Last Updated:** 2026-11-07
 
@@ -59,4 +59,5 @@ Follow-ups: Screenshots im User-Guide (`register-form-metering-points.png`) neu 
 _To be added by /qa_
 
 ## Deployment
-_To be added by /deploy_
+
+- Live in Prod seit 2026-11-08 (helm Revision 29, Image sha-84c5033, Tag v1.50.0-PROJ-85-127-128-129). Migrationen 000093/000094 angewendet.

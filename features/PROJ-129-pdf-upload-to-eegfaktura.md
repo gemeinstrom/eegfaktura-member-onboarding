@@ -1,6 +1,6 @@
 # PROJ-129: PDFs eines Antrags nach eegFaktura hochladen
 
-## Status: Approved
+## Status: Deployed
 **Created:** 2026-11-07
 **Last Updated:** 2026-11-07
 
@@ -575,4 +575,5 @@ nicht vom Backfill erfasst) zählen weiter als „bereits hochgeladen". Follow-u
 Quelltext-Scan umstellen; die zwei Vertragsprüfer-Adapter in `main.go` teilen.
 
 ## Deployment
-_To be added by /deploy_
+
+- Live in Prod seit 2026-11-08 (helm Revision 29, Image sha-84c5033, Tag v1.50.0-PROJ-85-127-128-129). Migrationen 000093/000094 angewendet. Upload für alle EEGs ohne Edition-Sperre (#125); Hinweise „nur in der Test-Umgebung“ im User-Guide entfernt.
