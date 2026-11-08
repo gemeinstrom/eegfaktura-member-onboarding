@@ -76,6 +76,9 @@ helm rollback eegfaktura-member-onboarding
 - Create git tag: `git tag -a vX.Y.Z-PROJ-X -m "Deploy PROJ-X: [Feature Name]"`
 - Push tag: `git push origin vX.Y.Z-PROJ-X`
 - Commit updated Helm image tags
+- **Nach dem Prod-Deploy:** Hinweise „nur in Test" im User-Guide für die ausgerollten Features entfernen:
+  `grep -rn 'Derzeit nur in der Test-Umgebung' docs/user-guide/`. Jeden Treffer, der zu einem jetzt in Prod laufenden Feature gehört,
+  samt eingerückter Folgezeile und Leerzeile löschen. Pattern siehe CLAUDE.md, Abschnitt „User-Guide: Funktionen nur in Test".
 
 ## Full Deployment Checklist
 - [ ] Pre-deployment checks all pass

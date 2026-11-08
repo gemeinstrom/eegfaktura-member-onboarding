@@ -440,6 +440,22 @@ production data, prepare a read-only query for the user instead of guessing.
 - Claude evaluates the review feedback, fixes or lists what is left, and merges low-complexity
   PRs. For everything else the user decides and merges.
 
+## User-Guide: Funktionen nur in Test
+
+Owner-Pattern seit 2026-11-08: Ist eine Funktion in der Test-Umgebung ausgerollt, aber noch nicht in Prod, bekommt jede
+Stelle im User-Guide (`docs/user-guide/**`), die sie beschreibt, direkt unter der Überschrift bzw. vor dem Absatz diesen Block,
+**wörtlich** (der Titel ist der Such-Schlüssel):
+
+```
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+```
+
+Die zweite Zeile darf an den Kontext angepasst werden, der Titel nicht. Auch der Eintrag in `docs/user-guide/changelog.md`
+bekommt den Block. Beim Prod-Deploy (`/deploy`, Bookkeeping) werden alle Blöcke des ausgerollten Features entfernt —
+Block = Titelzeile + eingerückte Zeile(n) + eine Leerzeile; sonst bleibt der Text unverändert. Finden:
+`grep -rn 'Derzeit nur in der Test-Umgebung' docs/user-guide/`.
+
 ## Security Workflow mit Snyk
 
 Dieses Projekt nutzt Snyk als ergänzenden Security-Scanner.

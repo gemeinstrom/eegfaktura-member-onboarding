@@ -112,6 +112,9 @@ Die Detailansicht zeigt alle Angaben des Mitglieds:
 
 ## Dokumente nach eegFaktura hochladen
 
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
 Du kannst SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über **Herunterladen ▾** bekommst.
 
 Das geht erst, wenn das Mitglied in eegFaktura existiert, also ab Status *Importiert* (auch *Bereit zur Aktivierung* und *Aktiviert*). Vorher ist das Menü **Nach eegFaktura hochladen ▾** nicht sichtbar.
