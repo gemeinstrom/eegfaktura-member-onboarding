@@ -746,10 +746,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#dokumente-bei-aktivierung-automatisch-nach-eegfaktura-hochladen-alle-optionen-nur-pro-edition" class="md-nav__link">
+  <a href="#dokumente-bei-aktivierung-automatisch-nach-eegfaktura-hochladen-alle-optionen" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dokumente bei Aktivierung automatisch nach eegFaktura hochladen (Alle Optionen, nur Pro-Edition)
+        Dokumente bei Aktivierung automatisch nach eegFaktura hochladen (Alle Optionen)
       
     </span>
   </a>
@@ -1510,7 +1510,7 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 <blockquote>
 <p>Dieser Schalter ist unabhängig vom <strong>Vorstands-Genehmigungs-Workflow</strong> weiter oben. Dort geht eine <em>Beitrittserklärung</em> (Dokument zum Unterschreiben) an die EEG; hier geht die fertige <em>Beitrittsbestätigung</em> zum Weiterleiten an die EEG. Beide lassen sich getrennt voneinander ein- und ausschalten.</p>
 </blockquote>
-<h3 id="dokumente-bei-aktivierung-automatisch-nach-eegfaktura-hochladen-alle-optionen-nur-pro-edition">Dokumente bei Aktivierung automatisch nach eegFaktura hochladen <em>(Alle Optionen, nur Pro-Edition)</em><a class="headerlink" href="#dokumente-bei-aktivierung-automatisch-nach-eegfaktura-hochladen-alle-optionen-nur-pro-edition" title="Permanent link">&para;</a></h3>
+<h3 id="dokumente-bei-aktivierung-automatisch-nach-eegfaktura-hochladen-alle-optionen">Dokumente bei Aktivierung automatisch nach eegFaktura hochladen <em>(Alle Optionen)</em><a class="headerlink" href="#dokumente-bei-aktivierung-automatisch-nach-eegfaktura-hochladen-alle-optionen" title="Permanent link">&para;</a></h3>
 <p>Mit drei Schaltern legst du fest, welche Dokumente beim Wechsel auf „Aktiviert" automatisch beim Mitglied in eegFaktura abgelegt werden — jedes Dokument einzeln:</p>
 <ul>
 <li><strong>SEPA-Mandat automatisch hochladen</strong></li>
@@ -1521,7 +1521,7 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 <p><strong>Wichtig bei Vorstands-Genehmigung:</strong> Hochgeladen wird die <strong>unsignierte</strong> Beitrittserklärung. Die vom Vorstand unterschriebene Fassung musst du selbst in eegFaktura beim Mitglied ergänzen. Willst du in eegFaktura nur die signierte Fassung haben, lass diesen Schalter aus und schalte zum Beispiel nur das SEPA-Mandat ein.</p>
 <p>Der Upload läuft im Hintergrund nach der Aktivierung, parallel zur Aktivierungs-Mail: Aktivierung und E-Mails warten nicht darauf, und ein Fehler macht die Aktivierung nicht rückgängig. Das Ergebnis siehst du im Antrag unter <strong>Dokumente in eegFaktura</strong> (Auslöser „automatisch"); einen fehlgeschlagenen Upload holst du dort mit <strong>Nach eegFaktura hochladen ▾</strong> nach. Ein Dokument, das schon einmal erfolgreich an dasselbe Mitglied hochgeladen wurde, wird nicht automatisch ein zweites Mal hochgeladen — auch nicht nach „Aktivierung zurücksetzen" und erneuter Aktivierung. Wurde der Antrag zurückgesetzt und an ein anderes Mitglied in eegFaktura neu importiert, geht das Dokument an das neue Mitglied.</p>
 <p>Ist der Plattform-Vertrag der EEG ausgesetzt, wird nicht automatisch hochgeladen. Lehnt eegFaktura deine Anmeldung ab (z. B. weil sie während einer langen Aktivierungs-Prüfung abgelaufen ist), bricht der automatische Upload für die übrigen Anträge ab — prüfe dann unter <strong>Dokumente in eegFaktura</strong>, was fehlt, und lade es manuell nach.</p>
-<p>Die Schalter gibt es nur in der Pro-Edition; in der Standard-Edition sind sie ausgeblendet. Beim Wechsel auf Standard werden sie ausgeschaltet — nach einem Wechsel zurück auf Pro musst du sie wieder einschalten.</p>
+<p>Die Schalter findest du unter <strong>Alle Optionen</strong>; in der einfachen Ansicht sind sie nicht zu sehen.</p>
 <h3 id="genossenschaftsanteile-alle-optionen">Genossenschaftsanteile <em>(Alle Optionen)</em><a class="headerlink" href="#genossenschaftsanteile-alle-optionen" title="Permanent link">&para;</a></h3>
 <blockquote>
 <p>Diese Sektion ist nur in <strong>Alle Optionen</strong> sichtbar.</p>
@@ -2029,7 +2029,7 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 <p>Im erweiterten Modus findest du in den Stammdaten-Einstellungen einen Switch zwischen den Editionen <strong>Standard</strong> und <strong>Pro</strong>. Wichtig zu wissen:</p>
 <ul>
 <li><strong>Snapshot-Pattern</strong>: bestehende Aktivierungen behalten ihren ursprünglichen Tarif, auch wenn du switchst. Nur <strong>neue</strong> Mitglieder-Aktivierungen ab dem Switch-Zeitpunkt tragen die neue Edition. So kannst du jederzeit problemlos wechseln, ohne dass alte Buchungen rückwirkend teurer werden.</li>
-<li><strong>Pro → Standard Downgrade-Block</strong>: ein Downgrade ist nur möglich, wenn keine Pro-only-Features mehr aktiv sind (Externe API-Key, Datenweiterleitung, Reconciliation-Backstop, Vorstands-Workflow, SEPA-Mandat-Audit, eigenes Brand-Theme). Der Dialog zeigt dir die Liste der aktiven Sperren mit Direktlinks zum jeweiligen Setting. Der automatische Upload nach eegFaktura sperrt den Wechsel nicht: seine Schalter werden beim Wechsel auf Standard ausgeschaltet.</li>
+<li><strong>Pro → Standard Downgrade-Block</strong>: ein Downgrade ist nur möglich, wenn keine Pro-only-Features mehr aktiv sind (Externe API-Key, Datenweiterleitung, Reconciliation-Backstop, Vorstands-Workflow, SEPA-Mandat-Audit, eigenes Brand-Theme). Der Dialog zeigt dir die Liste der aktiven Sperren mit Direktlinks zum jeweiligen Setting. Der automatische Upload nach eegFaktura sperrt den Wechsel nicht, seine Schalter bleiben dabei unverändert.</li>
 <li><strong>Wirkungs-Zeitpunkt</strong>: der Switch wirkt <strong>sofort</strong>. Du musst keine zusätzlichen Schritte machen — die nächste Mitglieder-Aktivierung in deiner EEG wird mit der neuen Edition versiegelt.</li>
 </ul>
 <h3 id="fragen">Fragen?<a class="headerlink" href="#fragen" title="Permanent link">&para;</a></h3>
