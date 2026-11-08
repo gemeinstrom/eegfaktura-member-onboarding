@@ -1,6 +1,6 @@
 # PROJ-131: Abfrage „Mehrfachteilnahme" im Beitrittsformular
 
-## Status: Planned
+## Status: Architected
 **Created:** 2026-11-08
 **Last Updated:** 2026-11-08
 
@@ -219,7 +219,108 @@ Die Antwort bleibt im Onboarding. Ins eegFaktura der BEG kommt das Mitglied übe
 <!-- Sections below are added by subsequent skills -->
 
 ## Tech Design (Solution Architect)
-_To be added by /architecture_
+
+**Stand:** 2026-11-08, vom Owner freigegeben (T1 eigene Karte, T5 Antwort bleibt erhalten, T8 PDF in beiden Varianten). Das Feature braucht Backend (Speicherung je EEG und je Antrag) und Frontend. Neue Pakete sind nicht nötig.
+
+### A) Bausteine
+
+```
+EEG-Einstellungen (Admin, einfache Ansicht)
++-- Karte „Mehrfachteilnahme"            (neu, eigene Speicherung wie der Einleitungstext)
+    +-- Schalter an/aus
+    +-- Überschrift (einzeilig)
+    +-- Erklärungstext  → gemeinsamer Text-Editor (aus dem Einleitungstext herausgelöst)
+    +-- Frage (einzeilig, Pflicht wenn an)
+
+Beitrittsformular (öffentlich) und Self-Edit-Link
++-- … bestehende Abschnitte …
++-- Abschnitt „Mehrfachteilnahme"        (neu, nur wenn an; vor den Einwilligungen)
+|   +-- Überschrift
+|   +-- Erklärungstext  → gemeinsame Anzeige wie beim Einleitungstext
+|   +-- Ja/Nein-Auswahl (Pflicht, anfangs leer)
++-- Einwilligungen · Absenden
+
+Antrag (Admin)
++-- Detailansicht: Zeile „Mehrfachteilnahme: Ja / Nein / keine Angabe"
++-- Bearbeiten: Auswahl Ja / Nein / keine Angabe (immer bearbeitbar)
+
+Ausgaben (alle aus demselben gespeicherten Wert)
++-- Mail an EEG + Eingangsbestätigung (alle Sendewege: Einreichen, erneut Einreichen, erneut Senden)
++-- PDF: Beitrittsbestätigung und Beitrittserklärung (Vorstands-Variante teilt die Daten)
++-- Daten-Export + Datenweiterleitung (ein Feldkatalog, Backend und Frontend gleich)
++-- Externe API (optional) · Config-Export/-Import
++-- Import nach eegFaktura: unverändert, Wert wird nicht übertragen
+```
+
+### B) Datenmodell (in Worten)
+
+**Je EEG** (Erweiterung des Eintrags in `registration_entrypoint`, vier Spalten, kein JSON):
+- Schalter „Frage anzeigen" — Standard aus.
+- Überschrift — Text, höchstens 200 Zeichen, darf leer sein.
+- Erklärungstext — formatierter Text, serverseitig bereinigt, Längenrahmen wie beim Einleitungstext, darf leer sein.
+- Frage — Text, höchstens 300 Zeichen. Pflicht, solange der Schalter an ist.
+
+**Je Antrag** (eine Spalte in `application`):
+- Mehrfachteilnahme gewünscht — drei Zustände: Ja, Nein, keine Angabe (leer).
+
+Eine Datenbank-Migration legt die fünf Spalten an. Sie fügt nur hinzu, alle Werte starten aus bzw. leer. Nach dem Deploy ändert sich deshalb für keine EEG etwas, bis sie die Frage einschaltet. Die Migrationsnummer wird beim Bau vergeben, weil PROJ-130 einen eigenen Entwurf hat.
+
+### C) Entscheidungen und Begründung
+
+| # | Entscheidung | Warum |
+|---|---|---|
+| T1 | **Eigene Einstellungskarte mit eigener Speicherung** (neues Endpoint-Paar „Mehrfachteilnahme lesen/speichern" je RC-Nummer), nicht in der großen EEG-Einstellungs-Speicherung. | Der Erklärungstext ist langer formatierter Text wie der Einleitungstext, und der hat sich als eigene Karte bewährt. Die große Einstellungs-Speicherung bleibt unberührt, damit kein bestehendes Feld beim Speichern verloren gehen kann. Die Prüfung „Frage nötig, wenn an" bleibt an einer Stelle. |
+| T2 | **Ein gemeinsamer Text-Editor**: Die Werkzeugleiste und das Eingabefeld des Einleitungstexts werden als eigener Baustein herausgelöst und an beiden Stellen genutzt. Dasselbe gilt für die Anzeige im Formular. | Das ist O5 („gleicher Editor"). Zwei Kopien würden auseinanderlaufen. Das Verhalten des Einleitungstexts ändert sich nicht. |
+| T3 | **Bereinigung doppelt wie beim Einleitungstext**: Der Server bereinigt beim Speichern und beim Config-Import mit demselben Helfer. Die Anzeige im Formular bereinigt ein zweites Mal. | Der Text erscheint auf einer öffentlichen Seite. Das ist dasselbe zweistufige Muster wie beim Einleitungstext, ohne eigene Regelmenge (AC-3). |
+| T4 | **Eine Prüfstelle für die Antwort** im Antrags-Service, genutzt vom Formular, vom Self-Edit-Link und von der externen API. Ist die Frage an und fehlt die Antwort, lehnt sie beim Einreichen ab. Ausnahme ist die externe API, dort ist die Antwort optional (O7). Ist die Frage aus, verwirft sie einen mitgeschickten Wert. | So kann kein Weg die Regel umgehen. Formular und Server prüfen dasselbe (AC-6, AC-7, AC-15). |
+| T5 | **Ausgeschaltete Frage lässt gespeicherte Antworten unangetastet.** Speichert ein öffentlicher Weg bei ausgeschalteter Frage (z. B. Self-Edit), bleibt der alte Wert stehen; er wird weder überschrieben noch gelöscht. Das Admin-Bearbeiten darf ihn immer setzen, auch auf „keine Angabe". | Erfüllt den Edge Case „EEG schaltet aus, Antworten bleiben" und AC-10. Ohne diese Regel würde das Speichern über den Self-Edit-Link den Wert still löschen. |
+| T6 | **Admin-Bearbeiten trägt das Feld auf allen Ebenen**: Typ, Formular-Zustand, Speicher-Daten, Server-Anfrage, Service und Datenbank. | Das Bearbeiten ersetzt den ganzen Antrag. Fehlt das Feld auf einer Ebene, geht der Wert beim Speichern verloren (bekannte Fehlerquelle). |
+| T7 | **Mails über die gemeinsame Zusatzfeld-Liste**: Die Zeile wird dort ergänzt, wo heute schon Wärmepumpe und ähnliche Felder stehen. Sie erscheint, sobald ein Wert gesetzt ist, unabhängig vom Schalter. | Alle Sendewege nutzen diese Liste. So reicht eine Stelle für EEG-Mail, Eingangsbestätigung, erneutes Einreichen und erneutes Senden (AC-12). |
+| T8 | **PDF**: Die Zeile kommt in den Mitglieds-Block. Damit steht sie in Beitrittsbestätigung und Beitrittserklärung (Vorstands-Variante). | Beide Varianten teilen dieselben Daten. Dass der Vorstand die Antwort auf der Erklärung sieht, ist gewollt: Er entscheidet über die Aufnahme mit. |
+| T9 | **Export-Feldkatalog**: Die neue Spalte kommt im selben Commit in Backend und Frontend, Werte Ja / Nein / leer. Die Datenweiterleitung nutzt denselben Katalog. | Backend und Frontend sind hier schon mehrfach auseinandergelaufen (AC-14). Das Kopier-Werkzeug der EEG liest genau diese Spalte. |
+| T10 | **Öffentliche Formular-Konfiguration** liefert Überschrift, Erklärung und Frage nur aus, wenn die Frage an ist. | Ist sie aus, braucht das Formular nichts, und es wird nichts Unnötiges veröffentlicht. |
+| T11 | **Einstellungs-Ansicht**: Die Karte ist in der einfachen Ansicht sichtbar und zählt nicht als „erweiterte" Einstellung. | So verlangt es AC-1. Die Prüfung, ob die Ansicht auf „Alle Optionen" springen muss, bleibt unverändert. |
+| T12 | **Mandanten-Trennung** wie bei jeder EEG-Einstellung: Jede Anfrage prüft zuerst die RC-Nummer gegen die Rechte des Admins. | Gleiches Muster wie beim Einleitungstext, keine neue Rechte-Logik. |
+| T13 | **Kein Import nach eegFaktura**: Import-Daten und Core-Schnittstelle bleiben unverändert. | Out of Scope (AC-17). |
+
+### D) Schnittstellen (für api-spec.md)
+
+- **Neu:** Einstellungen „Mehrfachteilnahme" lesen und speichern je RC-Nummer (Admin, Keycloak).
+  - Beim Speichern prüft der Server die Längen, verlangt eine Frage, wenn der Schalter an ist, und bereinigt den Erklärungstext.
+  - Fehler meldet er als Feldfehler (400).
+- **Erweitert:**
+  - Öffentliche Formular-Konfiguration: neuer optionaler Block mit den drei Texten.
+  - Antrag anlegen, ändern und einreichen (öffentlich, Self-Edit): neues optionales Feld Ja/Nein.
+  - Admin-Antrag lesen und bearbeiten: dasselbe Feld, dreiwertig.
+  - Externe API: dasselbe Feld, optional, ungültiger Wert ergibt 400.
+  - Config-Export/-Import: vier neue Einstellungswerte.
+
+### E) Abhängigkeiten
+
+Keine neuen Pakete. Der Text-Editor (tiptap), die Auswahl-Bausteine (shadcn) und der HTML-Bereiniger (bluemonday) sind schon im Projekt.
+
+### F) Umsetzung und Gates
+
+- **Ein Draft-PR** (Backend + Frontend zusammen). Der Export-Katalog muss in Backend und Frontend gleichzeitig kommen. Die Ausgaben greifen nur gemeinsam sinnvoll.
+- **Reihenfolge:**
+  1. Migration
+  2. Einstellungs-Endpoints + Prüfung
+  3. Antragsfeld + Prüfstelle (T4/T5)
+  4. Mails, PDF, Export, externe API, Config-Export
+  5. Frontend: Editor-Baustein, Einstellungskarte, Formularabschnitt, Detail/Bearbeiten
+  6. Doku: api-spec, domain-model, User-Guide mit Hinweis „nur in Test" bis zum Prod-Deploy
+- **Gates:**
+  - Review 1 + Review 2: Migration, öffentliches Formular, Mails/PDF, externe API
+  - `/qa`
+  - `/security-review`: öffentlicher Endpoint, Schema-Änderung, HTML auf öffentlicher Seite
+  - Freigabe der Migration durch den Owner vor dem Anwenden
+- **Tests:**
+  - Prüfstelle mit allen Kombinationen aus Schalter, Weg und Wert
+  - Bereinigung
+  - Admin-Bearbeiten verliert den Wert nicht
+  - Self-Edit bei ausgeschalteter Frage
+  - Export-Katalog Backend und Frontend gleich
+  - E2E: Formular mit eingeschalteter Frage, ohne Auswahl kein Absenden
 
 ## QA Test Results
 _To be added by /qa_
