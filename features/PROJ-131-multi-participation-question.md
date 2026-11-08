@@ -25,6 +25,104 @@ Ausdrücklich **nicht** nötig: das Mitglied automatisch auch in der zweiten eeg
 | O6 | **Neutrale Vorgabetexte.** Überschrift „Teilnahme an einer weiteren Energiegemeinschaft", Frage „Möchtest du zusätzlich an einer weiteren Energiegemeinschaft teilnehmen?", Erklärung leer. Die EEG kann alles anpassen. Speichern geht nur mit einem Frage-Text. |
 | O7 | **Externe API** nimmt das Feld optional an und prüft es wie das Formular. Es wird dort nicht erzwungen. |
 
+## Visualisierung der geplanten Lösung
+
+Skizzen zur Abstimmung, kein endgültiges Design. Die Beispieltexte sind frei erfunden.
+
+### 1. Einstellungen der EEG (Admin)
+
+```
+┌─ Einstellungen ▸ Formular ─────────────────────────────────────────────┐
+│                                                                        │
+│  Mehrfachteilnahme                                                     │
+│  ────────────────────────────────────────────────────────────────────  │
+│  [■ an ]  Frage zur Mehrfachteilnahme im Beitrittsformular anzeigen    │
+│                                                                        │
+│  Überschrift                                                           │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │ Zusätzliche Energie aus Wind- und Wasserkraft                    │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+│                                                                        │
+│  Erklärungstext                     [ B ] [ I ] [ • ] [ 1. ] [ 🔗 ]    │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │ Als Mitglied kannst du gleichzeitig bei der Muster-BEG           │  │
+│  │ mitmachen. Sie wird vor allem im Winter aus Windkraft            │  │
+│  │ versorgt. Details unter www.muster-beg.at                        │  │
+│  │                                                                  │  │
+│  │ Den Teilnahmefaktor zwischen beiden Gemeinschaften passen wir    │  │
+│  │ regelmäßig an; regionale Energie hat Vorrang.                    │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+│                                                                        │
+│  Frage *                                                               │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │ Möchtest du zusätzlich bei der Muster-BEG teilnehmen?            │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+Beim ersten Einschalten stehen in Überschrift und Frage die neutralen Vorgabetexte. Der Erklärungstext ist leer.
+
+### 2. Beitrittsformular (Mitglied)
+
+Der Abschnitt steht vor den Einwilligungen und erscheint nur, wenn die EEG die Frage eingeschaltet hat.
+
+```
+┌─ Beitrittsformular ────────────────────────────────────────────────────┐
+│  … Persönliche Daten · Bankverbindung · Zählpunkte …                   │
+│                                                                        │
+│  Zusätzliche Energie aus Wind- und Wasserkraft                         │
+│  ────────────────────────────────────────────────────────────────────  │
+│  Als Mitglied kannst du gleichzeitig bei der Muster-BEG mitmachen.     │
+│  Sie wird vor allem im Winter aus Windkraft versorgt.                  │
+│  Details unter www.muster-beg.at  ← anklickbarer Link                  │
+│                                                                        │
+│  Den Teilnahmefaktor zwischen beiden Gemeinschaften passen wir         │
+│  regelmäßig an; regionale Energie hat Vorrang.                         │
+│                                                                        │
+│  Möchtest du zusätzlich bei der Muster-BEG teilnehmen? *               │
+│  ┌──────────────────────────────┐┌──────────────────────────────┐      │
+│  │              Ja              ││             Nein             │      │
+│  └──────────────────────────────┘└──────────────────────────────┘      │
+│  (anfangs nichts gewählt; ohne Auswahl kein Absenden)                  │
+│                                                                        │
+│  … Einwilligungen · Antrag einreichen                                  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+Auf dem Handy (375 px) stehen „Ja" und „Nein" untereinander, jeweils über die volle Breite.
+
+### 3. Antrags-Detail (Admin)
+
+```
+┌─ Antrag ONB-… · Max Mustermann ────────────────────────────────────────┐
+│  Mitglied                                                              │
+│    Name ............... Max Mustermann                                 │
+│    E-Mail ............. max@example.org                                │
+│    Mehrfachteilnahme .. Ja                       [Bearbeiten ✎]        │
+│  …                                                                     │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+Im Bearbeiten-Formular lässt sich der Wert auf Ja, Nein oder „keine Angabe" setzen.
+
+### 4. Weg der Antwort
+
+```mermaid
+flowchart LR
+    S["EEG-Einstellungen<br/>Schalter + Überschrift,<br/>Erklärung, Frage"] --> F["Beitrittsformular<br/>Ja / Nein (Pflicht)"]
+    X["Externe API<br/>(optional)"] --> A
+    F --> A[("Antrag<br/>Mehrfachteilnahme:<br/>Ja / Nein / keine Angabe")]
+    E["Admin: Bearbeiten<br/>Self-Edit-Link (Mitglied)"] --> A
+    A --> D["Antrags-Detail"]
+    A --> M["Mails<br/>an EEG + Mitglied"]
+    A --> P["Beitrittsbestätigung<br/>(PDF)"]
+    A --> X2["Daten-Export /<br/>Datenweiterleitung"]
+    X2 -. "Kopier-Werkzeug der EEG" .-> B["Mitglied in der BEG<br/>(eegFaktura, manuell)"]
+    A -. "nicht übertragen" .-x C["Import nach eegFaktura<br/>(Core)"]
+```
+
+Die Antwort bleibt im Onboarding. Ins eegFaktura der BEG kommt das Mitglied über das eigene Kopier-Werkzeug der EEG, das den Export liest. Beim Import nach eegFaktura wird die Antwort nicht mitgegeben.
+
 ## User Stories
 
 - Als **EEG-Admin** möchte ich im Beitrittsformular eine Ja/Nein-Frage zur Teilnahme an unserer Partner-BEG einschalten, damit neue Mitglieder gleich beim Beitritt entscheiden.
