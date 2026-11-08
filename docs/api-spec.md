@@ -1593,7 +1593,7 @@ Returns the EEG settings — the eight Core-mastered fields (PROJ-32) plus the o
 
 `joiningConfirmationToEEG` (PROJ-114) defaults to `false`. When `true`, the `→ activated` transition sends the **Beitrittsbestätigung** (the PDF the member would normally receive) as a single forward-framed mail to the EEG `contact_email` (subject „Beitrittsbestätigung für … – bitte weiterleiten", Reply-To = member) instead of mailing the member; the member receives **nothing** and the usual separate EEG copy is suppressed. The board forwards the mail to the member, optionally adding a personal note. Independent of `boardApprovalWorkflowEnabled` — that toggle routes the *Beitrittserklärung* (a document to sign), this one the finished *Beitrittsbestätigung* (to forward); both can be on or off independently. Send-time fallback: if `contact_email` is empty when the mail is built, it falls back to the member and logs a warning (defense-in-depth behind the save-time validation below).
 
-`autoUploadSepaMandate`, `autoUploadJoiningConfirmation`, `autoUploadJoiningDeclaration` (PROJ-129) default to `false`. One switch per document: when `true` (Pro edition only), the document is uploaded automatically to eegFaktura when an application is activated — see §6.16a „Automatic upload at activation". `eegEdition` (read-only, `standard`/`pro`) lets the admin UI offer the switches only for Pro EEGs.
+`autoUploadSepaMandate`, `autoUploadJoiningConfirmation`, `autoUploadJoiningDeclaration` (PROJ-129) default to `false`. One switch per document: when `true` (any edition until PROJ-130), the document is uploaded automatically to eegFaktura when an application is activated — see §6.16a „Automatic upload at activation". `eegEdition` is read-only (`standard`/`pro`); kept for the editions (PROJ-130), the switches do not depend on it.
 
 `sepaMandateCoreAuditEnabled` and `sepaMandateB2BAuditEnabled` (PROJ-78) both default to `false`. When `true` for the matching mandate type (`einzugsart=core` resp. `einzugsart=b2b`), the SEPA-mandate PDF renders the electronic audit-trail block (formfreie Willenserklärung gem. § 76 (3) EIWOG 2010 — Tenant, Zustimmungs-Zeitstempel, IP-Adresse) **in place of** the classic Datum/Unterschrift-Block. When `false`, the classic block is always rendered, even if the audit data is fully populated. The two toggles are independent: a single EEG can opt into the electronic variant for B2B (Geschäftsleute) while keeping CORE (Verbraucher) on the classic signature workflow, or vice versa. Audit fallback (PROJ-77): even with the toggle on, the renderer falls back to the classic block if any of the three audit data fields (`AuditTenant`, `sepa_mandate_accepted_at`, `sepa_mandate_accepted_ip`) is empty — relevant for legacy applications without IP capture.
 
@@ -1640,7 +1640,7 @@ Writes the onboarding-only editable fields. The Core-mastered fields (`eegId`, `
 
 `joiningConfirmationToEEG` (PROJ-114): when `true`, the activation Beitrittsbestätigung is forwarded to the EEG `contact_email` instead of the member (see the GET section above for the full routing). **Cross-field validation:** if the body sets `joiningConfirmationToEEG = true` while the synchronised (Core-mastered) `contact_email` is empty, the save returns `400` with field `joiningConfirmationToEEG` and message „Bitte zuerst in eegFaktura eine Kontakt-E-Mail hinterlegen und die Stammdaten synchronisieren." (the value is validated against the stored Core value, not against the request body, because `contact_email` is read-only in onboarding).
 
-`autoUploadSepaMandate`, `autoUploadJoiningConfirmation`, `autoUploadJoiningDeclaration` (PROJ-129) are optional, each with patch semantics (`null`/omitted leaves the stored value unchanged — callers that do not know the fields, e.g. the legal-documents editor, do not reset them). Pro-only: switching one of them **on** for an EEG whose `eeg_edition` is not `pro` returns `403 pro_edition_required` („Der automatische Upload nach eegFaktura ist eine Funktion der Pro-Edition.") before anything is saved. Switching off and re-sending an already stored `true` are always allowed.
+`autoUploadSepaMandate`, `autoUploadJoiningConfirmation`, `autoUploadJoiningDeclaration` (PROJ-129) are optional, each with patch semantics (`null`/omitted leaves the stored value unchanged — callers that do not know the fields, e.g. the legal-documents editor, do not reset them). No edition rule (owner 2026-11-08): the switches work for every edition until the editions are introduced (PROJ-130). An edition switch (`POST /api/admin/billing/eegs/{rc}/edition`) leaves them unchanged.
 
 `activationMode` (PROJ-53) is optional in the request — `null`/omitted leaves the existing value unchanged (patch semantics). Allowed values: `participant_active` (default for new EEGs — Core-Teilnehmer-Status `ACTIVE` löst Activation aus) or `any_meter_registration_started` (mind. ein Zählpunkt mit `processState ∈ {PENDING, APPROVED, ACTIVE}`). Invalid values return `400`.
 
@@ -2030,7 +2030,6 @@ Keycloak JWT. Tenant-admin access is checked against the application's RC number
 ### Errors
 - `400 validation_error` — body invalid or unknown `documentType`
 - `403 forbidden` — tenant mismatch
-- `403 pro_edition_required` — EEG is on Standard edition
 - `404 not_found` — application not found
 - `409 not_imported` — status not `imported`/`ready_for_activation`/`activated`
 - `409 document_not_available` — same condition as the download (no SEPA mandate / Beitrittserklärung not available); message from the generator
@@ -2045,18 +2044,18 @@ Keycloak JWT. Tenant-admin access is checked against the application's RC number
 
 ### Automatic upload at activation
 
-Per EEG, three Pro-only switches (`autoUploadSepaMandate`, `autoUploadJoiningConfirmation`, `autoUploadJoiningDeclaration`, see `PUT /api/admin/settings/eeg`; default off). When an application reaches `activated`, the backend uploads every document whose switch is on — through the same upload service as the `POST` above, with `trigger: "activation"`:
+Per EEG, three switches (any edition until the editions are introduced, PROJ-130) (`autoUploadSepaMandate`, `autoUploadJoiningConfirmation`, `autoUploadJoiningDeclaration`, see `PUT /api/admin/settings/eeg`; default off). When an application reaches `activated`, the backend uploads every document whose switch is on — through the same upload service as the `POST` above, with `trigger: "activation"`:
 
 - Activation paths: status change to `activated` (`POST …/status`) and activation check batch (`POST /api/admin/applications/check-activation`); `POST …/mark-activated` calls the hook too, but see the skip rule for applications without a stored participant. The handlers hand the activated ids to one shared hook after the activation was committed (in parallel to the activation mail). The frontend sends `X-Core-Authorization` on `…/status`, `…/mark-activated` and `check-activation` (exchange mode).
 - Runs in the background (one goroutine per request, applications one after the other, 1 min per document). A panic in one application is logged (type + stack, no value) and the run continues. It never blocks, delays or rolls back the activation or the mails; the HTTP response is unchanged.
 - Uses the core token and Keycloak subject of the admin who triggered the activation (`actorUserId` in the protocol). Without a core token nothing is attempted (warning in the log); the admin can upload manually. The first `filestore_unauthorized` (token expired or not valid for the EEG) stops the run; the log line `activation upload: core token rejected — remaining applications skipped` carries the number of skipped applications.
-- Skipped without a protocol row: EEG not `pro`; platform contract suspended (PROJ-71, reason `contract_suspended` in the log; a failing contract check falls back to uploading, like the HTTP guard); application has no stored `target_participant_id` (activation without import, PROJ-53 — reason `participant_unconfirmed`: the member-number lookup has no confirmation, the admin uploads manually with the confirm dialog); application no longer `activated` (e.g. a board-mode batch activation rolled back because the board mail failed); document not available for the application (same rule as the download: no SEPA mandate, Beitrittserklärung only with board workflow); document already uploaded successfully to the same participant (no automatic repeat — re-activation after `reset-activation` does not upload a second copy; after a re-import to a different participant it is uploaded to the new one).
+- Skipped without a protocol row: platform contract suspended (PROJ-71, reason `contract_suspended` in the log; a failing contract check falls back to uploading, like the HTTP guard); application has no stored `target_participant_id` (activation without import, PROJ-53 — reason `participant_unconfirmed`: the member-number lookup has no confirmation, the admin uploads manually with the confirm dialog); application no longer `activated` (e.g. a board-mode batch activation rolled back because the board mail failed); document not available for the application (same rule as the download: no SEPA mandate, Beitrittserklärung only with board workflow); document already uploaded successfully to the same participant (no automatic repeat — re-activation after `reset-activation` does not upload a second copy; after a re-import to a different participant it is uploaded to the new one).
 - Failed attempts are recorded like manual ones (`result: "failed"` + error code) and can be repeated with the `POST`.
 - Logs (no PII): `activation upload: dispatch`, per document the upload service's `dispatch`/`success`/`failed` lines or `activation upload: skipped` with the refusal code.
 
 ### GET `/api/admin/applications/{id}/eegfaktura-uploads`
 
-Upload protocol of the application, newest first (empty array when there is none), plus the edition of the application's EEG (`standard`/`pro`) — the admin UI offers the upload action only for `pro`. Same auth and tenant check; `404` for an unknown application, `503` when the filestore is not wired (see POST). Not subject to the edition or status gate (the protocol stays readable after a downgrade).
+Upload protocol of the application, newest first (empty array when there is none), plus the edition of the application's EEG (`standard`/`pro`) — read-only, kept for the editions (PROJ-130); the admin UI does not use it yet. Same auth and tenant check; `404` for an unknown application, `503` when the filestore is not wired (see POST). Not subject to the edition or status gate (the protocol stays readable after a downgrade).
 
 ```json
 { "uploads": [ { "id": "uuid", "documentType": "joining_confirmation", "trigger": "manual", "result": "failed", "fileName": "Beitrittsbestaetigung-A005.pdf", "errorCode": "participant_not_found", "createdAt": "…" } ], "eegEdition": "pro" }
@@ -2066,7 +2065,7 @@ Upload protocol of the application, newest first (empty array when there is none
 
 The eegFaktura member an upload of this application would go to — shown in the confirm dialog before every upload, so that a mistyped member number (activation without import, PROJ-53) is noticed before the document lands at another member. Read-only: no upload, no `document_upload` row.
 
-Same guards as the `POST`, in the same order: tenant check, `503` if not configured, PROJ-71 cool-down (`423`), admin session token (`503`), `pro` edition (`403 pro_edition_required`), status `imported`/`ready_for_activation`/`activated` (`409 not_imported`).
+Same guards as the `POST`, in the same order: tenant check, `503` if not configured, PROJ-71 cool-down (`423`), admin session token (`503`), status `imported`/`ready_for_activation`/`activated` (`409 not_imported`).
 
 Resolution (same code path as the upload):
 - `source: "import"` — `application.target_participant_id` is set. The core participant list (`GET /api/participant`) is read to show number and name. If the list was read and the id is not in it, the member was deleted in eegFaktura → `409 participant_not_found`. If the list cannot be read, the response still carries the stored `participantId` without `participantNumber`/`displayName` — the upload only needs the id. The `POST` itself does not read the list for a stored id (the filestore does not check the participant either).
@@ -2081,7 +2080,7 @@ Resolution (same code path as the upload):
 
 ### Errors
 - `400 validation_error` — malformed id
-- `403 forbidden` / `403 pro_edition_required`
+- `403 forbidden`
 - `404 not_found`
 - `409 not_imported`
 - `409 participant_not_found` — stored id not in the core participant list (member deleted in eegFaktura), PROJ-53: member number not (or more than once) in eegFaktura, or no member number / malformed stored id; `message` German

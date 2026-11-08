@@ -4,6 +4,12 @@
 
 ---
 
+## 2026-11-08
+
+**Upload nach eegFaktura für alle EEGs**
+
+Das Menü **Nach eegFaktura hochladen ▾** im Antrag und die Schalter für den automatischen Upload (Einstellungen, Alle Optionen) stehen jetzt jeder EEG zur Verfügung — nicht mehr nur in der Pro-Edition. Bisher waren sie bei vielen EEGs nicht zu sehen. Ein Wechsel der Edition schaltet die Schalter auch nicht mehr aus.
+
 ## 2026-11-07
 
 **Dokumente bei Aktivierung automatisch nach eegFaktura hochladen (Pro)**

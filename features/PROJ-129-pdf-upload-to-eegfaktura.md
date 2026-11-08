@@ -457,6 +457,15 @@ Offen / in der Test-Zone zu verifizieren:
   Anträge werden nicht versucht (nur ein Log-Eintrag mit der Anzahl, kein Protokoll). Nachholen manuell.
 - **Aktivierung ohne Import:** kein automatischer Upload (bewusst, siehe oben).
 
+### Änderung 2026-11-08: keine Edition-Sperre bis PROJ-130
+
+Owner-Entscheidung 2026-11-08: Die Pro-Beschränkung (Owner-Entscheidung 2026-11-07, „nur Pro") ruht, bis die Editionen mit PROJ-130 eingeführt sind. Grund: In der Test-Zone waren Schalter und Menü bei einer Standard-EEG trotz „Alle Optionen" unsichtbar; eine Ausgrau-Logik gibt es noch nicht.
+
+- Auto-Upload-Schalter: unter „Alle Optionen" immer sichtbar und schaltbar (einfache Ansicht: weiterhin nicht).
+- „Nach eegFaktura hochladen" im Antrag: ab dem Import für jede EEG.
+- Backend: Pro-Prüfungen entfernt (Settings-PUT, Upload, Ziel-Abfrage, Aktivierungs-Upload, Config-Import); Fehlercode `pro_edition_required` entfällt. Auch der Owner-Wechsel auf Standard lässt die Schalter unverändert (`SetEegEditionTx`).
+- AC-Bezug: Die „nur Pro"-Teile von AC, Tech Design und QA-Notizen (inkl. „Wechsel auf Standard schaltet die Schalter aus") gelten bis PROJ-130 nicht; PROJ-130 führt sie als „ausgegraut" neu ein.
+
 ## QA Test Results
 
 ### Welle 1 — Backend (PR #120), 2026-11-07

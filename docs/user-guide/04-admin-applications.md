@@ -84,7 +84,7 @@ Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne
 | **Excel** | Herunterladen | ab Status *Genehmigt* |
 | **Beitrittsbestätigung** | Herunterladen | ab Status *Genehmigt* |
 | **Beitrittserklärung** | Herunterladen | Status *Aktiviert* + Vorstands-Genehmigungs-Workflow der EEG aktiv |
-| **SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung** | Nach eegFaktura hochladen | Pro-Edition, ab Status *Importiert* (gleiche Dokumente wie unter „Herunterladen"), siehe [unten](#dokumente-nach-eegfaktura-hochladen) |
+| **SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung** | Nach eegFaktura hochladen | Ab Status *Importiert* (gleiche Dokumente wie unter „Herunterladen"), siehe [unten](#dokumente-nach-eegfaktura-hochladen) |
 | **Bestätigungs-Mail** *(oder „Bestätigungs-Link" bei pendender E-Mail-Bestätigung)* | Erneut senden | jederzeit |
 | **SEPA-Mandat** | Erneut senden | Status *Aktiviert* |
 | **Stammdaten abgleichen** | Top-Level | Status *Aktiviert* (greift auf den Faktura-Core zu) |
@@ -108,13 +108,13 @@ Die Detailansicht zeigt alle Angaben des Mitglieds:
 - **Zählpunkte** — alle angegebenen Zählpunkte mit Richtung und Teilnahmefaktor
 - **Admin-Notiz** — interne Notizen (nur für Admins sichtbar)
 - **Statusverlauf** — chronologische Historie aller Statusänderungen
-- **Dokumente in eegFaktura** — welche PDFs nach eegFaktura hochgeladen wurden (nur Pro-Edition, siehe nächster Abschnitt)
+- **Dokumente in eegFaktura** — welche PDFs nach eegFaktura hochgeladen wurden (siehe nächster Abschnitt)
 
 ## Dokumente nach eegFaktura hochladen
 
-In der **Pro-Edition** kannst du SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über **Herunterladen ▾** bekommst.
+Du kannst SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über **Herunterladen ▾** bekommst.
 
-Das geht erst, wenn das Mitglied in eegFaktura existiert, also ab Status *Importiert* (auch *Bereit zur Aktivierung* und *Aktiviert*). Vorher ist das Menü **Nach eegFaktura hochladen ▾** nicht sichtbar. In der Standard-Edition gibt es die Funktion nicht.
+Das geht erst, wenn das Mitglied in eegFaktura existiert, also ab Status *Importiert* (auch *Bereit zur Aktivierung* und *Aktiviert*). Vorher ist das Menü **Nach eegFaktura hochladen ▾** nicht sichtbar.
 
 1. Menü **Nach eegFaktura hochladen ▾** öffnen und das Dokument wählen.
 2. Der Bestätigungsdialog nennt das Mitglied in eegFaktura, z. B. „Hochladen an Mitglied A015 · Max Mustermann in eegFaktura?". Prüfe den Namen — vor allem nach einer manuellen Aktivierung ohne Import, bei der das Mitglied über die eingetragene Mitgliedsnummer gesucht wird. Kann das Mitglied nicht gefunden werden, zeigt der Dialog den Grund und bietet kein Hochladen an.

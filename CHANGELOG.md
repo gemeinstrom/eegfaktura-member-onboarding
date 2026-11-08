@@ -15,6 +15,15 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
 - **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
 
+## 2026-11-08
+
+### PROJ-129: Upload nach eegFaktura ohne Edition-Sperre
+
+- **Owner-Entscheidung 2026-11-08:** Bis zur Einführung der Editionen (PROJ-130) ist der Upload für jede EEG verfügbar. Unter „Alle Optionen" stehen die drei Auto-Upload-Schalter immer (in der einfachen Ansicht weiterhin nicht), im Antrag das Menü „Nach eegFaktura hochladen" ab dem Import. Vorher waren beide bei Standard-EEGs ausgeblendet, auch mit „Alle Optionen".
+- **Backend:** Die Pro-Prüfungen sind entfernt — Einstellungen speichern (vorher `403 pro_edition_required` beim Einschalten), manueller Upload und Ziel-Abfrage (vorher `403`), automatischer Upload bei Aktivierung (vorher bei Standard übersprungen) und Config-Import (verwarf die Schalter bei Standard). Der Fehlercode `pro_edition_required` entfällt.
+- **Edition-Wechsel:** Der Owner-Wechsel auf Standard (`POST /api/admin/billing/eegs/{rc}/edition`) schaltet die Auto-Upload-Schalter nicht mehr aus (`SetEegEditionTx`). Die Edition-Logik kommt mit PROJ-130 neu.
+- **Bewusst gelassen:** `eegEdition` in der Upload-Protokoll-Antwort bleibt (für PROJ-130), wird vom Frontend aber nicht mehr gelesen.
+
 ## 2026-11-07
 
 ### Dependabot-Updates gesammelt
