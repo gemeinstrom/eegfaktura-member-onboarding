@@ -17,6 +17,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-08
 
+### PROJ-128: Ausrichtung der Formularfelder
+
+- Labels mit Info-Icon steckten in einer Flex-Zeile (14 px hoch), Labels ohne Icon belegen eine Textzeile (24 px). In Grids saßen Felder mit Icon deshalb 10 px höher (gemeldet: „Anlagenname"; gleich bei Zählpunkt/Faktor neben „Richtung", Beitrittsdatum neben „Personen im Haushalt"). Fix: Label-Zeile mit Icon als `h-6`-Block mit Inline-Icon (`ml-1 align-middle`) statt Flex — strukturgleich zu Labels ohne Icon. Betroffen: Zählpunkt-Felder, Mitgliedstyp, Titel vor/nach, Firmen-/Vereinsnummer + UID, IBAN/Kontowortlaut, Beitrittsdatum, Mandatsreferenz im Admin-Bearbeiten.
+- Label „Leistung PV-Wechselrichter (kW)" im Beitrittsformular → „WR-Leistung (kW)" (brach in der dreispaltigen PV-Zeile um). Admin, Export und PDF unverändert.
+- Geprüft per Playwright-Messung (Oberkante aller Eingabefelder je Zeile) für alle fünf Mitgliedstypen bei 1440/768/375 px mit allen optionalen Feldern: 0 Abweichungen.
+
 ### PROJ-129: Upload nach eegFaktura ohne Edition-Sperre
 
 - **Owner-Entscheidung 2026-11-08:** Bis zur Einführung der Editionen (PROJ-130) ist der Upload für jede EEG verfügbar. Unter „Alle Optionen" stehen die drei Auto-Upload-Schalter immer (in der einfachen Ansicht weiterhin nicht), im Antrag das Menü „Nach eegFaktura hochladen" ab dem Import. Vorher waren beide bei Standard-EEGs ausgeblendet, auch mit „Alle Optionen".

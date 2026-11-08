@@ -6,6 +6,10 @@
 
 ## 2026-11-08
 
+**Beitrittsformular: Felder sauber ausgerichtet**
+
+Felder mit Info-Symbol (z. B. Zählpunkt, Faktor, Anlagenname, Titel, Kontowortlaut, Beitrittsdatum) standen etwas höher als die Felder daneben. Jetzt liegen alle Eingabefelder einer Zeile auf derselben Höhe. Das Feld für die Wechselrichter-Leistung heißt im Formular kurz **WR-Leistung (kW)**, damit es in eine Zeile passt.
+
 **Upload nach eegFaktura für alle EEGs**
 
 !!! warning "Derzeit nur in der Test-Umgebung"
