@@ -119,6 +119,15 @@ Nach der Zählpunkt-Eingabe erscheint — sofern deine EEG die zugehörigen Feld
 
 > **Hinweis:** Die früheren Felder „Verbrauch Vorjahr/Prognose", „Einspeisung Prognose" und „PV-Leistung (kWp)" werden jetzt **pro Zählpunkt** abgefragt — direkt im jeweiligen Zählpunkt-Block des Formulars, nicht mehr hier im allgemeinen Abschnitt. Bei mehreren Verbraucher- oder Erzeuger-Zählpunkten gibt es entsprechend mehrere Eingaben.
 
+### Teilnahme an einer weiteren Energiegemeinschaft (nur bei aktivierten EEGs)
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Hat deine EEG die Frage zur Mehrfachteilnahme eingeschaltet, erscheint vor den Einwilligungen ein eigener Abschnitt. Deine EEG erklärt dort, an welcher weiteren Energiegemeinschaft (z. B. einer Bürgerenergiegemeinschaft) du zusätzlich teilnehmen kannst. Wähle **Ja** oder **Nein** — am Anfang ist nichts ausgewählt, und ohne Auswahl lässt sich der Antrag nicht einreichen. Auf dem Handy stehen die beiden Optionen untereinander.
+
+Stellt deine EEG eine Rückfrage zu deinem Antrag, ist deine bisherige Antwort beim Bearbeiten über den Link aus der Mail schon ausgewählt. Du kannst sie dort ändern.
+
 ## Schritt 8: Datenschutz und Einreichung
 
 ![Einwilligungen](images/register-form-einwilligungen.png)

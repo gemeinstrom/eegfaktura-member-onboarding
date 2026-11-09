@@ -110,6 +110,15 @@ Die Detailansicht zeigt alle Angaben des Mitglieds:
 - **Statusverlauf** — chronologische Historie aller Statusänderungen
 - **Dokumente in eegFaktura** — welche PDFs nach eegFaktura hochgeladen wurden (siehe nächster Abschnitt)
 
+### Mehrfachteilnahme
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Hat die EEG die Frage zur Mehrfachteilnahme eingeschaltet (siehe [Einstellungen](06-admin-settings.md#mehrfachteilnahme)), zeigen die Mitgliedsdaten die Zeile **Mehrfachteilnahme: Ja**, **Nein** oder **keine Angabe**. „Keine Angabe" steht bei älteren Anträgen und bei Anträgen über die externe API ohne Antwort. Ist die Frage ausgeschaltet, erscheint die Zeile nur, wenn der Antrag eine Antwort hat.
+
+Im Dialog **Bearbeiten** setzt du den Wert auf Ja, Nein oder „keine Angabe" — auch dann, wenn die Frage inzwischen ausgeschaltet ist. Wie alle anderen Angaben im Antrag lässt sich die Antwort bearbeiten, solange der Antrag noch nicht importiert ist. So korrigierst du die Antwort, wenn sich das Mitglied umentschieden hat. Das Speichern anderer Änderungen lässt die Antwort unverändert.
+
 ## Dokumente nach eegFaktura hochladen
 
 Du kannst SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über **Herunterladen ▾** bekommst.

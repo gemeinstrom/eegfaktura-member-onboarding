@@ -51,6 +51,18 @@ eines Antrags.
 Alle PDFs tragen das EEG-Logo (sofern in den EEG-Einstellungen synchronisiert)
 und werden mit Europe/Vienna-Zeitstempel versehen.
 
+### Mehrfachteilnahme in Mails und PDFs
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Hat das Mitglied die Frage zur Mehrfachteilnahme beantwortet, steht die Zeile
+**Mehrfachteilnahme: Ja** bzw. **Nein** in der Mail „Neuer Antrag" (A), in der
+Eingangsbestätigung (1) — auch beim erneuten Einreichen nach einer Rückfrage und
+beim erneuten Senden — sowie im Mitglieder-Block der Beitrittsbestätigung und
+der Beitrittserklärung. Ohne Antwort entfällt die Zeile. Das gilt unabhängig
+davon, ob die Frage bei der EEG gerade eingeschaltet ist.
+
 ### PDFs nachträglich herunterladen
 
 In der Antrags-Detailansicht kannst du die erzeugten Dokumente jederzeit über

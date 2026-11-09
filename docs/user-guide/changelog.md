@@ -6,6 +6,13 @@
 
 ## 2026-11-08
 
+**Neu: Frage zur Teilnahme an einer weiteren Energiegemeinschaft**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Arbeitet deine EEG mit einer Bürgerenergiegemeinschaft (BEG) oder einer anderen Energiegemeinschaft zusammen, kannst du neue Mitglieder jetzt beim Beitritt fragen, ob sie zusätzlich dort teilnehmen möchten. Im neuen Tab **Einstellungen → Mehrfachteilnahme** schaltest du die Frage ein und legst Überschrift, Erklärungstext (mit Absätzen und Links) und Frage selbst fest. Das Mitglied wählt im Formular verpflichtend Ja oder Nein. Die Antwort steht im Antrag, in den Mails an EEG und Mitglied, in der Beitrittsbestätigung und im Daten-Export (Spalte **Mehrfachteilnahme**). Im Antrag kannst du sie unter **Bearbeiten** korrigieren. Nach eegFaktura wird sie nicht übertragen. Standardmäßig ist die Frage aus — für deine EEG ändert sich nichts, bis du sie einschaltest.
+
 **Beitrittsformular: Felder sauber ausgerichtet**
 
 Felder mit Info-Symbol (z. B. Zählpunkt, Faktor, Anlagenname, Titel, Kontowortlaut, Beitrittsdatum) standen etwas höher als die Felder daneben. Jetzt liegen alle Eingabefelder einer Zeile auf derselben Höhe. Das Feld für die Wechselrichter-Leistung heißt im Formular kurz **WR-Leistung (kW)**, damit es in eine Zeile passt.

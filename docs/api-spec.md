@@ -101,6 +101,11 @@ No direct access to eegFaktura core tables takes place.
     "transformer": "hidden"
   },
   "introText": "<p>Willkommen!</p>",
+  "multiParticipation": {
+    "heading": "Teilnahme an einer weiteren Energiegemeinschaft",
+    "explanation": "<p>Als Mitglied kannst du zusätzlich bei der Muster-BEG mitmachen.</p>",
+    "question": "Möchtest du zusätzlich an einer weiteren Energiegemeinschaft teilnehmen?"
+  },
   "sepaMandateAtImport": false,
   "showCentralPolicy": true,
   "requireEmailConfirmation": false,
@@ -136,6 +141,8 @@ No direct access to eegFaktura core tables takes place.
 `fieldConfig` contains only explicitly configured fields. Missing fields fall back to system defaults (`hidden` for new fields, `optional` for `phone`, `birth_date`, `uid_number`, `bank_name`). Fields with admin state `admin_only` are returned as `"hidden"` — they are never shown to the member.
 
 `introText` is `null` when no text is configured.
+
+`multiParticipation` (PROJ-131): only present when the EEG has switched on the „Mehrfachteilnahme" question (see 6.9a). `heading` and `explanation` may be `null`; `explanation` is server-sanitized HTML (same allow-list as `introText`), the public page sanitizes it a second time and opens its links in a new tab. `question` is always set. When the block is present the form renders a required Ja/Nein choice before the consents and the submit (5.4) requires an answer.
 
 `sepaMandateAtImport` (PROJ-48) is `false` by default. When `true`, the registration form shows an explanatory hint that the SEPA mandate will be sent later (at import time) with the Mitgliedsnummer printed as Mandatsreferenz, instead of being attached to the welcome mail. PROJ-80 (2026-06-08) removed the `sepaMandateEnabled` toggle — the SEPA-Mandate-PDF is now always generated for SEPA members; the variant (audit-trail vs. signature field) is steered exclusively by `sepaMandateCoreAuditEnabled` resp. `sepaMandateB2BAuditEnabled`. Cross-Field-Coupling: when `sepaMandateCoreAuditEnabled = true`, this toggle is forced to `true` (the audit-trail PDF needs the Mitgliedsnummer as Mandatsreferenz to be complete).
 
@@ -281,6 +288,8 @@ Required-validation runs per-subfield: each name/email/phone is required only wh
 
 `cooperativeSharesCount` (PROJ-37) is required on the **submit** path (see 5.4) when the EEG has `cooperativeSharesEnabled = true` and must be `>= cooperativeRequiredShares`. On create it is optional — the public form populates it server-side at submit. The server silently ignores the value when the EEG has the feature disabled.
 
+`multiParticipationRequested` (PROJ-131, optional boolean): the member's Ja/Nein answer to the „Mehrfachteilnahme" question. Stored only when the EEG has the question switched on (`multiParticipation` present in 5.1); otherwise the value is discarded. Required on the **submit** path (5.4) when the question is on; optional on create.
+
 ### Rules
 - `rcNumber` required
 - `firstname` required
@@ -366,6 +375,7 @@ Same model as Create.
 ### Rules
 - only allowed in status `draft` or `needs_info`
 - existing metering points are fully replaced by the request
+- `multiParticipationRequested` (PROJ-131): taken over only when the EEG has the question switched on; omitted ⇒ unchanged. When the question is off, a sent value is discarded and the stored answer stays untouched (neither overwritten nor cleared).
 
 ### Response 200
 ```json
@@ -448,6 +458,7 @@ Before submit, the following must be set:
 - `privacyAcceptedAt` is set server-side
 - `accuracyConfirmed = true`
 - when the EEG has `cooperativeSharesEnabled = true` (PROJ-37): `cooperativeSharesCount` set and `>= cooperativeRequiredShares`
+- when the EEG has the „Mehrfachteilnahme" question switched on (PROJ-131): `multiParticipationRequested` set (`true` or `false`), else `400` with field error `multiParticipationRequested`. Applies to the first submit and to the re-submit after `needs_info` (self-edit link). The external API (8.1) is exempt.
 
 ### Response 200
 ```json
@@ -623,6 +634,8 @@ Returns the admin list.
 
 `consents` contains the immutable snapshots of legal document consents recorded at submission time. Empty array when no consents were submitted.
 
+`multiParticipationRequested` (PROJ-131): `true` / `false` / absent (= keine Angabe). `multiParticipationEnabled` mirrors the **current** EEG toggle (omitted when off) so the admin UI shows the „keine Angabe" row only when the question is on.
+
 `cooperativeSharesCount` (PROJ-37) is the number of shares the member subscribed; null when the EEG hasn't enabled the feature or the application predates its activation. The three accompanying fields (`cooperativeSharesEnabled`, `cooperativeRequiredShares`, `cooperativeShareAmountCents`) mirror the **current** EEG-level settings and are joined in at detail-build time so the admin UI can compute `count × amountCents = total` without a parallel `/settings/eeg` round-trip. When the feature is disabled, `cooperativeSharesEnabled` is `false` and the two value fields are omitted.
 
 ### Errors
@@ -663,6 +676,7 @@ Returns the admin list.
   "electricHotWater": false,
   "cooperativeSharesCount": 2,
   "networkOperatorAuthorization": true,
+  "multiParticipationRequested": true,
   "meteringPoints": [
     {
       "meteringPoint": "AT0031000000000000000000990022105",
@@ -673,6 +687,7 @@ Returns the admin list.
 ```
 
 ### Rules
+- `multiParticipationRequested` (PROJ-131): `true` / `false` / `null`. Unlike the other Zusatzangaben an explicit `null` clears the value („keine Angabe"); an omitted key leaves it unchanged. The admin may always set it, also when the EEG has the question switched off. The admin UI sends it on every save.
 - editable in `submitted`, `under_review`, `needs_info`, `approved`, `import_failed`
 - metering points are fully replaced
 - `einzugsart` accepts `core` | `b2b` | `kein_sepa` (PROJ-48 — admin-controlled per application, no longer auto-derived from `memberType`)
@@ -1536,6 +1551,55 @@ Send `{ "introText": null }` to clear the text (public form will show default te
 - `400` missing `rc_number` or invalid JSON
 - `403` not authorized for this EEG
 - `404` RC number not found
+
+---
+
+## 6.9a Get / save multi-participation question (PROJ-131)
+
+### GET `/api/admin/settings/multi-participation?rc_number={rc_number}`
+
+Returns the „Mehrfachteilnahme" settings of an EEG.
+
+```json
+{
+  "rcNumber": "RC123456",
+  "enabled": true,
+  "heading": "Teilnahme an einer weiteren Energiegemeinschaft",
+  "explanation": "<p>Als Mitglied kannst du zusätzlich bei der <a href=\"https://muster-beg.example.at\" target=\"_blank\" rel=\"noopener noreferrer\">Muster-BEG</a> mitmachen.</p>",
+  "question": "Möchtest du zusätzlich an einer weiteren Energiegemeinschaft teilnehmen?"
+}
+```
+
+`enabled` defaults to `false`; the three texts are `null` until saved.
+
+### PUT `/api/admin/settings/multi-participation?rc_number={rc_number}`
+
+Saves toggle and texts in one request (own card, not part of `PUT /settings/eeg`).
+
+```json
+{
+  "enabled": true,
+  "heading": "Teilnahme an einer weiteren Energiegemeinschaft",
+  "explanation": "<p>…</p>",
+  "question": "Möchtest du zusätzlich an einer weiteren Energiegemeinschaft teilnehmen?"
+}
+```
+
+Rules (server-side, shared with the config import):
+- `heading` and `question` are trimmed; empty ⇒ `null`. `heading` at most 200 characters, `question` at most 300 characters.
+- `explanation` is sanitized with the same helper and allow-list as the intro text (6.9); empty after sanitizing ⇒ `null`; at most 50 KiB after sanitizing (same frame as the intro text in the config import).
+- `question` is required while `enabled = true`.
+
+### Response
+- `204 No Content` on success
+
+### Errors
+- `400` missing `rc_number`, invalid JSON, or field errors (`fields.heading`, `fields.explanation`, `fields.question`)
+- `403` not authorized for this EEG
+- `404` RC number not found
+
+### Config-Export (PROJ-61) Integration
+`EEGSettingsSection` carries `multiParticipationEnabled`, `multiParticipationHeading`, `multiParticipationExplanation`, `multiParticipationQuestion` (all optional, additive in schema v1). Pre-PROJ-131 bundles import as switched off with empty texts. The import applies the same rules as the PUT above (explanation re-sanitized, lengths, question required when on) and rejects the bundle with a validation error on `multiParticipationHeading` / `multiParticipationExplanation` / `multiParticipationQuestion`.
 
 ---
 
@@ -2605,6 +2669,8 @@ For legal entity types (`municipality`, `company`, `association`): `companyName`
 - `municipality`: no additional fields beyond `companyName`.
 
 Configurable fields follow the EEG's active `field_config` — identical rules to the public form.
+
+`multiParticipationRequested` (PROJ-131, optional boolean): the „Mehrfachteilnahme" answer. Unlike the public form it stays **optional** even when the EEG has the question switched on. It is stored only when the question is on; otherwise it is discarded. A non-boolean value fails JSON decoding (`422 validation_error`, like every malformed body of this API).
 
 ### Response 201
 

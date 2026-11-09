@@ -17,6 +17,15 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-08
 
+### PROJ-131: Abfrage „Mehrfachteilnahme" im Beitrittsformular
+
+- **Migration 000095** (rein additiv, Owner-Freigabe vor dem Anwenden nötig): `registration_entrypoint.multi_participation_enabled BOOLEAN NOT NULL DEFAULT FALSE` + `multi_participation_heading/_explanation/_question TEXT NULL`; `application.multi_participation_requested BOOLEAN NULL`.
+- **Einstellungen:** neuer Tab „Mehrfachteilnahme" (einfache Ansicht und Alle Optionen) mit eigener Speicherung `GET/PUT /api/admin/settings/multi-participation?rc_number=…` (Tenant-Check zuerst). Überschrift ≤ 200 Zeichen, Frage ≤ 300 Zeichen und Pflicht bei eingeschaltetem Schalter, Erklärung mit `sanitize.HTML` bereinigt (≤ 50 KiB). Beim ersten Einschalten Vorgabetexte. Der Text-Editor des Einleitungstexts ist als `rich-text-editor.tsx` herausgelöst und wird von beiden Karten genutzt.
+- **Formular:** Abschnitt vor den Einwilligungen nur bei eingeschalteter Frage (`RegistrationConfig.multiParticipation`), Ja/Nein als Radio-Gruppe, anfangs leer, Pflicht (zod + Server). Erklärung zweistufig bereinigt (Server + DOMPurify), Links öffnen im neuen Tab.
+- **Prüfstelle** im Antrags-Service (`internal/application/multi_participation.go`): Formular und Self-Edit-Link verlangen beim Einreichen eine Antwort, die externe API nicht. Bei ausgeschalteter Frage wird ein mitgeschickter Wert verworfen und ein gespeicherter nicht angetastet.
+- **Admin:** Detailansicht zeigt „Mehrfachteilnahme: Ja / Nein / keine Angabe" (keine Angabe nur bei eingeschalteter Frage), Bearbeiten setzt Ja / Nein / keine Angabe immer — explizites `null` leert den Wert, ein fehlender Key lässt ihn stehen.
+- **Ausgaben:** Zeile in EEG-Mail (gemeinsame Zusatzfeld-Liste) und Eingangsbestätigung (alle Sendewege), im Mitglieder-Block beider PDF-Varianten, Export-Spalte `multi_participation_requested` „Mehrfachteilnahme" (Kategorie Stammdaten, Backend + Frontend), externe API, Config-Export/-Import (Import bereinigt und prüft wie der Endpoint). Kein Core-Import.
+
 ### PROJ-128: Ausrichtung der Formularfelder
 
 - Labels mit Info-Icon steckten in einer Flex-Zeile (14 px hoch), Labels ohne Icon belegen eine Textzeile (24 px). In Grids saßen Felder mit Icon deshalb 10 px höher (gemeldet: „Anlagenname"; gleich bei Zählpunkt/Faktor neben „Richtung", Beitrittsdatum neben „Personen im Haushalt"). Fix: Label-Zeile mit Icon als `h-6`-Block mit Inline-Icon (`ml-1 align-middle`) statt Flex — strukturgleich zu Labels ohne Icon. Betroffen: Zählpunkt-Felder, Mitgliedstyp, Titel vor/nach, Firmen-/Vereinsnummer + UID, IBAN/Kontowortlaut, Beitrittsdatum, Mandatsreferenz im Admin-Bearbeiten.

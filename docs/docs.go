@@ -2785,6 +2785,10 @@ const docTemplate = `{
                         "$ref": "#/definitions/shared.CreateMeteringPointRequest"
                     }
                 },
+                "multiParticipationRequested": {
+                    "description": "PROJ-131: Mehrfachteilnahme (Ja/Nein), optional (O7). Bei\nausgeschalteter Frage verworfen.",
+                    "type": "boolean"
+                },
                 "personsInHousehold": {
                     "type": "integer",
                     "minimum": 0

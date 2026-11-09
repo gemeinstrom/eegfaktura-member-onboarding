@@ -409,6 +409,33 @@ Klicke auf **Speichern**, um den Text zu übernehmen.
 
 ---
 
+## Mehrfachteilnahme
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Viele EEGs arbeiten mit einer Bürgerenergiegemeinschaft (BEG) oder einer anderen Energiegemeinschaft zusammen. Im Tab **Mehrfachteilnahme** kannst du neue Mitglieder beim Beitritt fragen, ob sie zusätzlich dort teilnehmen möchten. Der Tab ist in beiden Ansichten sichtbar (einfache Ansicht und Alle Optionen).
+
+- **Schalter** „Frage zur Mehrfachteilnahme im Beitrittsformular anzeigen" — Standard ist aus. Ist er an, erscheint im Beitrittsformular vor den Einwilligungen ein eigener Abschnitt, und das Mitglied muss **Ja** oder **Nein** wählen.
+- **Überschrift** — einzeilig, höchstens 200 Zeichen. Darf leer bleiben; dann zeigt das Formular keine Überschrift.
+- **Erklärungstext** — derselbe Editor wie beim Einleitungstext (Fett, Kursiv, Listen, Links). Hier ist Platz für die Beschreibung der Partner-Gemeinschaft, einen Link zu ihr und Hinweise, etwa zum Teilnahmefaktor. Links öffnen im Formular in einem neuen Tab.
+- **Frage** — einzeilig, höchstens 300 Zeichen. Pflicht, solange der Schalter an ist.
+
+Beim ersten Einschalten stehen in Überschrift und Frage neutrale Vorgabetexte („Teilnahme an einer weiteren Energiegemeinschaft" bzw. „Möchtest du zusätzlich an einer weiteren Energiegemeinschaft teilnehmen?"). Passe sie an deine Partner-Gemeinschaft an, z. B. „Möchtest du zusätzlich bei der Muster-BEG teilnehmen?". Klicke auf **Speichern** — dieser Tab speichert nur über den Button, ohne Auto-Speichern. Ungespeicherte Änderungen zeigt das orange Punkt-Symbol im Tab, und beim Tab- oder EEG-Wechsel fragt der Confirm-Dialog nach. Fehlt bei eingeschaltetem Schalter die Frage, wird nicht gespeichert und das Feld zeigt den Fehler.
+
+Wo die Antwort danach steht:
+
+- im Antrag (Detailansicht und Bearbeiten, siehe [Anträge verwalten](04-admin-applications.md#mehrfachteilnahme)),
+- in der Mail „Neuer Antrag" an die EEG und in der Eingangsbestätigung an das Mitglied,
+- in der Beitrittsbestätigung und der Beitrittserklärung (PDF),
+- im Daten-Export und in der Datenweiterleitung als Spalte **Mehrfachteilnahme** (Ja, Nein oder leer).
+
+Die Antwort wird **nicht** nach eegFaktura übertragen. Mitglieder, die Ja gewählt haben, legst du in der zweiten Gemeinschaft selbst an — zum Beispiel mit einem Werkzeug, das den Export liest.
+
+Schaltest du die Frage später aus, bleiben bereits gespeicherte Antworten erhalten und sichtbar. Neue Anträge bekommen dann keine Antwort. Beim Einschalten bleiben ältere Anträge auf „keine Angabe".
+
+---
+
 ## Formular-Felder & Zählpunktfelder
 
 ![Formular-Felder](images/admin-settings-fields.png)

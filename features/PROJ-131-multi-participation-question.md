@@ -1,6 +1,6 @@
 # PROJ-131: Abfrage „Mehrfachteilnahme" im Beitrittsformular
 
-## Status: Architected
+## Status: Approved
 **Created:** 2026-11-08
 **Last Updated:** 2026-11-08
 
@@ -184,7 +184,7 @@ Die Antwort bleibt im Onboarding. Ins eegFaktura der BEG kommt das Mitglied übe
   - Beim erneuten Einreichen nach einer Rückfrage und beim erneuten Senden gilt dasselbe, auf allen Sendewegen.
 - [ ] AC-13: Die Beitrittsbestätigung (PDF) zeigt die Zeile „Mehrfachteilnahme: Ja/Nein", wenn ein Wert gesetzt ist.
 - [ ] AC-14: Daten-Export und Datenweiterleitung haben die Spalte „Mehrfachteilnahme" mit den Werten Ja, Nein oder leer. Der Feldkatalog ist in Backend und Frontend gleich.
-- [ ] AC-15: Die externe API nimmt das Feld optional an (Ja/Nein) und lehnt ungültige Werte mit 400 ab. Bei ausgeschalteter Frage wird der Wert verworfen.
+- [ ] AC-15: Die externe API nimmt das Feld optional an (Ja/Nein) und lehnt ungültige Werte mit 422 `validation_error` ab, wie jede andere Validierung dieser API. Bei ausgeschalteter Frage wird der Wert verworfen.
 - [ ] AC-16: Config-Export und -Import übertragen Schalter und Texte. Der Erklärungstext wird beim Import wieder bereinigt.
 - [ ] AC-17: Der Import nach eegFaktura (Core) bleibt unverändert. Die Antwort wird nicht übertragen.
 
@@ -199,7 +199,7 @@ Die Antwort bleibt im Onboarding. Ins eegFaktura der BEG kommt das Mitglied übe
 - **Erklärungstext mit Links oder HTML aus dem Copy-Paste einer Website:** Die Bereinigung entfernt unerlaubte Tags, erlaubte Formatierung bleibt.
 - **Frage-Text gelöscht, Schalter an:** Speichern wird abgelehnt (AC-2), das Formular zeigt nie eine Frage ohne Text.
 - **Mehrere RC-Nummern beim Tenant-Admin:** Schalter und Texte gelten je EEG, so wie jede EEG-Einstellung.
-- **Status nach dem Import (aktiviert):** Der Wert bleibt im Antrag lesbar und änderbar, wie andere reine Onboarding-Felder.
+- **Status nach dem Import (aktiviert):** Der Wert bleibt im Antrag lesbar. Ändern lässt er sich wie alle anderen Antragsfelder nur, solange das Admin-Bearbeiten erlaubt ist (bis zum Import). *(Korrigiert nach QA 2026-11-08, BUG-2: „änderbar wie andere Onboarding-Felder“ war ein Widerspruch, denn die anderen Felder sind nach dem Import ebenfalls gesperrt.)*
 
 ## Out of Scope
 
@@ -322,8 +322,174 @@ Keine neuen Pakete. Der Text-Editor (tiptap), die Auswahl-Bausteine (shadcn) und
   - Export-Katalog Backend und Frontend gleich
   - E2E: Formular mit eingeschalteter Frage, ohne Auswahl kein Absenden
 
+## Implementation Notes
+
+**Stand:** 2026-11-08, Draft-PR (Backend + Frontend + Doku). Migration noch nicht angewendet.
+
+### Gebaut
+
+- **Migration `000095_multi_participation`** (additiv): vier Spalten auf `registration_entrypoint`, eine auf `application`. Down-Migration entfernt sie wieder; lokal Down+Up in einer Transaktion geprüft.
+- **Einstellungen (T1, T12):** `internal/http/admin_settings_multi_participation.go`, Routen neben dem Einleitungstext. Prüfung und Bereinigung leben in `application.NormalizeMultiParticipationSettings` und werden vom Endpoint und vom Config-Import gemeinsam genutzt. Grenzen: Überschrift 200 und Frage 300 Zeichen (Runen, nicht Bytes), Erklärung 50 KiB nach der Bereinigung (gleicher Rahmen wie `configexport.MaxIntroTextLength`, weil der Einleitungstext-Endpoint selbst keine Grenze hat).
+- **Prüfstelle (T4/T5):** `internal/application/multi_participation.go`. `applyMultiParticipationAnswer` übernimmt den Wert nur bei eingeschalteter Frage (Create, Public-Update/Self-Edit, externe API über Create). `validateMultiParticipationOnSubmit` prüft beim Einreichen; `SubmitApplication` (Formular, Self-Edit) verlangt eine Antwort, die neue Methode `SubmitExternalApplication` (externe API) nicht. Eine eingeschaltete Frage ohne Frage-Text zählt als aus (kann über Endpoint/Import nicht entstehen; Schutz gegen eine Pflichtfrage, die das Formular nicht zeigen könnte).
+- **Admin-Bearbeiten (T6):** Der Admin-Update ist im Backend kein echter Full-Replace, sondern Pointer-Sentinel. Damit „keine Angabe" setzbar ist, nutzt das Feld `shared.OptionalBool` (unterscheidet fehlenden Key von explizitem `null`). Das Admin-Formular schickt den Wert bei jedem Speichern mit (TS-Typ: Pflichtfeld `boolean | null`).
+- **Detailansicht (AC-9):** Das Backend liefert `multiParticipationEnabled` (aktueller Schalter) im Detail mit, der Entrypoint wird dort ohnehin geladen. Die Zeile erscheint bei gesetztem Wert oder eingeschalteter Frage.
+- **Mails (T7):** EEG-Mail über `buildConfigurableFields` (Zeile unabhängig von `field_config`), Eingangsbestätigung über ein eigenes Template-Feld in `buildMemberMailData`, weil das Mitglieder-Template die Zusatzfeld-Liste nicht rendert. Damit decken beide Builder alle Sendewege ab (Einreichen, Bestätigungs-Klick, erneutes Einreichen nach Rückfrage, erneutes Senden). Gemeinsamer Helfer `mail.MultiParticipationLabel` auch für das PDF.
+- **PDF (T8):** Zeile im Mitglieder-Block nach der Adresse, gilt für beide Varianten.
+- **Export (T9):** `multi_participation_requested` „Mehrfachteilnahme" als Bool in der Kategorie **Stammdaten** (eine Kategorie „Mitglied" gibt es nicht), Backend und Frontend im selben Commit, Test auf beiden Seiten mit denselben Werten.
+- **Frontend:** `src/components/rich-text-editor.tsx` (Werkzeugleiste + Editor, aus dem Einleitungstext herausgelöst, Verhalten dort unverändert), `RichTextDisplay` in `intro-text-display.tsx` (gemeinsame DOMPurify-Bereinigung), `admin-multi-participation-editor.tsx`, `registration-form/multi-participation-section.tsx`, `src/lib/multi-participation.ts` (Vorgabetexte, Client-Prüfung, Ja/Nein/keine-Angabe-Mapping).
+
+### Entscheidungen / Abweichungen
+
+- **Eigener Tab statt Karte im Tab „Formular-Felder":** Die Einstellungsseite verfolgt ungespeicherte Änderungen je Tab (Confirm-Dialog, Punkt-Symbol). Ein eigener Tab „Mehrfachteilnahme" fügt sich ohne Sonderlogik ein; er ist wie alle Tabs in beiden Ansichten sichtbar und zählt nicht in `isAdvancedActive` (T11).
+- **Kein Auto-Speichern in der Karte:** Nur der Speichern-Button. Ein Auto-Speichern würde beim Tippen der Frage laufend an der Pflicht-Prüfung scheitern. Der Tab-Wechsel-Schutz greift wie beim Einleitungstext.
+- **Links im neuen Tab (AC-3):** Der gemeinsame Editor setzt `target="_blank"` bereits. Für eingefügtes oder importiertes HTML ohne `target` setzt `RichTextDisplay` beim Anzeigen `target="_blank" rel="noopener noreferrer"` auf alle Links. Die Server-Policy (`sanitize.HTML`) ist unverändert, damit der Einleitungstext und die Admin-Notiz nicht mitgeändert werden.
+- **Externe API, ungültiger Typ:** AC-15 nennt 400. Die externe API meldet einen nicht dekodierbaren Body seit jeher mit `422 validation_error`; das bleibt so (gleicher Fehlercode wie jede andere Validierung dieser API). Dokumentiert in `docs/api-spec.md` 8.1.
+- **Swagger:** `swag init` bricht seit PROJ-103 an `json.RawMessage` ab. Nachgezogen wurde nur das Feld im externen Request (`docs/swagger.*`, `docs/docs.go`), die neuen Admin-Endpoints stehen in `docs/api-spec.md`.
+
+### Self-Reviews (2026-11-08)
+
+- **Review 1 (Korrektheit + Qualität):**
+  - Behoben: Die E2E-Spec schaltete die Frage an der gemeinsamen Test-EEG ein und konnte so parallel laufende Specs stören. Jetzt ergänzt sie die öffentliche Formular-Konfiguration nur im Browser und prüft, dass das Formular die Antwort mitschickt. Der Admin-Test überspringt sich ohne Test-Auth.
+  - Behoben: Schaltet die EEG die Frage ein, während ein Formular schon offen ist, zeigt das Formular jetzt die Server-Meldung mit dem Hinweis „Bitte lade die Seite neu.“
+  - Behoben: Der Erklärungstext ist erst nach dem Laden editierbar.
+  - Behoben: Die Detailansicht nutzt dieselbe Regel wie das Formular (Schalter an und Frage vorhanden).
+  - Vereinfacht: Hilfsfunktion `boolOrFalse` im Config-Import gemeinsam für Auto-Upload und Mehrfachteilnahme; `editorHtml` auch im Einleitungstext; leere Texte einheitlich als `null`; `maxLength` an den Eingaben entfernt (die Prüfung zählt Zeichen, nicht UTF-16-Einheiten); Schema-Block vor den SEPA-Kommentar verschoben.
+- **Bewusst belassen:** Ein Config-Bundle von vor dieser Funktion schaltet die Frage beim Import aus und leert die Texte. Das ist dasselbe Muster wie bei den anderen später ergänzten Schaltern; die Vorschau im Import zeigt die Änderung vorher an.
+- **Review 2 (Fachlich):** keine blockierenden Funde. Export zeigt Ja/Nein als Text (Test vorhanden).
+
 ## QA Test Results
-_To be added by /qa_
+
+**Stand:** 2026-11-08, /qa auf PR #127 (Head 7c9c044). Code und Tests statisch gegen jedes AC geprüft, lokale Test-Suiten ausgeführt, CI ausgewertet. Keine manuelle Browser-Session (kein lokaler Backend-/Keycloak-Stack); Cross-Browser und 375/768/1440 px nur per Code-Review (Grid `grid-cols-1 sm:grid-cols-2`, Radix-RadioGroup).
+
+**Ergebnis: NICHT bereit** — 1 High (rote E2E-Spec), 1 Medium, 1 Low. Status bleibt **In Review**.
+
+### Automatisierte Tests
+
+| Prüfung | Ergebnis |
+|---|---|
+| `go build ./...`, `go vet ./...` | ok |
+| `go test ./...` | ok (alle Pakete grün) |
+| `npx vitest run` (Node 22) | 23 Dateien, 308 Tests grün |
+| `npx tsc --noEmit` | ok |
+| `npm run lint` | 0 Fehler, 6 Warnungen (React-Compiler `incompatible-library`, Bestand) |
+| `npm run build` | ok |
+| CI Backend / Frontend / Semgrep / Trivy / Safety | grün (gosec zum Prüfzeitpunkt pending) |
+| CI **E2E (Playwright)** | **rot**: `tests/PROJ-131-multi-participation.spec.ts:81` (3 Versuche), siehe BUG-1 |
+| `govulncheck` | 6 erreichbare Funde in `excelize/v2@v2.11.0` — Bestand, `go.mod` vom PR nicht berührt |
+| `npm audit --audit-level=high` | keine High/Critical |
+
+### Acceptance Criteria
+
+| AC | Ergebnis | Nachweis |
+|---|---|---|
+| AC-1 Einstellungs-Abschnitt | Pass (Abweichung dokumentiert: eigener Tab statt Karte, in beiden Ansichten) | `src/components/admin-multi-participation-editor.tsx`, `src/app/admin/settings/page.tsx`; Vitest `admin-multi-participation.test.tsx` |
+| AC-2 Vorgabetexte, Frage Pflicht, Überschrift optional | Pass | `src/lib/multi-participation.ts` (`applyEnableDefaults`, `validateMultiParticipationSettings`); Server `NormalizeMultiParticipationSettings` (`internal/application/multi_participation.go`); `TestNormalizeMultiParticipationSettings`, `TestSaveMultiParticipation_FieldErrors` |
+| AC-3 Bereinigung wie Einleitungstext | Pass | `sanitize.HTML` in `sanitizeToNil`; Client DOMPurify mit gleicher Allow-List (`intro-text-display.tsx` `useSanitizedHtml`), Links `target=_blank rel=noopener noreferrer` in `RichTextDisplay`; Test „explanation sanitized like intro text" |
+| AC-4 Längen 200/300/50 KiB, Feldfehler | Pass | Runen-Zählung in `multi_participation.go`; Tests „length limits count characters", „explanation limit" |
+| AC-5 Abschnitt, Ja/Nein, nichts vorgewählt, vor Einwilligungen | Pass (Code + Vitest); E2E rot wegen Testfehler (BUG-1) | `registration-form/multi-participation-section.tsx`, `registration-form.tsx` (vor `ConsentSection`), `defaults.ts`; Vitest „startet ohne Auswahl" |
+| AC-6 ohne Auswahl kein Einreichen, Server prüft | Pass | Zod-superRefine in `schema.ts`; Server `validateMultiParticipationOnSubmit` in `submitApplication`; `TestMultiParticipation_CheckLocation` |
+| AC-7 ausgeschaltet: kein Abschnitt, Wert verworfen | Pass | `buildMultiParticipationConfig` (nil wenn aus), `applyMultiParticipationAnswer`; `payload.ts` sendet nur bei vorhandener Konfiguration |
+| AC-8 375 px, Tastatur, Gruppe beschriftet | Pass (Code-Review) | RadioGroup mit `aria-labelledby` + `aria-required`, `grid-cols-1 sm:grid-cols-2`, `min-h-11` |
+| AC-9 Detail-Zeile, „keine Angabe" nur bei aktiver Frage | Pass | `admin-application-detail.tsx:777`; `admin_service.go` setzt `MultiParticipationEnabled = multiParticipationActive(ep)` |
+| AC-10 Admin-Bearbeiten Ja/Nein/keine Angabe, auch bei ausgeschalteter Frage, kein Verlust | Pass (für bearbeitbare Status, siehe BUG-2) | 6 Layer: TS `_admin-types.ts` (`boolean \| null`, Pflichtfeld) → State `admin-edit-form.tsx` → Payload `fromMultiParticipationChoice` → DTO `OptionalBool` (`requests.go`) → Service `AdminUpdateApplication` (`.Set`) → SQL `UpdateAdminTx` `$36`; `TestOptionalBool_AdminUpdateRequest`, Vitest „verliert den Wert beim Speichern nicht", „sendet keine Angabe als null" |
+| AC-11 Self-Edit mit Vorauswahl | Pass | `GetApplicationForEdit` liefert den Wert, `from-application.ts`; Vitest „Self-Edit-Link: bisherige Antwort ist vorausgewählt" |
+| AC-12 Mails EEG + Mitglied, alle Sendewege | Pass | `buildConfigurableFields` (EEG-Mail) und `buildMemberMailData` (`SendSubmissionEmails` + `SendMemberConfirmation`); `TestEEGTemplate_RendersMultiParticipation`, `TestMemberTemplate_MultiParticipationRow` |
+| AC-13 PDF | Pass | `approval_pdf.go` Mitglieder-Block, `buildApprovalPDFData`; `TestFPDFApprovalGenerator_MultiParticipation_ChangesOutput` |
+| AC-14 Export-Spalte, Katalog FE = BE | Pass | `fields.go` + `data-export-fields.ts` mit gleichem Key/Label/Kategorie/Typ; `TestPROJ131_MultiParticipationField`, `data-export-fields.test.ts` |
+| AC-15 Externe API optional, ungültig → 400 | Pass mit Abweichung (BUG-3) | `external.go` Feld + `SubmitExternalApplication`; ungültiger Typ → 422 statt 400 |
+| AC-16 Config-Export/-Import, erneute Bereinigung | Pass | `exporter.go`, `importer.go` `validateAndSanitize` (gleicher Helfer), `diff.go`; `TestMultiParticipation_ConfigRoundtrip`, `…ImportSanitizesAndValidates`, `…LegacyBundleDefaultsOff` |
+| AC-17 Core-Import unverändert | Pass | kein Diff in `internal/importing`, `internal/coreclient` |
+| AC-18 User-Guide ohne PROJ-Refs, Changelog, Test-Hinweis | Pass (vorhanden, `grep PROJ- docs/user-guide` leer), aber eine falsche Aussage (BUG-2) | `docs/user-guide/02/04/06/07`, `changelog.md` |
+
+**Summe:** 18/18 AC funktional erfüllt (AC-15 mit dokumentierter Statuscode-Abweichung); ein Edge Case nicht erfüllt (BUG-2); E2E-Nachweis für AC-5/6 fehlt (BUG-1).
+
+### Edge Cases
+
+| Edge Case | Ergebnis |
+|---|---|
+| EEG schaltet aus, Antworten bleiben | Pass (T5; Mails/PDF/Export unabhängig vom Schalter) |
+| EEG schaltet ein, Altanträge „keine Angabe" | Pass. Hinweis: Läuft eine Rückfrage, muss das Mitglied beim erneuten Einreichen über den Self-Edit-Link antworten (Pflicht) — konsistent mit AC-11 |
+| Self-Edit ändert Antwort, Mail zeigt neuen Wert | Pass |
+| HTML aus Copy-Paste | Pass (bluemonday + DOMPurify) |
+| Frage gelöscht, Schalter an | Pass (Server + Client; „an ohne Frage" zählt serverseitig zusätzlich als aus) |
+| Mehrere RC-Nummern | Pass (`parseRCAndCheck` je Request) |
+| Status nach Import (aktiviert): Wert lesbar, Bearbeiten wie alle Felder bis zum Import | Pass nach Korrektur von Spec und User-Guide (BUG-2) |
+
+### Bugs
+
+| # | Severity | Befund | Repro / Ort | Empfehlung |
+|---|---|---|---|---|
+| BUG-1 | **High** | Neue E2E-Spec scheitert in CI (3/3 Versuche): `tests/PROJ-131-multi-participation.spec.ts:81` „Formular: ohne Ja/Nein kein Absenden…" findet die Überschrift nicht. Ursache: `enableQuestionInConfig` mockt `GET /api/public/registration/{rc}` per `page.route`, die Seite `src/app/register/[rc_number]/page.tsx:44` lädt die Konfiguration aber serverseitig (SSR) — der Browser-Mock greift nie (derselbe Hinweis steht in `tests/PROJ-11-registration-intro-text.spec.ts:30`). Damit ist die PR nicht mergebar, und AC-5/AC-6 haben keinen E2E-Nachweis. | `gh run view 42514214945 --log-failed` | Testansatz ändern, z. B. Frage an einer eigenen Test-EEG per Admin-API einschalten und danach zurücksetzen, oder Formularabschnitt per Vitest testen und E2E auf den echten Backend-Pfad beschränken. |
+| BUG-2 | Medium | Edge Case „Status nach dem Import (aktiviert): Wert bleibt änderbar" ist nicht umgesetzt, der User-Guide behauptet es aber: `docs/user-guide/04-admin-applications.md` „…auch nach Import oder Aktivierung". Admin-Bearbeiten ist nur in `submitted/under_review/needs_info/approved/import_failed` erlaubt (`internal/application/admin_service.go:407-416` → 409; Button in `admin-application-detail.tsx:703-708` ausgeblendet). | Antrag in `activated` öffnen → kein „Bearbeiten"; `PUT /api/admin/applications/{id}` mit `{"multiParticipationRequested":false}` → 409. | Owner-Entscheidung: Edge Case + User-Guide korrigieren (nach Import nicht änderbar, wie die anderen Onboarding-Felder) oder einen schmalen Pfad zum Setzen des Werts nach Import vorsehen. |
+| BUG-3 | Low | AC-15 verlangt 400 für einen ungültigen Wert, die externe API liefert 422 `validation_error` (Bestandsverhalten für nicht dekodierbare Bodies; in Implementation Notes und `api-spec.md` 8.1 dokumentiert). | `POST /api/external/v1/applications` mit `"multiParticipationRequested":"ja"` → 422 | AC-15 an 422 anpassen. |
+
+### Security Smoke Test
+
+| Severity | Datei | Funktion | Risiko | Exploit-Szenario | Fix-Empfehlung | Confidence |
+|---|---|---|---|---|---|---|
+| Info | `internal/http/admin_settings_multi_participation.go` | Get/SaveMultiParticipation | Tenant-Isolation | `parseRCAndCheck` als erste Prüfung (403 für fremde RC, `TestMultiParticipationSettings_ForeignTenantForbidden`); gleiches Muster wie Einleitungstext | keine | High |
+| Info | `internal/application/multi_participation.go`, `src/components/intro-text-display.tsx` | Erklärungstext auf öffentlicher Seite | Stored XSS | Server bluemonday (`sanitize.HTML`) bei Save und Config-Import, Client DOMPurify mit fester Allow-List; `openLinksInNewTab` arbeitet auf `<template>` (inert). Überschrift/Frage als React-Text gerendert | keine; im /security-review bestätigen | High |
+| Info | `registration_entrypoint_repo.go`, `application_repo.go` | SQL | Injection | alle Queries parametrisiert | keine | High |
+| Info | `admin_settings_multi_participation.go` | SaveMultiParticipation | Eingabelängen | Längen nach Bereinigung geprüft (200/300 Zeichen, 50 KiB); Body-Limit über bestehende `MaxBodySize`-Middleware | keine | Medium |
+| Info | `internal/application/application_service.go` | Create/Update/Submit | Business-Logik | Server erzwingt Pflicht (außer externe API), verwirft bei ausgeschalteter Frage; keine neuen Statusübergänge | keine | High |
+| Info | alle neuen Pfade | Logs | PII | keine neuen Log-Ausgaben mit Personendaten | keine | High |
+
+Keine Critical/High/Medium-Security-Funde.
+
+**Für `/security-review`:** öffentliche Formular-Konfiguration (`GET /api/public/registration/{rc}`, neuer Block nur bei aktiver Frage); Zwei-Schicht-Bereinigung des Erklärungstexts inkl. Config-Import und Link-Umschreibung in `RichTextDisplay`; Tenant-Isolation der zwei neuen Admin-Endpoints (`parseRCAndCheck`, `claims == nil`-Zweig); `OptionalBool`-Dekodierung im Admin-Update; Migration `000095` (rein additiv); externe API (Feld optional).
+
+### Regression
+
+| Bereich | Ergebnis |
+|---|---|
+| Einleitungstext (PROJ-11) nach Herauslösen des Editors | Pass: `admin-intro-text-editor.tsx` nutzt `useRichTextEditor`/`editorHtml`, Auto-Save/Dirty-Logik äquivalent (`isEmpty ? null : getHTML()` ↔ `editorHtml(e) \|\| null`); `IntroTextDisplay` ohne Link-Umschreibung wie bisher; PROJ-11-E2E in CI grün |
+| Admin-Bearbeiten speichern | Pass: fehlender Key lässt Wert stehen, explizites `null` leert; andere Felder unverändert |
+| Export-Katalog FE/BE | Pass (gleiche Definition, Tests beidseitig) |
+| Config-Export/-Import | Pass; `SaveAllEEGSettingsTx` nur vom Importer genutzt, `PUT /settings/eeg` unberührt; Alt-Bundle schaltet die Frage aus (bewusst, in der Vorschau sichtbar) |
+| Entrypoint-Laden | einziger SELECT (`GetByRCNumber`) um die vier Spalten erweitert |
+
+### Production-Ready
+
+**NEIN** — BUG-1 (High, rote E2E) zuerst beheben; BUG-2 per Owner-Entscheidung (Spec/User-Guide oder Code) vor dem Prod-Deploy klären. Danach /qa erneut, dann `/security-review`.
+
+### Nacharbeit nach QA (2026-11-08)
+
+- **BUG-1 behoben:** Die Formular-Tests laufen gegen die eigene Seed-EEG `RC131131` (Frage eingeschaltet, `db/seeds/dev_seed.sql`) statt gegen einen Browser-Mock, der wegen SSR nicht greift. Die gemeinsame Test-EEG `RC123456` bleibt unverändert.
+- **BUG-2 behoben (Doku):** Edge Case und User-Guide an das bestehende Bearbeiten-Fenster angeglichen. Nach dem Import ist der Wert lesbar, aber wie alle Antragsfelder nicht mehr änderbar. Kein neuer Bearbeiten-Pfad.
+- **Ergebnis:** CI auf 73933a1 komplett grün inkl. E2E (Chromium). Keine offenen Critical/High-Funde → **Approved**. Offen vor dem Merge: `/security-review` und Owner-Freigabe der Migration 000095.
+- **BUG-3 behoben (Doku):** AC-15 nennt jetzt 422 `validation_error`, wie die externe API seit jeher antwortet.
+
+## Security Review (2026-11-09)
+
+**Reviewer:** Security Engineer (AI) · **Scope:** PR #127 (Migration 000095, `GET/PUT /api/admin/settings/multi-participation`, öffentliche Formular-Konfiguration, Antragsfeld in öffentlichem/Self-Edit-/Admin-/externem Pfad, Config-Import, `RichTextDisplay`, Seed-EEG `RC131131`).
+
+**Threat Model:** Der Erklärungstext ist von EEG-Admins geschriebenes HTML auf einer öffentlichen Seite (XSS-Risiko). Die neuen Admin-Endpoints könnten fremde EEGs lesen oder ändern (Mandanten-Trennung). Das Antragsfeld könnte über einen Weg die Pflichtregel umgehen.
+
+| Severity | File | Function/Area | Risk | Exploit Scenario | Recommended Fix | Confidence |
+|---|---|---|---|---|---|---|
+| Low | `internal/sanitize/html.go` | bluemonday-Policy (bestehend) | Erlaubt `target` auf Links, erzwingt aber kein `rel="noopener"` | Gespeicherter Link mit `target="_blank"` ohne `rel` → Reverse-Tabnabbing, falls das HTML einmal ohne Client-Nachbearbeitung gerendert wird | Keine Änderung nötig: `RichTextDisplay` setzt `rel="noopener noreferrer"` auf jeden Link nach DOMPurify. Optional später `RequireNoReferrerOnLinks` in der Policy (betrifft auch Einleitungstext und Admin-Notiz) | High |
+| Info | `internal/http/admin.go` | `parseRCAndCheck`, Zweig `claims == nil` | Ohne Claims keine Tenant-Prüfung | Nur erreichbar, wenn die Auth-Middleware fehlt; beide Middlewares (Keycloak, Test-Header) setzen Claims oder lehnen ab. Gleiches Muster wie der Einleitungstext | Keine | High |
+| Info | `internal/application/multi_participation.go` | Überschrift/Frage als Klartext | Nicht HTML-bereinigt | Werden nur als React-Text gerendert (escaped), nicht in Mails/PDF | Keine; bei künftiger Nutzung in HTML-Vorlagen über `html/template` escapen | High |
+| Info | `db/seeds/dev_seed.sql` | Seed-EEG `RC131131` | Zusätzliche aktive RC-Nummer | Seed läuft nur in CI und lokal, nicht über Helm (Test/Prod) | Keine | High |
+
+**Geprüft ohne Befund:**
+- **Mandanten-Trennung:** `parseRCAndCheck` ist die erste Prüfung in GET und PUT. Der Unit-Test deckt 403 bei fremder RC ab.
+- **SQL und Eingaben:** alles parametrisiert. Längen, Pflichtfrage und Bereinigung prüft der Server über `NormalizeMultiParticipationSettings`, gemeinsam mit dem Config-Import; `Apply` ruft vorher `validateAndSanitize` auf.
+- **XSS, zweistufig:** Server bluemonday, Client DOMPurify mit derselben Allow-List. Das Link-Rewrite arbeitet auf einem inerten `<template>` nach der Bereinigung.
+- **Öffentliche Konfiguration:** Der Block wird nur bei aktiver Frage ausgeliefert. Rate-Limits der öffentlichen Routen bleiben unverändert.
+- **Externe API:** eigener Einreichweg (`SubmitExternalApplication`), den das öffentliche Formular nicht wählen kann. Bei ausgeschalteter Frage wird der Wert verworfen.
+- **`OptionalBool`:** ein falscher Typ führt zum JSON-Fehler und 400. Ohne den Schlüssel bleibt der Wert unverändert.
+- **Logging:** keine neuen Logs mit personenbezogenen Daten. Fehlerantworten nutzen das bestehende Fehlermodell.
+- **Migration 000095:** fügt nur hinzu und ist umkehrbar; der Down-Pfad löscht nur die fünf neuen Spalten.
+- **Core-Import:** unverändert.
+
+**Scans:**
+- govulncheck: 6 bekannte Advisories in `excelize/v2@v2.11.0`, schon auf main, kein Release mit Fix; der PR ändert `go.mod` nicht.
+- gosec (application, http, configexport, shared): 0 Issues.
+- npm audit `--audit-level=high`: keine High/Critical.
+- Semgrep/Trivy: in der PR-CI grün.
+
+**Verdict: APPROVED** — keine Critical/High/Medium-Funde.
 
 ## Deployment
 _To be added by /deploy_

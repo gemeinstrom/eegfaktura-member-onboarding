@@ -56,6 +56,11 @@ definitions:
         maxItems: 10
         minItems: 1
         type: array
+      multiParticipationRequested:
+        description: |-
+          PROJ-131: Mehrfachteilnahme (Ja/Nein), optional (O7). Bei
+          ausgeschalteter Frage verworfen.
+        type: boolean
       personsInHousehold:
         minimum: 0
         type: integer
