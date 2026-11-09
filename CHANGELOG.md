@@ -15,6 +15,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
 - **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
 
+## 2026-11-09
+
+### PROJ-128: Hinweis zu weiteren Zählpunkten nennt die Richtung
+
+- Tester-Vorschlag: Der Hinweis unter dem ersten Zählpunkt lautet jetzt „Weitere Zählpunkte? Unten hinzufügen und bei „Richtung“ Verbraucher oder Erzeuger korrekt wählen.“ — mit den Begriffen, die das Auswahlfeld zeigt.
+
 ## 2026-11-08
 
 ### PROJ-131: Abfrage „Mehrfachteilnahme" im Beitrittsformular
