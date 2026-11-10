@@ -5,7 +5,7 @@
 > **ℹ This GitHub repo is a public mirror.** Active development, CI/CD and
 > security scans run in a separate private main repo. Issues + Pull Requests
 > opened here may not be actively monitored. The mirror is updated automatically
-> on each push to the private main branch (see `features/PROJ-54-*.md`).
+> on each push to the private main branch.
 
 > Self-service registration system for EEG members with admin review workflow.
 
@@ -61,9 +61,7 @@ eegfaktura-member-onboarding/
 │   ├── PRD.md                     # Product Requirements Document
 │   ├── architecture.md            # Technical architecture
 │   └── domain-model.md            # Tables + status model
-├── features/                      # Feature specifications
-│   ├── INDEX.md                   # Feature tracking
-│   └── PROJ-X-*.md                # Individual feature specs
+├── features/                      # Feature specifications (private repo only)
 ├── src/                           # Frontend source code
 │   ├── app/                       # Next.js App Router pages
 │   ├── components/                # React components
@@ -218,7 +216,7 @@ Expected responses:
 
 ### Feature Development
 
-Features are tracked in `features/INDEX.md`. To add a new feature:
+Features are tracked in `features/INDEX.md` (private repo only — not part of the public mirror). To add a new feature:
 
 ```
 /requirements I want to add email notifications for application status changes

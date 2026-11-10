@@ -110,4 +110,4 @@ Mandatsreferenz bei der Submission-Zeit-PDF bleibt absichtlich Platzhalter („w
 
 ## Nicht-Architektur-Fragen
 
-Spezifische Tagesfragen werden direkt im jeweiligen Feature-Spec gelöst (`features/PROJ-NN-*.md`). Dieses File trägt nur die Themen, deren Lösung mehrere Features oder die Gesamtarchitektur betrifft.
+Spezifische Tagesfragen werden direkt im jeweiligen Feature-Spec gelöst (`features/PROJ-NN-*.md`, nur im privaten Repo). Dieses File trägt nur die Themen, deren Lösung mehrere Features oder die Gesamtarchitektur betrifft.

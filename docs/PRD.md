@@ -36,7 +36,7 @@ Version 1 — all delivered:
 
 ## 4. Feature Roadmap
 
-Single source of truth for current implementation status is [`features/INDEX.md`](../features/INDEX.md). The table below mirrors that file at the time of writing (2026-05-19).
+Single source of truth for current implementation status is `features/INDEX.md` in the private repository (not part of the public mirror). The table below mirrors that file at the time of writing (2026-05-19).
 
 ### Shipped to production
 
@@ -145,7 +145,7 @@ Single source of truth for current implementation status is [`features/INDEX.md`
 | PROJ-51 | Anzeige offener Nutzungsgebühren im Admin-UI | Wartet auf Klärung des Abrechnungs- und Status-Pflege-Konzepts |
 | PROJ-55 | Nachmelden von Zählpunkten anhand der Mitgliedsnummer | Wartet auf Self-Service-Portal-Direction (Owner-Entscheidung 2026-05-23) |
 
-> **Next available feature ID:** PROJ-109 (siehe `features/INDEX.md`).
+> **Next available feature ID:** siehe `features/INDEX.md` (privates Repo).
 
 ## 5. Success Metrics
 
@@ -219,7 +219,6 @@ Use this PRD as the high-level product context.
 
 Detailed implementation work is tracked via:
 
-- [`features/INDEX.md`](../features/INDEX.md) — single source of truth for feature status
-- individual feature specification files in [`features/`](../features/)
+- `features/INDEX.md` and the individual feature specifications in `features/` — private repository only, not part of the public mirror
 - [`CLAUDE.md`](../CLAUDE.md) for the binding architecture decisions and workflow conventions
 - [`docs/architecture.md`](architecture.md), [`docs/domain-model.md`](domain-model.md), [`docs/api-spec.md`](api-spec.md), [`docs/import-mapping.md`](import-mapping.md) for technical reference
