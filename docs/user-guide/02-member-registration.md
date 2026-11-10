@@ -109,6 +109,11 @@ Gib mindestens einen Zählpunkt an. Pro Zählpunkt-Eintrag erscheinen die Felder
 
 Über **Zählpunkt hinzufügen** kannst du bis zu 10 Zählpunkte angeben.
 
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Der folgende Hinweistext ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Solange erst ein Zählpunkt eingetragen ist, erinnert ein Hinweis daran: „Weitere Zählpunkte? Unten hinzufügen und bei „Richtung“ Verbraucher oder Erzeuger korrekt wählen.“ Hast du zum Beispiel eine PV-Anlage, trägst du den Bezug als **Verbraucher** und die Einspeisung als zweiten Zählpunkt als **Erzeuger** ein.
+
 ## Schritt 7: Weitere Angaben *(typabhängig)*
 
 Nach der Zählpunkt-Eingabe erscheint — sofern deine EEG die zugehörigen Felder konfiguriert hat — der Block „Weitere Angaben". Welche Felder dort sichtbar sind, hängt vom Typ deiner Zählpunkte ab:
