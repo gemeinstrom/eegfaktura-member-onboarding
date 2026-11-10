@@ -636,6 +636,8 @@ Returns the admin list.
 
 `multiParticipationRequested` (PROJ-131): `true` / `false` / absent (= keine Angabe). `multiParticipationEnabled` mirrors the **current** EEG toggle (omitted when off) so the admin UI shows the „keine Angabe" row only when the question is on.
 
+`importContactEmail` (PROJ-58, 2026-11-10): the `contact.email` the core import will send — the main e-mail, plus `;billing` for organisations with a deviating billing e-mail that the core accepts (see `docs/import-mapping.md`). Computed server-side; the import dialog renders it.
+
 `cooperativeSharesCount` (PROJ-37) is the number of shares the member subscribed; null when the EEG hasn't enabled the feature or the application predates its activation. The three accompanying fields (`cooperativeSharesEnabled`, `cooperativeRequiredShares`, `cooperativeShareAmountCents`) mirror the **current** EEG-level settings and are joined in at detail-build time so the admin UI can compute `count × amountCents = total` without a parallel `/settings/eeg` round-trip. When the feature is disabled, `cooperativeSharesEnabled` is `false` and the two value fields are omitted.
 
 ### Errors

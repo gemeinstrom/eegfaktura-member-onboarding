@@ -38,7 +38,7 @@ The existing participant structure contains, among others:
 |---|---|---:|---|---|
 | `application.firstname` | `firstname` | yes | – | direct |
 | `application.lastname` | `lastname` | yes | – | direct |
-| `application.email` | `contact.email` | yes | – | direct |
+| `application.email` (+ `application.billing_email`) | `contact.email` | yes | – | direct; for organisations (company, association, municipality) with a deviating billing e-mail (`has_billing_email`, PROJ-58) it is appended after the main address: `main;billing`. Left out when equal to the main address (case-insensitive) or when it fails the core's per-part rule `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$` (e.g. umlauts) — the core would otherwise reject the whole participant. The core keeps one e-mail field but accepts a `;`-separated list and sends invoices and member mails to every address (`model.ValidateEmailList`). Read-back: resync (PROJ-70) treats the onboarding e-mail as unchanged when it matches any part and writes back only the first part; reconciliation (PROJ-69) indexes every part. `shared.CoreContactEmail` / `shared.SplitCoreEmails`, tests in `internal/shared/core_email_test.go` |
 | `application.phone` | `contact.phone` | no | `""` | direct |
 | `application.resident_street` | `residentAddress.street` | yes | – | direct |
 | `application.resident_street_number` | `residentAddress.streetNumber` | yes | – | direct |

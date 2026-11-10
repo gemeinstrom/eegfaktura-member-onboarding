@@ -15,6 +15,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
 - **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
 
+## 2026-11-10
+
+### PROJ-58: Abweichende Rechnungs-E-Mail wird beim Import übertragen
+
+- Tester-Rückmeldung 2026-11-09: Die Rechnungs-E-Mail kam nicht nach eegFaktura. Der Core hat je Teilnehmer nur `contact.email`, nimmt dort aber eine `;`-getrennte Liste an und verschickt Rechnungen und Mitglieds-Mails an jede Adresse (`model.ValidateEmailList`; Hinweis aus der Tester-Gruppe, im Core-Code verifiziert). Owner-Entscheidung: `shared.CoreContactEmail` hängt bei Org-Mitgliedstypen eine gesetzte Rechnungs-E-Mail an die Haupt-E-Mail an (`main;billing`); weggelassen bei gleicher Adresse oder wenn sie die Core-Regel je Adresse nicht erfüllt (z. B. Umlaut — sonst würde der ganze Import scheitern). Der Admin-Detail-Response liefert den Wert als `importContactEmail`, der Import-Dialog zeigt ihn. Rückweg: Resync (PROJ-70) schreibt nur den ersten Teil zurück und gilt als unverändert, wenn die Onboarding-E-Mail einem Teil entspricht; die Reconciliation (PROJ-69) indexiert jeden Teil. `docs/import-mapping.md` nachgezogen.
+
 ## 2026-11-09
 
 ### PROJ-128: Hinweis zu weiteren Zählpunkten nennt die Richtung

@@ -99,3 +99,30 @@ billing_email als Versand-Adresse genutzt.
 **Migration:** Schema-Migration `000051_billing_email` lief automatisch über pre-upgrade Hook-Job
 
 Bookkeeping wurde am 2026-05-23 nachgezogen. Feature ist seit 2026-05-21 in Prod.
+
+## Nachtrag 2026-11-10: Übertragung beim Import
+
+Tester-Rückmeldung 2026-11-09: Die Rechnungs-E-Mail kam beim Import nicht nach eegFaktura (V1 hatte keine Übertragung vorgesehen). Der Core hat je Teilnehmer ein E-Mail-Feld (`contact.email`), nimmt dort aber mehrere Adressen getrennt durch `;` an und verschickt Rechnungen und Mitglieds-Mails an jede (`eegfaktura-backend` `model.ValidateEmailList`, Billing `MailTemplateValues`). Owner-Entscheidung: Der Import überträgt `haupt;rechnung` (Haupt-E-Mail zuerst; nur bei Org-Mitgliedstypen; gleiche Adresse nur einmal; ohne Toggle oder leere Rechnungs-E-Mail nur die Haupt-E-Mail). Eine Rechnungs-E-Mail, die die Core-Regel je Adresse nicht erfüllt (z. B. Umlaut), wird weggelassen, damit der Import nicht scheitert. Der Import-Dialog zeigt den vom Backend berechneten Wert (`importContactEmail`). Rückweg: Resync schreibt nur den ersten Teil zurück, die Reconciliation indexiert jeden Teil. Helfer: `shared.CoreContactEmail` / `shared.SplitCoreEmails`. Mapping: `docs/import-mapping.md`. Self-Reviews: Resync-Rückschreiben (Review 1+2), Umlaut-Import-Fehler, Org-Prüfung, Reconciliation, Dialog-Doppelregel — alle behoben.
+
+### Security Review (2026-11-10)
+
+**Scope:** PR #128 (Core-Import `contact.email`, Resync PROJ-70, Reconciliation PROJ-69, Admin-Detail-Feld `importContactEmail`, Import-Dialog).
+
+**Threat Model:** Der Import schreibt in den eegFaktura-Core. Eine falsche E-Mail-Liste könnte Mails an fremde Adressen lenken oder den Import scheitern lassen. Resync und Reconciliation lesen Core-Daten zurück und könnten Onboarding-Daten verfälschen oder falsche Anträge verknüpfen.
+
+| Severity | File | Area | Risk | Scenario | Fix | Confidence |
+|---|---|---|---|---|---|---|
+| Low | `internal/application/reconciliation_service.go` | `buildMatchIndex` | Doppelte Adresse in der Core-Liste → zwei Kandidaten → „ambiguous“ | Admin trägt in eegFaktura `a@x.at;A@x.at` ein | Behoben: je Teilnehmer jeder Schlüssel nur einmal, Test ergänzt | High |
+| Info | `internal/application/reconciliation_service.go` | Match über Rechnungs-Adresse | Antrag passt auf die Rechnungs-Adresse eines anderen Teilnehmers | Braucht zusätzlich dieselbe IBAN; bei zwei Treffern „ambiguous“ (sicher) | Keine | High |
+| Info | `internal/shared/core_email.go` | Haupt-E-Mail ohne Core-Regel | Haupt-E-Mail mit Umlaut lässt den Import scheitern | Bestand vor diesem PR, keine Regression | Keine | High |
+
+**Geprüft ohne Befund:**
+- Mandanten-Trennung unverändert: Die Reconciliation lädt Teilnehmer je RC-Nummer, das Detail-Endpoint prüft den Tenant.
+- `importContactEmail` kombiniert nur `email` und `billingEmail`, die die Admin-Detailansicht ohnehin liefert.
+- Resync kann keine `;`-Liste mehr in `application.email` schreiben; `billing_email` wird nicht zurückgelesen.
+- Keine neuen Logs mit E-Mail-Adressen, keine neuen Fehlerantworten.
+- Keine Schema-Änderung, keine neuen Abhängigkeiten.
+
+**Scans:** gosec (shared, importing, application): 0 Issues. govulncheck und npm audit unverändert, weil `go.mod` und `package.json` nicht geändert sind. Semgrep/Trivy laufen in der PR-CI.
+
+**Verdict: APPROVED** — keine Critical/High/Medium-Funde.

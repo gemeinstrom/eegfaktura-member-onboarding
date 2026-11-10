@@ -149,4 +149,6 @@ Central tracking for all features.
 | PROJ-130 | Internes Abrechnungs-Feature (Details in privater Spec, `visibility:private`). Ersetzt PROJ-110. | Architected | `features/PROJ-130-edition-standard-pro-switch.md` | 2026-11-08 |
 | PROJ-131 | Abfrage „Mehrfachteilnahme" im Beitrittsformular (Tester-Wunsch 2026-10-30): je EEG ein-/ausschaltbare Ja/Nein-Pflichtfrage mit eigener Überschrift, Erklärungstext (Editor wie Einleitungstext) und Frage; Antwort in Antrag/Bearbeiten, Mails, Beitrittsbestätigung, Export und externer API — kein Core-Import. | Approved | `features/PROJ-131-multi-participation-question.md` | 2026-11-08 |
 
-## Next Available ID: PROJ-132
+| PROJ-132 | Abweichende Zählpunkt-Adresse im Admin-Bearbeiten (Tester-Rückmeldung 2026-11-10): Option „Abweichende Adresse“ mit Straße, Nr., PLZ, Ort bei jedem Zählpunkt im Bearbeiten-Formular, neu und bestehend. Nur Frontend; Backend-Prüfung „alle vier oder keines“ besteht (PROJ-39/95). | Architected | `features/PROJ-132-admin-edit-meter-address.md` | 2026-11-10 |
+
+## Next Available ID: PROJ-133

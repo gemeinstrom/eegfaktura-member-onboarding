@@ -4,6 +4,22 @@
 
 ---
 
+## 2026-11-10
+
+**Abweichende Rechnungs-E-Mail kommt beim Import nach eegFaktura**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Hat ein Unternehmen, ein Verein oder eine Gemeinde eine abweichende Rechnungs-E-Mail angegeben, überträgt der Import jetzt beide Adressen in das E-Mail-Feld des Mitglieds in eegFaktura, getrennt durch „;“ (zuerst die Haupt-E-Mail). eegFaktura schickt Rechnungen und andere Mails an beide Adressen. Bisher kam nur die Haupt-E-Mail an. Der Import-Dialog zeigt vorher, was übertragen wird, und weist darauf hin, wenn eine Rechnungs-E-Mail nicht übertragen werden kann (zum Beispiel wegen eines Umlauts).
+
+**Hinweis zu weiteren Zählpunkten nennt die Richtung**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Unter dem ersten Zählpunkt steht jetzt: „Weitere Zählpunkte? Unten hinzufügen und bei „Richtung“ Verbraucher oder Erzeuger korrekt wählen.“
+
 ## 2026-11-08
 
 **Neu: Frage zur Teilnahme an einer weiteren Energiegemeinschaft**
