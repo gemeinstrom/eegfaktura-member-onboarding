@@ -111,6 +111,12 @@ Gib mindestens einen Zählpunkt an. Pro Zählpunkt-Eintrag erscheinen die Felder
 
 Solange erst ein Zählpunkt eingetragen ist, erinnert ein Hinweis daran: „Weitere Zählpunkte? Unten hinzufügen und bei „Richtung“ Verbraucher oder Erzeuger korrekt wählen.“ Hast du zum Beispiel eine PV-Anlage, trägst du den Bezug als **Verbraucher** und die Einspeisung als zweiten Zählpunkt als **Erzeuger** ein.
 
+### Teilnahme an einer weiteren Energiegemeinschaft (nur bei aktivierten EEGs)
+
+Hat deine EEG die Frage zur Mehrfachteilnahme eingeschaltet, erscheint direkt nach den Zählpunkten ein eigener Abschnitt. Deine EEG erklärt dort, an welcher weiteren Energiegemeinschaft (z. B. einer Bürgerenergiegemeinschaft) du zusätzlich teilnehmen kannst. Wähle **Ja** oder **Nein** — am Anfang ist nichts ausgewählt, und ohne Auswahl lässt sich der Antrag nicht einreichen. Auf dem Handy stehen die beiden Optionen untereinander.
+
+Stellt deine EEG eine Rückfrage zu deinem Antrag, ist deine bisherige Antwort beim Bearbeiten über den Link aus der Mail schon ausgewählt. Du kannst sie dort ändern.
+
 ## Schritt 7: Weitere Angaben *(typabhängig)*
 
 Nach der Zählpunkt-Eingabe erscheint — sofern deine EEG die zugehörigen Felder konfiguriert hat — der Block „Weitere Angaben". Welche Felder dort sichtbar sind, hängt vom Typ deiner Zählpunkte ab:
@@ -120,12 +126,6 @@ Nach der Zählpunkt-Eingabe erscheint — sofern deine EEG die zugehörigen Feld
 - Bei reinen Erzeuger-Anträgen werden diese Verbraucher-Felder ausgeblendet.
 
 > **Hinweis:** Die früheren Felder „Verbrauch Vorjahr/Prognose", „Einspeisung Prognose" und „PV-Leistung (kWp)" werden jetzt **pro Zählpunkt** abgefragt — direkt im jeweiligen Zählpunkt-Block des Formulars, nicht mehr hier im allgemeinen Abschnitt. Bei mehreren Verbraucher- oder Erzeuger-Zählpunkten gibt es entsprechend mehrere Eingaben.
-
-### Teilnahme an einer weiteren Energiegemeinschaft (nur bei aktivierten EEGs)
-
-Hat deine EEG die Frage zur Mehrfachteilnahme eingeschaltet, erscheint vor den Einwilligungen ein eigener Abschnitt. Deine EEG erklärt dort, an welcher weiteren Energiegemeinschaft (z. B. einer Bürgerenergiegemeinschaft) du zusätzlich teilnehmen kannst. Wähle **Ja** oder **Nein** — am Anfang ist nichts ausgewählt, und ohne Auswahl lässt sich der Antrag nicht einreichen. Auf dem Handy stehen die beiden Optionen untereinander.
-
-Stellt deine EEG eine Rückfrage zu deinem Antrag, ist deine bisherige Antwort beim Bearbeiten über den Link aus der Mail schon ausgewählt. Du kannst sie dort ändern.
 
 ## Schritt 8: Datenschutz und Einreichung
 

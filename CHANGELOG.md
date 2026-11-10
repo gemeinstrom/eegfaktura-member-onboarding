@@ -17,6 +17,10 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-10
 
+### PROJ-131: Mehrfachteilnahme direkt nach den Zählpunkten
+
+- Owner-Wunsch: Der Abschnitt „Mehrfachteilnahme" steht im Beitrittsformular jetzt direkt nach den Zählpunkten und vor „Weitere Angaben" (vorher vor den Einwilligungen). Nur Reihenfolge; Spec, User-Guide 02 und 06 angepasst.
+
 ### PROJ-132: Abweichende Zählpunkt-Adresse im Admin-Bearbeiten
 
 - **Nur Frontend:** Jeder Zählpunkt im Bearbeiten-Dialog hat die Option „Abweichende Adresse für diesen Zählpunkt" mit Straße, Hausnr., PLZ, Ort (neuer Baustein `admin-meter-address-fields.tsx`, gesteuert über Werte). Beim Öffnen an, sobald ein Adressfeld befüllt ist; Ausschalten leert die vier Felder, der Server setzt den Zählpunkt dann auf die Mitgliedsadresse zurück. Fehler wie im restlichen Dialog: eine Meldung „Zählpunkt <Zählpunktnummer>: …" plus markierte leere Felder.

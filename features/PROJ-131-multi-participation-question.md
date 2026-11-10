@@ -76,7 +76,7 @@ Beim ersten Einschalten stehen in Überschrift und Frage die neutralen Vorgabete
 
 ### 2. Beitrittsformular (Mitglied)
 
-Der Abschnitt steht vor den Einwilligungen und erscheint nur, wenn die EEG die Frage eingeschaltet hat.
+Der Abschnitt steht direkt nach den Zählpunkten (vor den „Weiteren Angaben“) und erscheint nur, wenn die EEG die Frage eingeschaltet hat.
 
 ```
 ┌─ Beitrittsformular ────────────────────────────────────────────────────┐
@@ -165,7 +165,7 @@ Die Antwort bleibt im Onboarding. Ins eegFaktura der BEG kommt das Mitglied übe
 - [ ] AC-5: Ist die Frage eingeschaltet, zeigt das Beitrittsformular einen eigenen Abschnitt.
   - Er besteht aus der Überschrift, dem Erklärungstext und der Frage mit zwei deutlich klickbaren Optionen „Ja" und „Nein".
   - Am Anfang ist keine Option gewählt.
-  - Der Abschnitt steht vor den Einwilligungen.
+  - Der Abschnitt steht direkt nach den Zählpunkten, vor den „Weiteren Angaben“ (Owner-Änderung 2026-11-10; vorher vor den Einwilligungen).
 - [ ] AC-6: Ohne Auswahl lässt sich der Antrag nicht einreichen (Feldfehler am Abschnitt). Der Server prüft das ebenfalls.
 - [ ] AC-7: Ist die Frage ausgeschaltet, erscheint der Abschnitt nicht. Ein mitgeschickter Wert wird verworfen und nicht gespeichert.
 - [ ] AC-8: Der Abschnitt funktioniert auf Mobilgeräten (375 px) und mit Tastatur. Die Ja/Nein-Auswahl ist als Gruppe mit Beschriftung zugänglich.
@@ -234,7 +234,7 @@ EEG-Einstellungen (Admin, einfache Ansicht)
 
 Beitrittsformular (öffentlich) und Self-Edit-Link
 +-- … bestehende Abschnitte …
-+-- Abschnitt „Mehrfachteilnahme"        (neu, nur wenn an; vor den Einwilligungen)
++-- Abschnitt „Mehrfachteilnahme"        (neu, nur wenn an; nach den Zählpunkten)
 |   +-- Überschrift
 |   +-- Erklärungstext  → gemeinsame Anzeige wie beim Einleitungstext
 |   +-- Ja/Nein-Auswahl (Pflicht, anfangs leer)

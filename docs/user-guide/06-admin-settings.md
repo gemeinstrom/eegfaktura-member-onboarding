@@ -413,7 +413,7 @@ Klicke auf **Speichern**, um den Text zu übernehmen.
 
 Viele EEGs arbeiten mit einer Bürgerenergiegemeinschaft (BEG) oder einer anderen Energiegemeinschaft zusammen. Im Tab **Mehrfachteilnahme** kannst du neue Mitglieder beim Beitritt fragen, ob sie zusätzlich dort teilnehmen möchten. Der Tab ist in beiden Ansichten sichtbar (einfache Ansicht und Alle Optionen).
 
-- **Schalter** „Frage zur Mehrfachteilnahme im Beitrittsformular anzeigen" — Standard ist aus. Ist er an, erscheint im Beitrittsformular vor den Einwilligungen ein eigener Abschnitt, und das Mitglied muss **Ja** oder **Nein** wählen.
+- **Schalter** „Frage zur Mehrfachteilnahme im Beitrittsformular anzeigen" — Standard ist aus. Ist er an, erscheint im Beitrittsformular direkt nach den Zählpunkten ein eigener Abschnitt, und das Mitglied muss **Ja** oder **Nein** wählen.
 - **Überschrift** — einzeilig, höchstens 200 Zeichen. Darf leer bleiben; dann zeigt das Formular keine Überschrift.
 - **Erklärungstext** — derselbe Editor wie beim Einleitungstext (Fett, Kursiv, Listen, Links). Hier ist Platz für die Beschreibung der Partner-Gemeinschaft, einen Link zu ihr und Hinweise, etwa zum Teilnahmefaktor. Links öffnen im Formular in einem neuen Tab.
 - **Frage** — einzeilig, höchstens 300 Zeichen. Pflicht, solange der Schalter an ist.
