@@ -1,6 +1,6 @@
 # PROJ-132: Abweichende Zählpunkt-Adresse im Admin-Bearbeiten
 
-## Status: Approved
+## Status: Deployed
 **Created:** 2026-11-10
 **Last Updated:** 2026-11-10
 
@@ -204,4 +204,5 @@ Nur Admin-UI. Keine neuen oder geänderten Endpoints, kein Diff an Auth, Tenant-
 - Kein Playwright-Spec ergänzt; es gibt keinen bestehenden Admin-Bearbeiten-E2E. Die Abdeckung liegt in `src/components/admin-edit-meter-address.test.tsx` (7 Tests) und `src/lib/meter-address.test.ts`.
 
 ## Deployment
-_To be added by /deploy_
+
+- Live in Prod seit 2026-11-10 (helm Revision 30, Image sha-70534b7, Tag v1.51.0-PROJ-58-131-132). Test-Hinweise im User-Guide entfernt.

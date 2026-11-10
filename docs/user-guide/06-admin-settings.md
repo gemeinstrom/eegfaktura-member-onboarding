@@ -411,9 +411,6 @@ Klicke auf **Speichern**, um den Text zu übernehmen.
 
 ## Mehrfachteilnahme
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Viele EEGs arbeiten mit einer Bürgerenergiegemeinschaft (BEG) oder einer anderen Energiegemeinschaft zusammen. Im Tab **Mehrfachteilnahme** kannst du neue Mitglieder beim Beitritt fragen, ob sie zusätzlich dort teilnehmen möchten. Der Tab ist in beiden Ansichten sichtbar (einfache Ansicht und Alle Optionen).
 
 - **Schalter** „Frage zur Mehrfachteilnahme im Beitrittsformular anzeigen" — Standard ist aus. Ist er an, erscheint im Beitrittsformular vor den Einwilligungen ein eigener Abschnitt, und das Mitglied muss **Ja** oder **Nein** wählen.

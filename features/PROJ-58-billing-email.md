@@ -126,3 +126,7 @@ Tester-Rückmeldung 2026-11-09: Die Rechnungs-E-Mail kam beim Import nicht nach 
 **Scans:** gosec (shared, importing, application): 0 Issues. govulncheck und npm audit unverändert, weil `go.mod` und `package.json` nicht geändert sind. Semgrep/Trivy laufen in der PR-CI.
 
 **Verdict: APPROVED** — keine Critical/High/Medium-Funde.
+
+### Deployment Nachtrag
+
+- Live in Prod seit 2026-11-10 (helm Revision 30, Image sha-70534b7, Tag v1.51.0-PROJ-58-131-132).

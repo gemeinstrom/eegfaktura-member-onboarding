@@ -109,9 +109,6 @@ Gib mindestens einen Zählpunkt an. Pro Zählpunkt-Eintrag erscheinen die Felder
 
 Über **Zählpunkt hinzufügen** kannst du bis zu 10 Zählpunkte angeben.
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Der folgende Hinweistext ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Solange erst ein Zählpunkt eingetragen ist, erinnert ein Hinweis daran: „Weitere Zählpunkte? Unten hinzufügen und bei „Richtung“ Verbraucher oder Erzeuger korrekt wählen.“ Hast du zum Beispiel eine PV-Anlage, trägst du den Bezug als **Verbraucher** und die Einspeisung als zweiten Zählpunkt als **Erzeuger** ein.
 
 ## Schritt 7: Weitere Angaben *(typabhängig)*
@@ -125,9 +122,6 @@ Nach der Zählpunkt-Eingabe erscheint — sofern deine EEG die zugehörigen Feld
 > **Hinweis:** Die früheren Felder „Verbrauch Vorjahr/Prognose", „Einspeisung Prognose" und „PV-Leistung (kWp)" werden jetzt **pro Zählpunkt** abgefragt — direkt im jeweiligen Zählpunkt-Block des Formulars, nicht mehr hier im allgemeinen Abschnitt. Bei mehreren Verbraucher- oder Erzeuger-Zählpunkten gibt es entsprechend mehrere Eingaben.
 
 ### Teilnahme an einer weiteren Energiegemeinschaft (nur bei aktivierten EEGs)
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Hat deine EEG die Frage zur Mehrfachteilnahme eingeschaltet, erscheint vor den Einwilligungen ein eigener Abschnitt. Deine EEG erklärt dort, an welcher weiteren Energiegemeinschaft (z. B. einer Bürgerenergiegemeinschaft) du zusätzlich teilnehmen kannst. Wähle **Ja** oder **Nein** — am Anfang ist nichts ausgewählt, und ohne Auswahl lässt sich der Antrag nicht einreichen. Auf dem Handy stehen die beiden Optionen untereinander.
 

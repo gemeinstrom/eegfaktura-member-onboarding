@@ -1,6 +1,6 @@
 # PROJ-131: Abfrage „Mehrfachteilnahme" im Beitrittsformular
 
-## Status: Approved
+## Status: Deployed
 **Created:** 2026-11-08
 **Last Updated:** 2026-11-08
 
@@ -492,4 +492,5 @@ Keine Critical/High/Medium-Security-Funde.
 **Verdict: APPROVED** — keine Critical/High/Medium-Funde.
 
 ## Deployment
-_To be added by /deploy_
+
+- Live in Prod seit 2026-11-10 (helm Revision 30, Image sha-70534b7, Tag v1.51.0-PROJ-58-131-132). Migration 000095 angewendet. Test-Hinweise im User-Guide entfernt.

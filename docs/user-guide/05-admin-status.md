@@ -130,9 +130,6 @@ Nach der Genehmigung kann der Antrag in eegFaktura importiert werden:
 
 **Abweichende Rechnungs-E-Mail:**
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Hat ein Unternehmen, ein Verein oder eine Gemeinde eine abweichende Rechnungs-E-Mail angegeben, überträgt der Import beide Adressen in das E-Mail-Feld des Mitglieds in eegFaktura, getrennt durch „;“ — zuerst die Haupt-E-Mail, dann die Rechnungs-E-Mail. eegFaktura schickt Rechnungen und andere Mails dann an beide Adressen. Der Import-Dialog zeigt vorher, was übertragen wird. Eine Rechnungs-E-Mail, die eegFaktura nicht annimmt (zum Beispiel mit Umlaut), lässt der Import weg; der Dialog weist darauf hin, und du kannst sie in eegFaktura in angepasster Form nachtragen. Soll nur eine der beiden Adressen Mails bekommen, passe das E-Mail-Feld nach dem Import in eegFaktura an.
 
 > **Hinweis:** Die Mitgliedsnummer wird erst beim Import vergeben. Im Status `submitted` / `under_review` / `approved` ist sie noch leer — das ist beabsichtigt, weil nur eegFaktura die endgültige Nummern­vergabe steuert.

@@ -53,9 +53,6 @@ und werden mit Europe/Vienna-Zeitstempel versehen.
 
 ### Mehrfachteilnahme in Mails und PDFs
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Hat das Mitglied die Frage zur Mehrfachteilnahme beantwortet, steht die Zeile
 **Mehrfachteilnahme: Ja** bzw. **Nein** in der Mail „Neuer Antrag" (A), in der
 Eingangsbestätigung (1) — auch beim erneuten Einreichen nach einer Rückfrage und

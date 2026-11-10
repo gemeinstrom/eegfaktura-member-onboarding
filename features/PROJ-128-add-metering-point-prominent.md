@@ -61,3 +61,4 @@ _To be added by /qa_
 ## Deployment
 
 - Live in Prod seit 2026-11-08 (helm Revision 29, Image sha-84c5033, Tag v1.50.0-PROJ-85-127-128-129). Migrationen 000093/000094 angewendet.
+- Nachtrag 2026-11-10: Hinweistext „Weitere Zählpunkte? Unten hinzufügen und bei „Richtung“ Verbraucher oder Erzeuger korrekt wählen.“ (Tester-Vorschlag) live mit Live in Prod seit 2026-11-10 (helm Revision 30, Image sha-70534b7, Tag v1.51.0-PROJ-58-131-132).

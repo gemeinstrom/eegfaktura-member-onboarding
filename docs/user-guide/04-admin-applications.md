@@ -112,9 +112,6 @@ Die Detailansicht zeigt alle Angaben des Mitglieds:
 
 ### Mehrfachteilnahme
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Hat die EEG die Frage zur Mehrfachteilnahme eingeschaltet (siehe [Einstellungen](06-admin-settings.md#mehrfachteilnahme)), zeigen die Mitgliedsdaten die Zeile **Mehrfachteilnahme: Ja**, **Nein** oder **keine Angabe**. „Keine Angabe" steht bei älteren Anträgen und bei Anträgen über die externe API ohne Antwort. Ist die Frage ausgeschaltet, erscheint die Zeile nur, wenn der Antrag eine Antwort hat.
 
 Im Dialog **Bearbeiten** setzt du den Wert auf Ja, Nein oder „keine Angabe" — auch dann, wenn die Frage inzwischen ausgeschaltet ist. Wie alle anderen Angaben im Antrag lässt sich die Antwort bearbeiten, solange der Antrag noch nicht importiert ist. So korrigierst du die Antwort, wenn sich das Mitglied umentschieden hat. Das Speichern anderer Änderungen lässt die Antwort unverändert.
@@ -152,9 +149,6 @@ Klicke auf **Bearbeiten**, nimm die Änderungen vor und speichere.
 ![Admin-Edit-Dialog mit der Zusatzangaben-Section zwischen Adresse und Zählpunkten](images/admin-edit-zusatzangaben.png)
 
 ### Abweichende Adresse eines Zählpunkts
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Liegt eine Anlage nicht an der Adresse des Mitglieds, setzt du beim Zählpunkt die Option **Abweichende Adresse für diesen Zählpunkt** und trägst Straße, Hausnummer, PLZ und Ort ein. Das geht bei bestehenden und bei neu hinzugefügten Zählpunkten. Hat das Mitglied im Beitrittsformular schon eine abweichende Adresse angegeben, ist die Option beim Öffnen an und die Felder sind befüllt. Ist die Option an, sind alle vier Felder Pflicht — fehlt eines, speichert der Dialog nicht und markiert die leeren Felder. Schaltest du die Option aus, wird die Adresse beim Speichern entfernt und der Zählpunkt übernimmt wieder die Adresse des Mitglieds. Beispiel: Max Mustermann wohnt in der Musterstraße 1, seine PV-Anlage steht am Anlagenweg 7 in Musterdorf.
 

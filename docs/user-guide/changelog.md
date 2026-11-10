@@ -8,31 +8,19 @@
 
 **Abweichende Zählpunkt-Adresse im Bearbeiten-Dialog**
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Im Dialog **Bearbeiten** eines Antrags hat jeder Zählpunkt jetzt die Option **Abweichende Adresse für diesen Zählpunkt** mit Straße, Hausnummer, PLZ und Ort — bei bestehenden und bei neu hinzugefügten Zählpunkten. Eine vom Mitglied angegebene Adresse siehst und korrigierst du dort. Schaltest du die Option aus, übernimmt der Zählpunkt wieder die Adresse des Mitglieds. Bisher musste die Anlagenadresse eines nachträglich ergänzten Zählpunkts nach dem Import in eegFaktura von Hand eingetragen werden.
 
 **Abweichende Rechnungs-E-Mail kommt beim Import nach eegFaktura**
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Hat ein Unternehmen, ein Verein oder eine Gemeinde eine abweichende Rechnungs-E-Mail angegeben, überträgt der Import jetzt beide Adressen in das E-Mail-Feld des Mitglieds in eegFaktura, getrennt durch „;“ (zuerst die Haupt-E-Mail). eegFaktura schickt Rechnungen und andere Mails an beide Adressen. Bisher kam nur die Haupt-E-Mail an. Der Import-Dialog zeigt vorher, was übertragen wird, und weist darauf hin, wenn eine Rechnungs-E-Mail nicht übertragen werden kann (zum Beispiel wegen eines Umlauts).
 
 **Hinweis zu weiteren Zählpunkten nennt die Richtung**
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Unter dem ersten Zählpunkt steht jetzt: „Weitere Zählpunkte? Unten hinzufügen und bei „Richtung“ Verbraucher oder Erzeuger korrekt wählen.“
 
 ## 2026-11-08
 
 **Neu: Frage zur Teilnahme an einer weiteren Energiegemeinschaft**
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Arbeitet deine EEG mit einer Bürgerenergiegemeinschaft (BEG) oder einer anderen Energiegemeinschaft zusammen, kannst du neue Mitglieder jetzt beim Beitritt fragen, ob sie zusätzlich dort teilnehmen möchten. Im neuen Tab **Einstellungen → Mehrfachteilnahme** schaltest du die Frage ein und legst Überschrift, Erklärungstext (mit Absätzen und Links) und Frage selbst fest. Das Mitglied wählt im Formular verpflichtend Ja oder Nein. Die Antwort steht im Antrag, in den Mails an EEG und Mitglied, in der Beitrittsbestätigung und im Daten-Export (Spalte **Mehrfachteilnahme**). Im Antrag kannst du sie unter **Bearbeiten** korrigieren. Nach eegFaktura wird sie nicht übertragen. Standardmäßig ist die Frage aus — für deine EEG ändert sich nichts, bis du sie einschaltest.
 
