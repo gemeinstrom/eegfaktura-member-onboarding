@@ -17,6 +17,11 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-10
 
+### PROJ-132: Abweichende Zählpunkt-Adresse im Admin-Bearbeiten
+
+- **Nur Frontend:** Jeder Zählpunkt im Bearbeiten-Dialog hat die Option „Abweichende Adresse für diesen Zählpunkt" mit Straße, Hausnr., PLZ, Ort (neuer Baustein `admin-meter-address-fields.tsx`, gesteuert über Werte). Beim Öffnen an, sobald ein Adressfeld befüllt ist; Ausschalten leert die vier Felder, der Server setzt den Zählpunkt dann auf die Mitgliedsadresse zurück. Fehler wie im restlichen Dialog: eine Meldung „Zählpunkt <Zählpunktnummer>: …" plus markierte leere Felder.
+- **Gemeinsame Prüfregel** `src/lib/meter-address.ts` („alle vier oder keines", liefert die fehlenden Felder, plus Längen) — genutzt vom zod-Schema des Beitrittsformulars (Verhalten und Meldung unverändert) und vom Bearbeiten-Dialog. Backend unverändert (`validateMeteringPointAddresses` besteht).
+
 ### PROJ-58: Abweichende Rechnungs-E-Mail wird beim Import übertragen
 
 - Tester-Rückmeldung 2026-11-09: Die Rechnungs-E-Mail kam nicht nach eegFaktura. Der Core hat je Teilnehmer nur `contact.email`, nimmt dort aber eine `;`-getrennte Liste an und verschickt Rechnungen und Mitglieds-Mails an jede Adresse (`model.ValidateEmailList`; Hinweis aus der Tester-Gruppe, im Core-Code verifiziert). Owner-Entscheidung: `shared.CoreContactEmail` hängt bei Org-Mitgliedstypen eine gesetzte Rechnungs-E-Mail an die Haupt-E-Mail an (`main;billing`); weggelassen bei gleicher Adresse oder wenn sie die Core-Regel je Adresse nicht erfüllt (z. B. Umlaut — sonst würde der ganze Import scheitern). Der Admin-Detail-Response liefert den Wert als `importContactEmail`, der Import-Dialog zeigt ihn. Rückweg: Resync (PROJ-70) schreibt nur den ersten Teil zurück und gilt als unverändert, wenn die Onboarding-E-Mail einem Teil entspricht; die Reconciliation (PROJ-69) indexiert jeden Teil. `docs/import-mapping.md` nachgezogen.

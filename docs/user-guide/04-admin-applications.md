@@ -151,6 +151,13 @@ Klicke auf **Bearbeiten**, nimm die Änderungen vor und speichere.
 
 ![Admin-Edit-Dialog mit der Zusatzangaben-Section zwischen Adresse und Zählpunkten](images/admin-edit-zusatzangaben.png)
 
+### Abweichende Adresse eines Zählpunkts
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Liegt eine Anlage nicht an der Adresse des Mitglieds, setzt du beim Zählpunkt die Option **Abweichende Adresse für diesen Zählpunkt** und trägst Straße, Hausnummer, PLZ und Ort ein. Das geht bei bestehenden und bei neu hinzugefügten Zählpunkten. Hat das Mitglied im Beitrittsformular schon eine abweichende Adresse angegeben, ist die Option beim Öffnen an und die Felder sind befüllt. Ist die Option an, sind alle vier Felder Pflicht — fehlt eines, speichert der Dialog nicht und markiert die leeren Felder. Schaltest du die Option aus, wird die Adresse beim Speichern entfernt und der Zählpunkt übernimmt wieder die Adresse des Mitglieds. Beispiel: Max Mustermann wohnt in der Musterstraße 1, seine PV-Anlage steht am Anlagenweg 7 in Musterdorf.
+
 > **Hinweis:** Änderungen an Antragsdaten werden im Statusverlauf nicht automatisch protokolliert. Nutze die Admin-Notiz für wichtige Vermerke.
 
 > **Hinweis:** Das Speichern der Admin-Notiz aktualisiert ausschließlich das Notizfeld — andere Antragsdaten (Mitgliedstyp, Zählpunkte, Teilnahmefaktor, …) werden dabei nicht überschrieben.

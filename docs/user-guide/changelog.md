@@ -6,6 +6,13 @@
 
 ## 2026-11-10
 
+**Abweichende Zählpunkt-Adresse im Bearbeiten-Dialog**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Im Dialog **Bearbeiten** eines Antrags hat jeder Zählpunkt jetzt die Option **Abweichende Adresse für diesen Zählpunkt** mit Straße, Hausnummer, PLZ und Ort — bei bestehenden und bei neu hinzugefügten Zählpunkten. Eine vom Mitglied angegebene Adresse siehst und korrigierst du dort. Schaltest du die Option aus, übernimmt der Zählpunkt wieder die Adresse des Mitglieds. Bisher musste die Anlagenadresse eines nachträglich ergänzten Zählpunkts nach dem Import in eegFaktura von Hand eingetragen werden.
+
 **Abweichende Rechnungs-E-Mail kommt beim Import nach eegFaktura**
 
 !!! warning "Derzeit nur in der Test-Umgebung"
