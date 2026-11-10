@@ -128,13 +128,3 @@ einheitlich konstruiert:
 Die EEG-Kontaktadresse erhält Mails mit dem Präfix des Antragstellers
 oder mit „Antrag …" / „SEPA-Mandat versandt …" / „Antrag aktiviert …",
 gefolgt von Mitgliedsname und Referenznummer in Klammern.
-
----
-
-## Technische Referenz
-
-Die Entwickler-/Operations-Sicht (welche Funktion löst aus, welches Template
-rendert, welche Metriken werden geschrieben) findet sich in
-[`docs/architecture.md`](https://github.com/gemeinstrom/eegfaktura-member-onboarding/blob/main/docs/architecture.md#mail-flow-post-proj-46--proj-47--proj-48--proj-53)
-(Mail-Flow-Tabelle) und in [`docs/operations.md`](https://github.com/gemeinstrom/eegfaktura-member-onboarding/blob/main/docs/operations.md)
-(SMTP-Ausfall-Verhalten).
