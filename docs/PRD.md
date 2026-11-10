@@ -220,5 +220,4 @@ Use this PRD as the high-level product context.
 Detailed implementation work is tracked via:
 
 - `features/INDEX.md` and the individual feature specifications in `features/` — private repository only, not part of the public mirror
-- [`CLAUDE.md`](../CLAUDE.md) for the binding architecture decisions and workflow conventions
 - [`docs/architecture.md`](architecture.md), [`docs/domain-model.md`](domain-model.md), [`docs/api-spec.md`](api-spec.md), [`docs/import-mapping.md`](import-mapping.md) for technical reference

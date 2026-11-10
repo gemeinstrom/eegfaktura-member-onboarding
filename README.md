@@ -68,21 +68,10 @@ eegfaktura-member-onboarding/
 │   └── lib/                       # Utilities and configurations
 ├── db/migrations/                 # Database migrations (Go backend)
 ├── cmd/                           # Go application entrypoints
-├── internal/                      # Go application code
-└── .claude/                       # AI development workflow
+└── internal/                      # Go application code
 ```
 
 ## Development Workflow
-
-This project uses the AI Coding Starter Kit workflow with specialized skills:
-
-1. **Requirements** (`/requirements`) - Define features with user stories and acceptance criteria
-2. **Architecture** (`/architecture`) - Design technical approach (PM-friendly)
-3. **Frontend** (`/frontend`) - Build UI components with Next.js and shadcn/ui
-4. **Backend** (`/backend`) - Implement Go APIs and database schemas
-5. **QA** (`/qa`) - Test features against acceptance criteria + security smoke test
-6. **Security Review** (`/security-review`) - Required for auth, public endpoints, schema changes, Helm/CI changes
-7. **Deploy** (`/deploy`) - Deploy to Kubernetes via Helm
 
 ### Getting Started
 
@@ -213,16 +202,6 @@ Expected responses:
    ```
 
    Open `http://localhost:3000` in the browser. Enter RC number `RC123456` (seeded by `dev_seed.sql`) to access the registration form.
-
-### Feature Development
-
-Features are tracked in `features/INDEX.md` (private repo only — not part of the public mirror). To add a new feature:
-
-```
-/requirements I want to add email notifications for application status changes
-```
-
-The skill will create a feature spec and update tracking. Then proceed with architecture and implementation.
 
 ## Build & Test
 
