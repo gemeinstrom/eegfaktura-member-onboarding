@@ -134,9 +134,6 @@ Hat ein Unternehmen, ein Verein oder eine Gemeinde eine abweichende Rechnungs-E-
 
 **Beitrittsdatum („Aktiv am“):**
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Hat das Mitglied ein Beitrittsdatum angegeben (Feld **Aktiv am (Beitrittsdatum)**), überträgt der Import dieses Datum nach eegFaktura: als **Aktiv am** des Mitglieds und als Registrierungsdatum aller Zählpunkte. Das gilt auch rückwirkend: Ein Datum in der Vergangenheit steht dann als **Aktiv am** in eegFaktura. Beim Bestätigen des Mitglieds in eegFaktura fordert eegFaktura die Anmeldung beim Netzbetreiber (ANFORDERUNG_ECON) zu diesem Datum an, zum Beispiel zum 01. des Monats. Ist das Datum beim Bestätigen schon erreicht oder vorbei, setzt eegFaktura für die Anmeldung den nächsten Tag ein. Ohne Beitrittsdatum gilt wie bisher der Tag des Imports. Ein schon importiertes Mitglied ändert sich dadurch nicht; dort das Datum bei Bedarf in eegFaktura korrigieren.
 
 > **Hinweis:** Die Mitgliedsnummer wird erst beim Import vergeben. Im Status `submitted` / `under_review` / `approved` ist sie noch leer — das ist beabsichtigt, weil nur eegFaktura die endgültige Nummern­vergabe steuert.
