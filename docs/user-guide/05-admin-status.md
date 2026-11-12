@@ -132,6 +132,13 @@ Nach der Genehmigung kann der Antrag in eegFaktura importiert werden:
 
 Hat ein Unternehmen, ein Verein oder eine Gemeinde eine abweichende Rechnungs-E-Mail angegeben, überträgt der Import beide Adressen in das E-Mail-Feld des Mitglieds in eegFaktura, getrennt durch „;“ — zuerst die Haupt-E-Mail, dann die Rechnungs-E-Mail. eegFaktura schickt Rechnungen und andere Mails dann an beide Adressen. Der Import-Dialog zeigt vorher, was übertragen wird. Eine Rechnungs-E-Mail, die eegFaktura nicht annimmt (zum Beispiel mit Umlaut), lässt der Import weg; der Dialog weist darauf hin, und du kannst sie in eegFaktura in angepasster Form nachtragen. Soll nur eine der beiden Adressen Mails bekommen, passe das E-Mail-Feld nach dem Import in eegFaktura an.
 
+**Beitrittsdatum („Aktiv am“):**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Hat das Mitglied ein Beitrittsdatum angegeben (Feld **Aktiv am (Beitrittsdatum)**), überträgt der Import dieses Datum nach eegFaktura: als **Aktiv am** des Mitglieds und als Registrierungsdatum aller Zählpunkte. Das gilt auch rückwirkend: Ein Datum in der Vergangenheit steht dann als **Aktiv am** in eegFaktura. Beim Bestätigen des Mitglieds in eegFaktura fordert eegFaktura die Anmeldung beim Netzbetreiber (ANFORDERUNG_ECON) zu diesem Datum an, zum Beispiel zum 01. des Monats. Ist das Datum beim Bestätigen schon erreicht oder vorbei, setzt eegFaktura für die Anmeldung den nächsten Tag ein. Ohne Beitrittsdatum gilt wie bisher der Tag des Imports. Ein schon importiertes Mitglied ändert sich dadurch nicht; dort das Datum bei Bedarf in eegFaktura korrigieren.
+
 > **Hinweis:** Die Mitgliedsnummer wird erst beim Import vergeben. Im Status `submitted` / `under_review` / `approved` ist sie noch leer — das ist beabsichtigt, weil nur eegFaktura die endgültige Nummern­vergabe steuert.
 
 > **Hinweis:** Der Import kann bei technischen Problemen mit eegFaktura fehlschlagen. In diesem Fall prüfe den Fehlerhinweis und wiederhole den Import, sobald das Problem behoben ist.

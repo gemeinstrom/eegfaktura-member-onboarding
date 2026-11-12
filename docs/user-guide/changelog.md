@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-11-12
+
+**Beitrittsdatum kommt beim Import nach eegFaktura**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Das vom Mitglied angegebene Beitrittsdatum (**Aktiv am**) wird beim Import jetzt nach eegFaktura übernommen: als **Aktiv am** des Mitglieds und für alle Zählpunkte. Die Anmeldung beim Netzbetreiber wird damit zu diesem Datum angefordert, zum Beispiel zum 01. des Monats. Bisher stand dort immer der Tag des Imports. Bei schon importierten Mitgliedern bitte das Datum in eegFaktura korrigieren.
+
 ## 2026-11-10
 
 **Abweichende Zählpunkt-Adresse im Bearbeiten-Dialog**

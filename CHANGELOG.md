@@ -15,6 +15,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
 - **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
 
+## 2026-11-12
+
+### PROJ-133: Beitrittsdatum wird beim Import übertragen
+
+- Tester-Meldung: Die Anmeldung beim Netzbetreiber (ANFORDERUNG_ECON) lief zum Importtag statt zum Beitrittsdatum (z. B. 01.12.). Ursache: Der Import setzte `participantSince` und `meters[].registeredSince` immer auf den Importzeitpunkt; `membership_start_date` ging nicht in den Payload. Der Core nimmt als Prozessdatum das spätere der beiden Daten (morgen, wenn nicht in der Zukunft).
+- `BuildPayload` sendet jetzt das Beitrittsdatum (Mitternacht UTC, der Core liest nur den Datumsteil) als `participantSince` und als `registeredSince` aller Zählpunkte, wie das Registrieren-Formular des Cores. Ohne Beitrittsdatum unverändert der Importzeitpunkt. Übrige Import-Felder unverändert. Nebenwirkung im Core: Ist das Mandatsdatum leer (nur ohne vollständige Mandatsdaten der EEG oder bei Altanträgen), nimmt die Core-Abrechnung `participantSince` als Mandatsdatum, also jetzt das Beitrittsdatum. Bereits importierte Mitglieder bleiben unberührt.
+- `docs/import-mapping.md` §4 und User-Guide Kapitel 5 angepasst.
+
 ## 2026-11-10
 
 ### PROJ-131: Mehrfachteilnahme direkt nach den Zählpunkten
