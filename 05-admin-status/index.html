@@ -1006,6 +1006,12 @@ reguläre Import-Pfad übersprungen werden soll.</p>
 <p><img alt="Import-Aktion" src="../images/admin-import-action.png" /></p>
 <p><strong>Abweichende Rechnungs-E-Mail:</strong></p>
 <p>Hat ein Unternehmen, ein Verein oder eine Gemeinde eine abweichende Rechnungs-E-Mail angegeben, überträgt der Import beide Adressen in das E-Mail-Feld des Mitglieds in eegFaktura, getrennt durch „;“ — zuerst die Haupt-E-Mail, dann die Rechnungs-E-Mail. eegFaktura schickt Rechnungen und andere Mails dann an beide Adressen. Der Import-Dialog zeigt vorher, was übertragen wird. Eine Rechnungs-E-Mail, die eegFaktura nicht annimmt (zum Beispiel mit Umlaut), lässt der Import weg; der Dialog weist darauf hin, und du kannst sie in eegFaktura in angepasster Form nachtragen. Soll nur eine der beiden Adressen Mails bekommen, passe das E-Mail-Feld nach dem Import in eegFaktura an.</p>
+<p><strong>Beitrittsdatum („Aktiv am“):</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
+<p>Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
+</div>
+<p>Hat das Mitglied ein Beitrittsdatum angegeben (Feld <strong>Aktiv am (Beitrittsdatum)</strong>), überträgt der Import dieses Datum nach eegFaktura: als <strong>Aktiv am</strong> des Mitglieds und als Registrierungsdatum aller Zählpunkte. Das gilt auch rückwirkend: Ein Datum in der Vergangenheit steht dann als <strong>Aktiv am</strong> in eegFaktura. Beim Bestätigen des Mitglieds in eegFaktura fordert eegFaktura die Anmeldung beim Netzbetreiber (ANFORDERUNG_ECON) zu diesem Datum an, zum Beispiel zum 01. des Monats. Ist das Datum beim Bestätigen schon erreicht oder vorbei, setzt eegFaktura für die Anmeldung den nächsten Tag ein. Ohne Beitrittsdatum gilt wie bisher der Tag des Imports. Ein schon importiertes Mitglied ändert sich dadurch nicht; dort das Datum bei Bedarf in eegFaktura korrigieren.</p>
 <blockquote>
 <p><strong>Hinweis:</strong> Die Mitgliedsnummer wird erst beim Import vergeben. Im Status <code>submitted</code> / <code>under_review</code> / <code>approved</code> ist sie noch leer — das ist beabsichtigt, weil nur eegFaktura die endgültige Nummern­vergabe steuert.</p>
 <p><strong>Hinweis:</strong> Der Import kann bei technischen Problemen mit eegFaktura fehlschlagen. In diesem Fall prüfe den Fehlerhinweis und wiederhole den Import, sobald das Problem behoben ist.</p>
