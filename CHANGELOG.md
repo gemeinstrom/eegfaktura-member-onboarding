@@ -15,6 +15,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
 - **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
 
+## 2026-11-14
+
+### Sicherheitsupdates der Abhängigkeiten
+
+- **excelize 2.11.1** (Dependabot-Alert #120, hoch): Eine präparierte Excel-Datei mit unbegrenzter Spaltenangabe konnte den Prozess hängen lassen oder den Speicher füllen. Mitgezogen: `golang.org/x/net` 0.62.0, `mscfb`, `efp`.
+- **Go 1.26.11** (`go.mod`): behebt die erreichbare `net/http`-Lücke, die govulncheck mit 1.26.10 meldet. Das Backend-Image baut ohnehin mit `golang:1.26-alpine`; die Mindestversion zwingt jetzt auch CI und lokale Builds auf den Patch-Stand.
+- **minimatch 11.0.8 per npm-Override** (Alert #119, mittel, nur Dev-Werkzeuge): eslint verlangt selbst in der neuesten Version noch die verwundbare 10er-Linie. Das Override `minimatch@>=7.0.0 <11.0.1 → ^11.0.1` trifft nur diese; minimatch 3.x (eslint-Plugins) ist nicht betroffen und bleibt. Kann entfernt werden, sobald eslint auf minimatch 11 hebt.
+
 ## 2026-11-12
 
 ### PROJ-133: Beitrittsdatum wird beim Import übertragen
