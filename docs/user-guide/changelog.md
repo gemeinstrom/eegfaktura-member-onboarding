@@ -8,9 +8,6 @@
 
 **Fehler „Request Header Or Cookie Too Large“ behoben**
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Korrektur ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Wer im Admin-Bereich angemeldet war, sah auf manchen Browsern (vor allem Safari) beim Öffnen der Beitrittsseite die Meldung „400 Bad Request – Request Header Or Cookie Too Large“. Die Anmeldung speichert jetzt weniger Daten im Browser, damit der Fehler nicht mehr entsteht. Wer ihn bereits sieht, muss einmal die gespeicherten Websitedaten löschen, denn auch Abmelden scheitert dann an derselben Meldung. In Safari: Einstellungen → Datenschutz → Websitedaten verwalten → „eegfaktura“ suchen → Entfernen. Danach neu anmelden. Alternativ funktioniert ein privates Fenster sofort.
 
 ## 2026-11-12
