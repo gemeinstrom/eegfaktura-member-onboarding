@@ -27,6 +27,24 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Nicht** behoben für Browser, deren Cookie-Zeile schon über dem Limit liegt: nginx lehnt dort jede Anfrage ab, auch Abmelden und den Session-Abruf, sodass das Cookie nie neu geschrieben wird. Abhilfe ist einmaliges Löschen der Websitedaten (im User-Guide-Changelog beschrieben).
 - Die Abmelde-Route löscht das Session-Cookie jetzt samt aller Teile (`.0`, `.1`, …) mit passendem `Path` und `Secure`; vorher blieb der Löschversuch für `__Secure-`-Cookies wirkungslos.
 
+### Dependabot-Welle 2026-11-14 gesammelt (#131–#140)
+
+- **Go:**
+  - `go-mail` 0.8.2
+  - `x/sync` 0.25.0
+  - `keyfunc/v3` 3.9.1, zieht `jwkset` 0.11.4 mit
+- **npm:**
+  - tiptap 3.33.0: alle Pakete auf derselben Version, weil tiptap die Peer-Abhängigkeiten exakt pinnt. Ein Einzel-Update auf 3.34 scheiterte an `@tiptap/pm`.
+  - `react-colorful` 5.8.1
+- **npm, nur Dev:**
+  - `eslint` 10.15
+  - `postcss` 8.5.33
+  - `jsdom` 31: Major-Update, verlangt Node ≥ 22.22.2. CI nutzt Node 22, lokal läuft 22.23.
+- **GitHub Actions:**
+  - `docker/login-action` 4.8.0
+  - `codeql-action/upload-sarif` 4.39.3
+- Der minimatch-Override bleibt nötig, weil auch eslint 10.15 noch minimatch 10 verlangt.
+
 ### Sicherheitsupdates der Abhängigkeiten
 
 - **excelize 2.11.1** (Dependabot-Alert #120, hoch): Eine präparierte Excel-Datei mit unbegrenzter Spaltenangabe konnte den Prozess hängen lassen oder den Speicher füllen. Mitgezogen: `golang.org/x/net` 0.62.0, `mscfb`, `efp`.
