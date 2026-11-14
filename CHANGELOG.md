@@ -17,6 +17,16 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-14
 
+### PROJ-134: Kleineres Login-Cookie
+
+- **Fehler „400 Request Header Or Cookie Too Large“** auf allen Seiten der Domain (gemeldet in Safari, auch auf der öffentlichen Beitrittsseite) nach einem Admin-Login. Ursache: Das NextAuth-Session-Cookie enthielt Access-, ID- und Refresh-Token; alle Cookie-Teile zusammen überschritten das nginx-Limit von 8 KB pro Header-Zeile.
+- Das ID-Token liegt jetzt in einem eigenen `httpOnly`-Cookie (`src/lib/id-token-cookie.ts`) mit Pfad `/api/auth/keycloak-logout`. Der Browser schickt es nur beim Abmelden mit. Es ist auch nicht mehr über `/api/auth/session` im Browser lesbar.
+- „Abmelden“ läuft jetzt über `/api/auth/keycloak-logout`. Die Route setzt `id_token_hint`; ohne Cookie (Login vor dem Update) sendet sie `client_id`, und Keycloak fragt einmal nach.
+- Das ID-Token-Cookie wird beim Token-Refresh aktualisiert. Session und Cookie laufen über `SESSION_MAX_AGE_SECONDS` (30 Tage) gemeinsam ab.
+- Bestehende Sessions bleiben gültig. Sie verschieben das ID-Token beim nächsten Session-Abruf in das neue Cookie.
+- **Nicht** behoben für Browser, deren Cookie-Zeile schon über dem Limit liegt: nginx lehnt dort jede Anfrage ab, auch Abmelden und den Session-Abruf, sodass das Cookie nie neu geschrieben wird. Abhilfe ist einmaliges Löschen der Websitedaten (im User-Guide-Changelog beschrieben).
+- Die Abmelde-Route löscht das Session-Cookie jetzt samt aller Teile (`.0`, `.1`, …) mit passendem `Path` und `Secure`; vorher blieb der Löschversuch für `__Secure-`-Cookies wirkungslos.
+
 ### Sicherheitsupdates der Abhängigkeiten
 
 - **excelize 2.11.1** (Dependabot-Alert #120, hoch): Eine präparierte Excel-Datei mit unbegrenzter Spaltenangabe konnte den Prozess hängen lassen oder den Speicher füllen. Mitgezogen: `golang.org/x/net` 0.62.0, `mscfb`, `efp`.
