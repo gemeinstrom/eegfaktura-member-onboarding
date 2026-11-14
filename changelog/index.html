@@ -355,6 +355,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#2026-11-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2026-11-14
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#2026-11-12" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -985,6 +996,13 @@
 <h1 id="was-ist-neu">Was ist neu?<a class="headerlink" href="#was-ist-neu" title="Permanent link">&para;</a></h1>
 <p>Übersicht der Änderungen der letzten Tage, die für <strong>EEG-Admins</strong> und <strong>Mitglieder</strong> spürbar sind. Technische Details, Bug-Fixes ohne UI-Auswirkung und Infrastruktur-Themen sind hier bewusst weggelassen — die finden sich in der Commit-Historie.</p>
 <hr />
+<h2 id="2026-11-14">2026-11-14<a class="headerlink" href="#2026-11-14" title="Permanent link">&para;</a></h2>
+<p><strong>Fehler „Request Header Or Cookie Too Large“ behoben</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
+<p>Diese Korrektur ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
+</div>
+<p>Wer im Admin-Bereich angemeldet war, sah auf manchen Browsern (vor allem Safari) beim Öffnen der Beitrittsseite die Meldung „400 Bad Request – Request Header Or Cookie Too Large“. Die Anmeldung speichert jetzt weniger Daten im Browser, damit der Fehler nicht mehr entsteht. Wer ihn bereits sieht, muss einmal die gespeicherten Websitedaten löschen, denn auch Abmelden scheitert dann an derselben Meldung. In Safari: Einstellungen → Datenschutz → Websitedaten verwalten → „eegfaktura“ suchen → Entfernen. Danach neu anmelden. Alternativ funktioniert ein privates Fenster sofort.</p>
 <h2 id="2026-11-12">2026-11-12<a class="headerlink" href="#2026-11-12" title="Permanent link">&para;</a></h2>
 <p><strong>Beitrittsdatum kommt beim Import nach eegFaktura</strong></p>
 <p>Das vom Mitglied angegebene Beitrittsdatum (<strong>Aktiv am</strong>) wird beim Import jetzt nach eegFaktura übernommen: als <strong>Aktiv am</strong> des Mitglieds und für alle Zählpunkte. Die Anmeldung beim Netzbetreiber wird damit zu diesem Datum angefordert, zum Beispiel zum 01. des Monats. Bisher stand dort immer der Tag des Imports. Bei schon importierten Mitgliedern bitte das Datum in eegFaktura korrigieren.</p>
