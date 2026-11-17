@@ -10,6 +10,15 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Vorstands- und Weiterleitungs-Mail: Reply-To = EEG-Kontakt
+
+- **Nutzer-Rückmeldung 2026-11-16:** Ein Mitglied bekam die „Beitrittserklärung zur Unterzeichnung“ (PROJ-76) samt internem B2B-Hinweis. Die Mail ging nur an die EEG, hatte aber Reply-To = Mitglied; ein „Antworten“ mit dem unterschriebenen PDF schickte das Zitat mit.
+- `SendBoardApprovalRequest` und die Forward-Mail aus `SendActivationNotification` (PROJ-114) setzen Reply-To jetzt auf den EEG-Kontakt.
+- Beide Mails nennen die Mitglieds-E-Mail und bitten, das Dokument in einer neuen E-Mail zu schicken, nicht über „Antworten“ oder „Weiterleiten“. Auch der Re-Aktivierungs-Hinweis der Vorstands-Mail sagt das jetzt.
+- Betreff der Forward-Mail: „Beitrittsbestätigung für … – bitte ans Mitglied senden“ (vorher „bitte weiterleiten“).
+- Offen: Die normale EEG-Kopie „Mitglied aktiviert“ und die SEPA-Ablage-Kopie können ebenfalls interne Hinweise (B2B, kein SEPA) enthalten und behalten Reply-To = Mitglied.
+- Tests prüfen Reply-To und die Mitglieds-Adresse im Text (`spySender` erfasst jetzt `opts.ReplyTo`).
+
 ### NetworkPolicies: Ingress im hostNetwork und Billing-CronJobs
 
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
