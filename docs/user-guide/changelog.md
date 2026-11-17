@@ -13,6 +13,10 @@
 
 Die Mails **Beitrittserklärung zur Unterzeichnung** (Vorstands-Freigabe) und **Beitrittsbestätigung – bitte ans Mitglied senden** (bisher „bitte weiterleiten“) enthalten interne Hinweise, zum Beispiel zur Umstellung auf das B2B-Mandat. Bisher ging ein Klick auf „Antworten“ direkt an das Mitglied, das dann auch diese Hinweise sah. Jetzt geht eine Antwort an die Kontaktadresse der EEG. Die Mail nennt die E-Mail-Adresse des Mitglieds und bittet, das Dokument in einer neuen E-Mail an das Mitglied zu schicken.
 
+**Anlagenname im Bearbeiten-Dialog**
+
+Im Dialog **Bearbeiten** eines Antrags kannst du jetzt bei jedem Zählpunkt den **Anlagennamen** eintragen oder korrigieren. Bisher ging das nur im Beitrittsformular. Der Anlagenname wird beim Import als Anlagenbezeichnung nach eegFaktura übernommen.
+
 ## 2026-11-14
 
 **Fehler „Request Header Or Cookie Too Large“ behoben**

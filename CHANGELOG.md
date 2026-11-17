@@ -19,6 +19,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - Offen: Die normale EEG-Kopie „Mitglied aktiviert“ und die SEPA-Ablage-Kopie können ebenfalls interne Hinweise (B2B, kein SEPA) enthalten und behalten Reply-To = Mitglied.
 - Tests prüfen Reply-To und die Mitglieds-Adresse im Text (`spySender` erfasst jetzt `opts.ReplyTo`).
 
+### Anlagenname im Admin-Bearbeiten
+
+- **Nutzer-Rückmeldung 2026-11-17:** Im Bearbeiten-Dialog fehlte ein Eingabefeld für den Anlagennamen (`installation_name`), obwohl das Public-Form ihn per Field-Config anbietet. Der Wert wurde beim Speichern unverändert durchgereicht, war aber nicht änderbar.
+- `admin-edit-form.tsx` hat jetzt pro Zählpunkt ein Feld **Anlagenname** (max. 100 Zeichen wie im Backend), unabhängig von der Field-Config. Backend und Import (`EquipmentName`) unverändert.
+- Anlagennummer und Trafo haben im Bearbeiten-Dialog weiterhin kein Feld.
+
 ### NetworkPolicies: Ingress im hostNetwork und Billing-CronJobs
 
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
