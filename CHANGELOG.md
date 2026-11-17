@@ -10,6 +10,15 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### NetworkPolicies: Ingress im hostNetwork und Billing-CronJobs
+
+- **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
+- **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
+
+## 2026-11-17
+
+Deployed: Test rev 374 / Prod rev 38, `sha-cbbb73a`.
+
 ### Vorstands- und Weiterleitungs-Mail: Reply-To = EEG-Kontakt
 
 - **Nutzer-Rückmeldung 2026-11-16:** Ein Mitglied bekam die „Beitrittserklärung zur Unterzeichnung“ (PROJ-76) samt internem B2B-Hinweis. Die Mail ging nur an die EEG, hatte aber Reply-To = Mitglied; ein „Antworten“ mit dem unterschriebenen PDF schickte das Zitat mit.
@@ -24,11 +33,6 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Nutzer-Rückmeldung 2026-11-17:** Im Bearbeiten-Dialog fehlte ein Eingabefeld für den Anlagennamen (`installation_name`), obwohl das Public-Form ihn per Field-Config anbietet. Der Wert wurde beim Speichern unverändert durchgereicht, war aber nicht änderbar.
 - `admin-edit-form.tsx` hat jetzt pro Zählpunkt ein Feld **Anlagenname** (max. 100 Zeichen wie im Backend), unabhängig von der Field-Config. Backend und Import (`EquipmentName`) unverändert.
 - Anlagennummer und Trafo haben im Bearbeiten-Dialog weiterhin kein Feld.
-
-### NetworkPolicies: Ingress im hostNetwork und Billing-CronJobs
-
-- **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
-- **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
 
 ## 2026-11-14
 

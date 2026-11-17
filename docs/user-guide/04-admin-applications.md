@@ -154,9 +154,6 @@ Liegt eine Anlage nicht an der Adresse des Mitglieds, setzt du beim Zählpunkt d
 
 ### Anlagenname eines Zählpunkts
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Jeder Zählpunkt hat im Dialog **Bearbeiten** das Feld **Anlagenname**, zum Beispiel „Hauptanlage“ oder „Nebengebäude“. Das Feld ist immer da, auch wenn es im Beitrittsformular ausgeblendet ist. Der Anlagenname wird beim Import als Anlagenbezeichnung nach eegFaktura übernommen.
 
 > **Hinweis:** Änderungen an Antragsdaten werden im Statusverlauf nicht automatisch protokolliert. Nutze die Admin-Notiz für wichtige Vermerke.
