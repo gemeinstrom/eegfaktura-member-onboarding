@@ -70,7 +70,10 @@ das Menü **Herunterladen ▾** erneut abrufen — ohne eine Mail auszulösen:
   B2B-Firmenlastschrift). Ist für den Antrag kein Mandat hinterlegt (kein SEPA
   gewählt) oder fehlen EEG-Stammdaten wie die Gläubiger-ID, erscheint stattdessen
   ein Hinweis, was ergänzt werden muss.
-- **Beitrittserklärung** — nur bei EEGs mit aktiviertem Vorstands-Genehmigungs-Workflow.
+- **Beitrittserklärung** — in jedem Status und für jede EEG, auch ohne Vorstands-Genehmigungs-Workflow. Vor der Genehmigung steht als Datum das Einreichungsdatum; solange keine Mitgliedsnummer vergeben ist, fehlt diese Zeile.
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Die Beitrittserklärung in jedem Status herunterzuladen ist noch nicht in der Produktiv-Umgebung verfügbar. Dort gibt es sie nur bei Status *Aktiviert* mit Vorstands-Genehmigungs-Workflow.
 
 Das SEPA-Mandat wird beim Download unverändert reproduziert; vor dem Import trägt
 es noch keine Mandatsreferenz, danach die Mitgliedsnummer.

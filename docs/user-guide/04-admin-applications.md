@@ -79,12 +79,15 @@ Klicke auf eine Zeile in der Tabelle, um die **Detailansicht** des Antrags zu ö
 
 Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne Top-Level-Buttons. Sichtbarkeit hängt vom aktuellen Status ab:
 
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Die Beitrittserklärung jederzeit herunterzuladen ist noch nicht in der Produktiv-Umgebung verfügbar. Dort gibt es sie nur bei Status *Aktiviert* mit Vorstands-Genehmigungs-Workflow.
+
 | Aktion | Dropdown / Top-Level | Wann verfügbar |
 |--------|---------------------|----------------|
 | **Excel** | Herunterladen | ab Status *Genehmigt* |
 | **Beitrittsbestätigung** | Herunterladen | ab Status *Genehmigt* |
-| **Beitrittserklärung** | Herunterladen | Status *Aktiviert* + Vorstands-Genehmigungs-Workflow der EEG aktiv |
-| **SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung** | Nach eegFaktura hochladen | Ab Status *Importiert* (gleiche Dokumente wie unter „Herunterladen"), siehe [unten](#dokumente-nach-eegfaktura-hochladen) |
+| **Beitrittserklärung** | Herunterladen | jederzeit, auch ohne Vorstands-Genehmigungs-Workflow |
+| **SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung** | Nach eegFaktura hochladen | Ab Status *Importiert* (gleiche Dokumente wie unter „Herunterladen"; die Beitrittserklärung nur bei Status *Aktiviert* + Vorstands-Genehmigungs-Workflow), siehe [unten](#dokumente-nach-eegfaktura-hochladen) |
 | **Bestätigungs-Mail** *(oder „Bestätigungs-Link" bei pendender E-Mail-Bestätigung)* | Erneut senden | jederzeit |
 | **SEPA-Mandat** | Erneut senden | Status *Aktiviert* |
 | **Stammdaten abgleichen** | Top-Level | Status *Aktiviert* (greift auf den Faktura-Core zu) |
@@ -118,7 +121,7 @@ Im Dialog **Bearbeiten** setzt du den Wert auf Ja, Nein oder „keine Angabe" �
 
 ## Dokumente nach eegFaktura hochladen
 
-Du kannst SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über **Herunterladen ▾** bekommst.
+Du kannst SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über **Herunterladen ▾** bekommst. Die Beitrittserklärung lässt sich allerdings nur bei Status *Aktiviert* und eingeschaltetem Vorstands-Genehmigungs-Workflow hochladen.
 
 Das geht erst, wenn das Mitglied in eegFaktura existiert, also ab Status *Importiert* (auch *Bereit zur Aktivierung* und *Aktiviert*). Vorher ist das Menü **Nach eegFaktura hochladen ▾** nicht sichtbar.
 

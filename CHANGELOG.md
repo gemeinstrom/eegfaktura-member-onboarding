@@ -10,6 +10,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### PROJ-136: Beitrittserklärung jederzeit herunterladen
+
+- `GET /api/admin/applications/{id}/joining-declaration.pdf` liefert das PDF in jedem Status außer `draft` und für jede EEG (vorher nur `activated` + Vorstands-Workflow). Neue Regel `JoiningDeclarationDownloadUnavailableReason`.
+- Upload nach eegFaktura (PROJ-129) und Vorstands-Mail behalten die alte Regel (`JoiningDeclarationUnavailableReason`); `uploadableDocuments` prüft die Beitrittserklärung jetzt separat statt über `pdfAvailability`.
+- Ohne Mitgliedsnummer entfällt die Zeile im PDF (Renderer-Verhalten unverändert).
+- „Datum“ im Beitritts-PDF: vor der Genehmigung das Einreichungsdatum statt des Download-Tags (`buildApprovalPDFData`).
+- Der Download ist jetzt wie Beitrittsbestätigung und SEPA-Mandat bei pausiertem Vertrag gesperrt (423, PROJ-71); vorher fehlte die Prüfung.
+
 ### NetworkPolicies: Ingress im hostNetwork und Billing-CronJobs
 
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.

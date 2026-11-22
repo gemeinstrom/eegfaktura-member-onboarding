@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-11-22
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+**Beitrittserklärung jederzeit herunterladen**
+
+Im Antrag findest du unter **Herunterladen** jetzt immer die **Beitrittserklärung** — in jedem Status (auch vor der Genehmigung) und auch dann, wenn deine EEG den Vorstands-Genehmigungs-Workflow nicht nutzt. Das PDF wird bei jedem Download aus den aktuellen Antragsdaten erzeugt. Solange noch keine Mitgliedsnummer vergeben ist, fehlt diese Zeile im PDF. Bisher gab es die Beitrittserklärung nur bei Status *Aktiviert* mit Vorstands-Workflow. Die Mail an den Vorstand und das Hochladen nach eegFaktura bleiben unverändert.
+
 ## 2026-11-17
 
 **Mails zum Weiterleiten an das Mitglied: Antworten geht an die EEG**
