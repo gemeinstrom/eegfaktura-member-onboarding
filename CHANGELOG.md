@@ -10,13 +10,6 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
-### Reply-To der EEG-Kopien „SEPA-Mandat“ und „Antrag aktiviert“ = EEG-Kontakt
-
-- Folge von #146: Die Ablage-Kopie zum SEPA-Mandat (`SendMandateAtImportNotification`) kann den internen B2B-Hinweis enthalten, die EEG-Kopie „Antrag aktiviert“ (`SendActivationNotification`) zusätzlich den Hinweis „kein SEPA-Mandat“. Reply-To ist jetzt der EEG-Kontakt statt des Mitglieds.
-- Beide Mails nennen die Mitglieds-E-Mail („E-Mail des Mitglieds“), der Footer sagt, wohin eine Antwort geht.
-- Bewusst unverändert: „Neuer Antrag“ an die EEG behält Reply-To = Mitglied, weil die EEG dort Rückfragen direkt stellt. Ihr einziger Hinweis-Block (kein SEPA-Mandat) betrifft die eigene Angabe des Mitglieds; der B2B-Hinweis erscheint dort nicht. Mails an das Mitglied: Reply-To = EEG-Kontakt wie bisher.
-- Test `TestEEGCopies_ReplyToIsEEGContact`.
-
 ### NetworkPolicies: Ingress im hostNetwork und Billing-CronJobs
 
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
@@ -24,7 +17,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## 2026-11-22
 
-Deployed: Test rev 375 / Prod rev 39, `sha-7f1b573` (PROJ-136); danach Test rev 376 / Prod rev 40, `sha-ab37fcd` (Dependabot-Welle).
+Deployed: Test rev 375 / Prod rev 39, `sha-7f1b573` (PROJ-136); danach Test rev 376 / Prod rev 40, `sha-ab37fcd` (Dependabot-Welle); danach Test rev 377 / Prod rev 41, `sha-2ad0fab` (Reply-To EEG-Kopien, #156).
+
+### Reply-To der EEG-Kopien „SEPA-Mandat“ und „Antrag aktiviert“ = EEG-Kontakt
+
+- Folge von #146: Die Ablage-Kopie zum SEPA-Mandat (`SendMandateAtImportNotification`) kann den internen B2B-Hinweis enthalten, die EEG-Kopie „Antrag aktiviert“ (`SendActivationNotification`) zusätzlich den Hinweis „kein SEPA-Mandat“. Reply-To ist jetzt der EEG-Kontakt statt des Mitglieds.
+- Beide Mails nennen die Mitglieds-E-Mail („E-Mail des Mitglieds“), der Footer sagt, wohin eine Antwort geht.
+- Bewusst unverändert: „Neuer Antrag“ an die EEG behält Reply-To = Mitglied, weil die EEG dort Rückfragen direkt stellt. Ihr einziger Hinweis-Block (kein SEPA-Mandat) betrifft die eigene Angabe des Mitglieds; der B2B-Hinweis erscheint dort nicht. Mails an das Mitglied: Reply-To = EEG-Kontakt wie bisher.
+- Test `TestEEGCopies_ReplyToIsEEGContact`.
 
 ### Dependabot-Welle 2026-11-22 gesammelt (#145, #148–#151, #153)
 

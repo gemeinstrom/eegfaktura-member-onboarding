@@ -26,9 +26,6 @@ eines Antrags.
 
 ## Mails an den EEG-Kontakt
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Dass „Antworten“ bei den Mails B und C an die EEG-Kontaktadresse geht, ist noch nicht in der Produktiv-Umgebung verfügbar. Dort geht die Antwort noch an das Mitglied.
-
 | # | Mail | Auslöser | PDF-Anhang |
 |---|------|----------|------------|
 | A | **Neuer Antrag** | direkt nach Einreichung — oder, wenn das Mitglied seine E-Mail erst bestätigen muss, erst nach dem Klick auf den Bestätigungs-Link | — |
