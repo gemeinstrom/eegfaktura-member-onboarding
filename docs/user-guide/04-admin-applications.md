@@ -116,6 +116,13 @@ Hat die EEG die Frage zur Mehrfachteilnahme eingeschaltet (siehe [Einstellungen]
 
 Im Dialog **Bearbeiten** setzt du den Wert auf Ja, Nein oder „keine Angabe" — auch dann, wenn die Frage inzwischen ausgeschaltet ist. Wie alle anderen Angaben im Antrag lässt sich die Antwort bearbeiten, solange der Antrag noch nicht importiert ist. So korrigierst du die Antwort, wenn sich das Mitglied umentschieden hat. Das Speichern anderer Änderungen lässt die Antwort unverändert.
 
+### Zusatzinformation
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Hat der Antrag eine Zusatzinformation, zeigt die Detailansicht sie als eigenen Abschnitt **Zusatzinformation** über der Admin-Notiz, mit allen Zeilenumbrüchen. Anders als die Admin-Notiz ist sie für das Mitglied bestimmt: Sie steht auf Beitrittsbestätigung und Beitrittserklärung, in der Eingangsbestätigung, in der Mail „Neuer Antrag“ und im Daten-Export. Nach eegFaktura wird sie nicht übertragen.
+
 ## Dokumente nach eegFaktura hochladen
 
 Du kannst SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über **Herunterladen ▾** bekommst. Die Beitrittserklärung lässt sich allerdings nur bei Status *Aktiviert* und eingeschaltetem Vorstands-Genehmigungs-Workflow hochladen.
@@ -145,6 +152,15 @@ Als Admin kannst du folgende Felder direkt korrigieren:
 - Admin-Notiz (interne Anmerkungen)
 
 Klicke auf **Bearbeiten**, nimm die Änderungen vor und speichere.
+
+### Zusatzinformation bearbeiten
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Im Dialog **Bearbeiten** gibt es über der Admin-Notiz immer das mehrzeilige Feld **Zusatzinformation** (höchstens 2000 Zeichen), auch wenn das Feld im Beitrittsformular ausgeblendet ist. Dort hältst du individuelle Absprachen mit dem Mitglied fest, zum Beispiel: „Teilnahmefaktor 50 % im ersten Jahr. Depot: 500 €, Rückzahlung bei Austritt.“ Speichern ohne Änderung lässt den Text stehen; leerst du das Feld, wird die Zusatzinformation entfernt.
+
+Änderst du den Text bei einem eingereichten Antrag (neu, geändert oder geleert), bekommt das Mitglied die E-Mail **„Zusatzinformation zu deinem Antrag geändert“** (bei Unternehmen und Gemeinden „Ihrem Antrag“) mit dem neuen Text bzw. dem Hinweis, dass sie entfernt wurde. Die Kontaktadresse der EEG bekommt eine Kopie. Speichern ohne Textänderung löst keine Mail aus. Verlangt deine EEG die Bestätigung der E-Mail-Adresse und hat das Mitglied sie noch nicht bestätigt, wird der Text gespeichert, aber noch keine Mail verschickt. Kann die Mail nicht versendet werden, bleibt die Änderung trotzdem gespeichert, und du siehst die Meldung **„Mitglied nicht informiert“** — informiere das Mitglied dann bitte selbst. Wie alle Angaben lässt sich der Text im Dialog **Bearbeiten** in den Status Eingereicht, In Bearbeitung, Rückfrage, Genehmigt und Import fehlgeschlagen ändern; nach dem Import nicht mehr.
 
 ![Admin-Edit-Dialog mit der Zusatzangaben-Section zwischen Adresse und Zählpunkten](images/admin-edit-zusatzangaben.png)
 

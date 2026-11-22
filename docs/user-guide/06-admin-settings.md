@@ -489,6 +489,18 @@ Felder, die pro Zählpunkt im Mitgliedsformular erscheinen — bei mehreren Zäh
 - **Bankname** *(Application-Scope, ab 2026-05-18 konfigurierbar)* — bisher fix im Bankverbindungsblock angezeigt. Seit 2026-05-31 Default `Ausgeblendet` (zuvor `Optional`) — Bankname ist für die meisten EEGs nicht zentral, IBAN reicht. Auf `Optional` setzen wenn du das Feld im Mitgliederformular anzeigen willst; auf `Verpflichtend`, wenn der Bankname explizit gefordert ist (z. B. weil die EEG bei Auslandsüberweisungen die Bank kennen will). Bestehende EEGs mit explizitem Eintrag bleiben unverändert.
 - **Teilnahmefaktor (%)** *(Zählpunkt-Scope, ab 2026-05-19 konfigurierbar)* — bisher fix sichtbar im Mitgliedsformular, vorbelegt mit 100 %. Default `Optional` (bewahrt heutiges Verhalten — Mitglied sieht das Feld und kann den Wert ändern). Bei `Ausgeblendet` oder `Admin-Vorbefüllung` ist das Feld im Formular weg und der Wert wird serverseitig automatisch auf **100 %** gesetzt. Bei `Verpflichtend` bleibt das Feld sichtbar und mit 100 % vorbelegt — der Default macht den Wert technisch nie leer, das Pflicht-Häkchen erinnert das Mitglied nur, hinzuschauen. **In allen Modi** zeigen Beitrittsbestätigungs-PDF, Mail und Excel-Export den Teilnahmefaktor unverändert — der Toggle steuert nur die Public-Form-Sichtbarkeit, nicht die Render-Pfade.
 
+### Zusatzinformation
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Mit dem Feld **Zusatzinformation** *(nur in der Ansicht „Alle Optionen“)* können neue Mitglieder im Beitrittsformular selbst einen Text zu individuellen Absprachen eintragen, etwa zu Teilnahmefaktor, Depot oder Besicherung. Standard ist **Ausgeblendet** — für deine EEG ändert sich nichts, bis du das Feld umstellst.
+
+- **Optional** oder **Verpflichtend:** Das Formular zeigt als letzten Abschnitt direkt vor den Einwilligungen ein mehrzeiliges Textfeld (höchstens 2000 Zeichen). Bei „Verpflichtend“ lässt sich der Antrag ohne Text nicht einreichen.
+- **Ausgeblendet** oder **Admin-Vorgabe:** Das Feld erscheint nicht im Formular. Beide Zustände wirken hier gleich, denn im Dialog **Bearbeiten** eines Antrags kannst du die Zusatzinformation immer pflegen. Ein schon gespeicherter Text bleibt erhalten, auch wenn das Mitglied den Antrag nach einer Rückfrage korrigiert.
+
+Ist der Text befüllt, erscheint er unabhängig von dieser Einstellung auf Beitrittsbestätigung und Beitrittserklärung, in den Mails zum Antrag und im Daten-Export (Spalte **Zusatzinformation**). Nach eegFaktura wird er nicht übertragen. Anträge über die externe API kennen das Feld nicht; dort gilt auch „Verpflichtend“ nicht.
+
 Klicke auf **Konfiguration speichern**, um die Änderungen zu übernehmen.
 
 ---

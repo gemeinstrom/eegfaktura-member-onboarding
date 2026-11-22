@@ -10,6 +10,16 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### PROJ-135: Zusatzinformation pro Antrag
+
+- **Migration 000096** (additiv): `application.additional_information TEXT NULL`. Noch nicht angewendet.
+- Neue Feld-Einstellung `additional_information` (Standard `hidden`). Bei `optional`/`required` zeigt das Beitrittsformular ein mehrzeiliges Feld als letzten Abschnitt vor den Einwilligungen; „Pflicht“ prüfen Frontend und Backend beim Einreichen (externe API ausgenommen, sie kennt das Feld nicht).
+- Prüfung an einer Stelle (`internal/application/additional_information.go`): Trimmen, Zeilenumbrüche vereinheitlicht, leer → NULL, mehr als 2000 Zeichen → 400. Formular und Rückfrage-Link übernehmen den Wert nur bei eingeblendetem Feld; bei `hidden`/`admin_only` bleibt ein gespeicherter Text unverändert.
+- Admin-Bearbeiten zeigt das Feld immer und sendet es bei jedem Speichern mit. Eine echte Änderung an einem eingereichten Antrag schickt dem Mitglied die Mail „Zusatzinformation zu deinem/Ihrem Antrag geändert“ (Reply-To EEG) und der EEG eine Kopie (Reply-To EEG). Versand synchron nach dem Commit; scheitert die Mitglieder-Mail, bleibt die Änderung gespeichert und die Antwort meldet `additionalInformationMailFailed: true` („Mitglied nicht informiert“). Solange ein Antrag `submitted` ist und die E-Mail-Adresse bei Pflicht-Bestätigung (PROJ-31) noch nicht bestätigt wurde, geht keine Mail raus. Der Rückfrage-Link sendet den Text nur, wenn das Mitglied ihn geändert hat.
+- Ausgabe, wenn befüllt (unabhängig von der Feld-Einstellung): Antrags-Detail, Eingangsbestätigung inkl. erneut senden, Mail „Neuer Antrag“, Beitrittsbestätigung und Beitrittserklärung (eigener Abschnitt vor dem Vorstands-Signaturblock, Umbruch über Seiten), Excel-Export (Spalte „Zusatzinformation“, Stammdaten, Backend- und Frontend-Katalog gleich). Kein Core-Import, keine externe API.
+- PDF: Zeichen außerhalb von Windows-1252 (z. B. Emoji) werden im Zusatztext als „?“ ausgegeben statt den ganzen Text zu verstümmeln; vorher NFC-Normalisierung. Der Vorstands-Signaturblock der Beitrittserklärung rutscht geschlossen auf eine neue Seite, wenn er nicht mehr passt.
+- HTML-Mails: Zeilenumbrüche als `<br>` (Outlook ignoriert `pre-wrap`); NUL im Text → 400, übrige Steuerzeichen außer Zeilenumbruch/Tab werden entfernt.
+
 ### NetworkPolicies: Ingress im hostNetwork und Billing-CronJobs
 
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.

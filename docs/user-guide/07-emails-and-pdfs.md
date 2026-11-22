@@ -60,6 +60,15 @@ beim erneuten Senden — sowie im Mitglieder-Block der Beitrittsbestätigung und
 der Beitrittserklärung. Ohne Antwort entfällt die Zeile. Das gilt unabhängig
 davon, ob die Frage bei der EEG gerade eingeschaltet ist.
 
+### Zusatzinformation in Mails und PDFs
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Hat der Antrag eine Zusatzinformation, steht sie als eigener Abschnitt **Zusatzinformation** mit allen Zeilenumbrüchen in der Eingangsbestätigung (1) — auch beim erneuten Senden —, in der Mail „Neuer Antrag“ (A) sowie in Beitrittsbestätigung und Beitrittserklärung (bei der Beitrittserklärung vor dem Unterschriftsblock des Vorstands). Ohne Text sehen Mails und PDFs aus wie bisher. Das gilt unabhängig davon, ob das Feld im Beitrittsformular eingeblendet ist.
+
+Ändert ein Admin die Zusatzinformation im Dialog **Bearbeiten**, bekommt das Mitglied zusätzlich die Mail **„Zusatzinformation zu deinem Antrag geändert“** mit dem neuen Text oder dem Hinweis, dass sie entfernt wurde. Die EEG-Kontaktadresse bekommt eine Kopie; „Antworten“ geht bei beiden Mails an die EEG. Ohne EEG-Kontaktadresse entfällt die Kopie. Ändert das Mitglied den Text selbst über den Rückfrage-Link, geht diese Mail nicht raus — ebenso nicht, solange das Mitglied seine E-Mail-Adresse noch nicht bestätigt hat (bei EEGs mit E-Mail-Bestätigung).
+
 ### PDFs nachträglich herunterladen
 
 In der Antrags-Detailansicht kannst du die erzeugten Dokumente jederzeit über

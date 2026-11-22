@@ -6,6 +6,13 @@
 
 ## 2026-11-22
 
+**Neu: Zusatzinformation pro Antrag**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Individuelle Absprachen mit einem Mitglied, etwa zum Teilnahmefaktor oder zu einer Depotzahlung, hältst du jetzt im Antrag als **Zusatzinformation** fest. Im Dialog **Bearbeiten** gibt es dafür immer ein mehrzeiliges Feld. Ist es befüllt, steht der Text auf Beitrittsbestätigung und Beitrittserklärung, in der Eingangsbestätigung, in der Mail „Neuer Antrag“ und im Daten-Export (Spalte **Zusatzinformation**). Änderst du ihn bei einem eingereichten Antrag, bekommt das Mitglied eine E-Mail mit dem neuen Text, die EEG eine Kopie. Unter **Einstellungen → Formular-Felder** (Ansicht „Alle Optionen“) kannst du das Feld auch im Beitrittsformular einblenden — als letzten Abschnitt vor den Einwilligungen, optional oder als Pflicht. Standardmäßig ist es dort ausgeblendet. Nach eegFaktura wird die Zusatzinformation nicht übertragen.
+
 **Ablage-Kopie SEPA-Mandat und „Mitglied aktiviert“: Antworten geht an die EEG**
 
 Auch diese beiden Mails an die EEG können interne Hinweise enthalten, etwa zur Umstellung auf das B2B-Mandat. Ein Klick auf „Antworten“ geht deshalb jetzt an die Kontaktadresse der EEG statt an das Mitglied. Die E-Mail-Adresse des Mitglieds steht in der Mail; schreib dem Mitglied bitte eine neue E-Mail. Die Mail „Neuer Antrag“ bleibt wie bisher: Dort geht „Antworten“ direkt an das Mitglied.
