@@ -26,11 +26,14 @@ eines Antrags.
 
 ## Mails an den EEG-Kontakt
 
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Dass „Antworten“ bei den Mails B und C an die EEG-Kontaktadresse geht, ist noch nicht in der Produktiv-Umgebung verfügbar. Dort geht die Antwort noch an das Mitglied.
+
 | # | Mail | Auslöser | PDF-Anhang |
 |---|------|----------|------------|
 | A | **Neuer Antrag** | direkt nach Einreichung — oder, wenn das Mitglied seine E-Mail erst bestätigen muss, erst nach dem Klick auf den Bestätigungs-Link | — |
-| B | **SEPA-Mandat versandt** | parallel zu Mitglieder-Mail #5 (Import + Mandat-Versand) | gleiche Mandat-PDF wie das Mitglied bekommen hat |
-| C | **Mitglied aktiviert** | parallel zu Mitglieder-Mail #6 (Wechsel auf „Aktiviert") | gleiche Beitrittsbestätigungs-PDF wie das Mitglied |
+| B | **SEPA-Mandat versandt** | parallel zu Mitglieder-Mail #5 (Import + Mandat-Versand) | gleiche Mandat-PDF wie das Mitglied bekommen hat. Die Mail nennt die E-Mail-Adresse des Mitglieds; eine Antwort geht an die EEG-Kontaktadresse. |
+| C | **Mitglied aktiviert** | parallel zu Mitglieder-Mail #6 (Wechsel auf „Aktiviert") | gleiche Beitrittsbestätigungs-PDF wie das Mitglied. Die Mail nennt die E-Mail-Adresse des Mitglieds; eine Antwort geht an die EEG-Kontaktadresse. |
 | C′ | **Beitrittserklärung zur Unterzeichnung** | beim Wechsel auf „Aktiviert", wenn die EEG den Vorstands-Genehmigungs-Workflow aktiviert hat | Beitrittserklärungs-PDF mit Vorstands-Signaturblock am Ende. Vorstand unterschreibt und schickt sie in einer **neuen** E-Mail ans Mitglied (die Mail nennt dessen Adresse). Nicht über „Antworten“ oder „Weiterleiten“, denn die Mail enthält interne Hinweise; eine Antwort geht an die EEG-Kontaktadresse. Mail-Nr. 6 an das Mitglied entfällt; das Mitglied wird über die reguläre eegFaktura-Aktivierungs-Mail informiert. **Pflicht-Bedingung:** EEG-Kontakt-Mail muss gepflegt sein, sonst bricht der Aktivierungs-Übergang ab. |
 | C″ | **Beitrittsbestätigung – bitte ans Mitglied senden** | beim Wechsel auf „Aktiviert", wenn die EEG „Beitrittsbestätigung an die EEG senden" aktiviert hat | Beitrittsbestätigungs-PDF (dasselbe, das sonst das Mitglied bekäme), mit Vorspann, sie in einer neuen E-Mail ans Mitglied zu schicken (die Mail nennt dessen Adresse; eine Antwort geht an die EEG-Kontaktadresse). Das Mitglied bekommt vom System **nichts** (auch keine Aktivierungs-Mail #6). **Pflicht-Bedingung:** EEG-Kontakt-Mail muss gepflegt sein. Unabhängig vom Vorstands-Workflow (C′) — beide Schalter wirken getrennt. |
 

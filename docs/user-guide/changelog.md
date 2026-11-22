@@ -6,6 +6,13 @@
 
 ## 2026-11-22
 
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+**Ablage-Kopie SEPA-Mandat und „Mitglied aktiviert“: Antworten geht an die EEG**
+
+Auch diese beiden Mails an die EEG können interne Hinweise enthalten, etwa zur Umstellung auf das B2B-Mandat. Ein Klick auf „Antworten“ geht deshalb jetzt an die Kontaktadresse der EEG statt an das Mitglied. Die E-Mail-Adresse des Mitglieds steht in der Mail; schreib dem Mitglied bitte eine neue E-Mail. Die Mail „Neuer Antrag“ bleibt wie bisher: Dort geht „Antworten“ direkt an das Mitglied.
+
 **Beitrittserklärung jederzeit herunterladen**
 
 Im Antrag findest du unter **Herunterladen** jetzt immer die **Beitrittserklärung** — in jedem Status (auch vor der Genehmigung) und auch dann, wenn deine EEG den Vorstands-Genehmigungs-Workflow nicht nutzt. Das PDF wird bei jedem Download aus den aktuellen Antragsdaten erzeugt. Solange noch keine Mitgliedsnummer vergeben ist, fehlt diese Zeile im PDF. Bisher gab es die Beitrittserklärung nur bei Status *Aktiviert* mit Vorstands-Workflow. Die Mail an den Vorstand und das Hochladen nach eegFaktura bleiben unverändert.

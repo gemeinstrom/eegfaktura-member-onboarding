@@ -10,10 +10,21 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Reply-To der EEG-Kopien „SEPA-Mandat“ und „Antrag aktiviert“ = EEG-Kontakt
+
+- Folge von #146: Die Ablage-Kopie zum SEPA-Mandat (`SendMandateAtImportNotification`) kann den internen B2B-Hinweis enthalten, die EEG-Kopie „Antrag aktiviert“ (`SendActivationNotification`) zusätzlich den Hinweis „kein SEPA-Mandat“. Reply-To ist jetzt der EEG-Kontakt statt des Mitglieds.
+- Beide Mails nennen die Mitglieds-E-Mail („E-Mail des Mitglieds“), der Footer sagt, wohin eine Antwort geht.
+- Bewusst unverändert: „Neuer Antrag“ an die EEG behält Reply-To = Mitglied, weil die EEG dort Rückfragen direkt stellt. Ihr einziger Hinweis-Block (kein SEPA-Mandat) betrifft die eigene Angabe des Mitglieds; der B2B-Hinweis erscheint dort nicht. Mails an das Mitglied: Reply-To = EEG-Kontakt wie bisher.
+- Test `TestEEGCopies_ReplyToIsEEGContact`.
+
 ### NetworkPolicies: Ingress im hostNetwork und Billing-CronJobs
 
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
 - **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
+
+## 2026-11-22
+
+Deployed: Test rev 375 / Prod rev 39, `sha-7f1b573` (PROJ-136); danach Test rev 376 / Prod rev 40, `sha-ab37fcd` (Dependabot-Welle).
 
 ### Dependabot-Welle 2026-11-22 gesammelt (#145, #148–#151, #153)
 
@@ -26,10 +37,6 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
   - `lucide-react` 1.73.0
   - `dompurify` 3.4.18
 - **Nicht übernommen:** `typescript` 7.0.2 (#152, Major). `tsc` selbst läuft, aber `typescript-eslint` 8.73 (über `eslint-config-next`) unterstützt TS 7 noch nicht (Peer `typescript <6.1.0`) und bricht `npm run lint` mit „typescript-eslint does not support TS 7.0“ ab. TypeScript bleibt auf 6.0.3, bis typescript-eslint nachzieht.
-
-## 2026-11-22
-
-Deployed: Test rev 375 / Prod rev 39, `sha-7f1b573`.
 
 ### PROJ-136: Beitrittserklärung jederzeit herunterladen
 
@@ -420,8 +427,6 @@ Welle 2B — sieben Card-Sektion-Komponenten unter `src/components/registration-
 - `consent-section.tsx` (257 Zeilen) — Datenschutz + Pflicht-Dokumente + PROJ-44 Netzbetreiber-Vollmacht + PROJ-56 Netzbetreiber-Info-Felder + Info-Dokumente.
 
 Keine Verhaltens-Änderung — 1:1 visuell + funktional. Tests grün: `tsc --noEmit` clean, 238/238 Vitest grün, Production-`NEXT_PUBLIC_TEST_AUTH_MODE= npm run build` clean.
-
-
 
 Welle 1C schließt den api.ts-Refactor ab: die drei größten verbleibenden Blöcke wurden in dedizierte Module extrahiert. **api.ts: 1295 → 53 Zeilen (von ursprünglich 2442 → −97,8 % gesamt)**. AC-2 (api.ts <50 Zeilen) damit voll erfüllt (53 Zeilen mit Header-Kommentar).
 
