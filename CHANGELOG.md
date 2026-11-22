@@ -15,6 +15,18 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - **Neuer Wert `networkPolicies.ingressNodeCIDRs`** (Default leer = unverändert): Läuft der Ingress-Controller mit `hostNetwork`, kommt sein Verkehr mit Node-Adressen an, die der `namespaceSelector` nie trifft. Mit den Node-CIDRs bleiben Frontend und Backend erreichbar, sobald der Cluster NetworkPolicies durchsetzt. Ohne Policy-Engine (z. B. nur flannel) ändert sich nichts.
 - **Postgres-Policy:** Die CronJobs `billing-daily` und `billing-quarterly` (PROJ-104) fehlten in der Liste der erlaubten Clients. Mit einer Policy-Engine hätten sie die Datenbank nicht mehr erreicht.
 
+### Dependabot-Welle 2026-11-22 gesammelt (#145, #148–#151, #153)
+
+- **Go:**
+  - `keyfunc/v3` 3.9.2
+  - `x/text` 0.44.0, zieht `x/mod` 0.42.0 und `x/tools` 0.52.0 mit
+- **npm:**
+  - `next` 16.4.6
+  - tiptap 3.34.0: alle Pakete auf derselben Version, Lockfile aus #150
+  - `lucide-react` 1.73.0
+  - `dompurify` 3.4.18
+- **Nicht übernommen:** `typescript` 7.0.2 (#152, Major). `tsc` selbst läuft, aber `typescript-eslint` 8.73 (über `eslint-config-next`) unterstützt TS 7 noch nicht (Peer `typescript <6.1.0`) und bricht `npm run lint` mit „typescript-eslint does not support TS 7.0“ ab. TypeScript bleibt auf 6.0.3, bis typescript-eslint nachzieht.
+
 ## 2026-11-22
 
 Deployed: Test rev 375 / Prod rev 39, `sha-7f1b573`.
