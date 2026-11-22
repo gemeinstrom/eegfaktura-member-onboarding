@@ -79,9 +79,6 @@ Klicke auf eine Zeile in der Tabelle, um die **Detailansicht** des Antrags zu ö
 
 Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne Top-Level-Buttons. Sichtbarkeit hängt vom aktuellen Status ab:
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Die Beitrittserklärung jederzeit herunterzuladen ist noch nicht in der Produktiv-Umgebung verfügbar. Dort gibt es sie nur bei Status *Aktiviert* mit Vorstands-Genehmigungs-Workflow.
-
 | Aktion | Dropdown / Top-Level | Wann verfügbar |
 |--------|---------------------|----------------|
 | **Excel** | Herunterladen | ab Status *Genehmigt* |
