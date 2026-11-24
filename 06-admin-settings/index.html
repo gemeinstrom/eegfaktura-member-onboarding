@@ -1482,10 +1482,21 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 <li><strong>Im B2B-Mandat den elektronischen Audit-Trail nutzen (statt manueller Unterschrift)</strong> — wirkt unabhängig vom CORE-Toggle, weil die Rechtsbewertung für Geschäftsleute (B2B) anders ausfallen kann als für Verbraucher (CORE).</li>
 </ul>
 <p>Auch beim B2B-Audit-Pfad bekommt der EEG-Kontakt die Ablage-Kopie per E-Mail.</p>
+<div class="admonition warning">
+<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
+<p>Dieser Wortlaut ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
+</div>
 <blockquote>
 <p><strong>Beispiel-Wortlaut Audit-Trail-Block:</strong>
-<em>Der Kunde hat der Musterstadt EEG nach Verifizierung seiner E-Mail-Adresse am 21.05.2026 11:50 von der IP-Adresse 192.0.2.42 auf elektronischem Weg (formfreie Willenserklärung gem. § 76 (3) EIWOG 2010) seine Zustimmung zum Vertrag im obigen Sinne sowie für das SEPA-Lastschriftmandat erteilt.</em></p>
-<p><strong>Hinweis:</strong> Wenn der Audit-Trail aktiv ist, aber für einen einzelnen Antrag noch keine IP-Adresse gespeichert wurde (Altanträge aus der Zeit vor der elektronischen Erfassung), fällt das PDF automatisch auf die klassische Unterschriftslinie zurück. Es kommt also nie zu einem fehlerhaften Audit-Block ohne Datenbasis.</p>
+<em>Der Kunde hat der Musterstadt EEG nach Verifizierung seiner E-Mail-Adresse am 21.05.2026 um 11:50 Uhr auf elektronischem Weg seine Zustimmung zum SEPA-Lastschriftmandat erteilt.</em></p>
+</blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
+<p>Dass die IP-Adresse nicht mehr im PDF steht, gilt noch nicht in der Produktiv-Umgebung.</p>
+</div>
+<blockquote>
+<p><strong>Hinweis:</strong> Die IP-Adresse steht nicht im PDF, wird aber weiterhin gespeichert.</p>
+<p>Wenn der Audit-Trail aktiv ist, aber für einen einzelnen Antrag noch keine IP-Adresse gespeichert wurde (Altanträge aus der Zeit vor der elektronischen Erfassung), fällt das PDF automatisch auf die klassische Unterschriftslinie zurück. Es kommt also nie zu einem fehlerhaften Audit-Block ohne Datenbasis.</p>
 </blockquote>
 <h4 id="firmenlastschrift-b2b-und-vorbereitungs-toggle">Firmenlastschrift (B2B) und Vorbereitungs-Toggle<a class="headerlink" href="#firmenlastschrift-b2b-und-vorbereitungs-toggle" title="Permanent link">&para;</a></h4>
 <p>Für die B2B-Firmenlastschrift gibt es zwei Wege, die der Admin im Antrags-Bearbeiten-Dialog wählen kann.</p>
@@ -1897,7 +1908,7 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 </ul>
 <p><strong>Mitgliedstypen</strong> und <strong>Pflichtfelder</strong> orientieren sich an der <code>field_config</code> der EEG — die gleichen Regeln wie im öffentlichen Formular. Für <code>private</code>/<code>farmer</code> sind <code>firstname</code> + <code>lastname</code> Pflicht, für <code>company</code>/<code>municipality</code>/<code>association</code> ist <code>companyName</code> Pflicht.</p>
 <p><strong>Vollständige technische Referenz</strong> (alle Felder, Validierungen, Fehler-Codes, Mitgliedstyp-Details): Die API-Spezifikation erhalten Integrations-Partner auf Anfrage beim Betreiber.</p>
-<p><strong>Neu seit Juni 2026:</strong> Du kannst im Request-Body das optionale Feld <code>submitterIp</code> mitgeben (z.B. <code>"submitterIp": "203.0.113.42"</code>). Wenn dein Backend die End-User-IP aus dem ursprünglichen Browser-Request kennt, dokumentiert die Plattform sie als Audit-Trail im SEPA-Firmenlastschrift-Mandat-PDF (rechtskonform nach § 76 (3) EIWOG 2010). Ohne dieses Feld wird das PDF im klassischen Format mit Datum/Unterschriftsfeld erstellt.</p>
+<p><strong>Neu seit Juni 2026:</strong> Du kannst im Request-Body das optionale Feld <code>submitterIp</code> mitgeben (z.B. <code>"submitterIp": "203.0.113.42"</code>). Wenn dein Backend die End-User-IP aus dem ursprünglichen Browser-Request kennt, speichert die Plattform sie als Audit-Trail der elektronischen Zustimmung. Hat die EEG das elektronische Mandat für den Mandatstyp (Basis- oder Firmenlastschrift) aktiviert, bekommt das SEPA-Mandat-PDF dann den Audit-Block statt der Unterschriftslinie. Ohne dieses Feld wird das PDF im klassischen Format mit Datum/Unterschriftsfeld erstellt.</p>
 <hr />
 <h2 id="datenweiterleitung">Datenweiterleitung<a class="headerlink" href="#datenweiterleitung" title="Permanent link">&para;</a></h2>
 <p><img alt="Datenweiterleitung" src="../images/admin-settings-datenweiterleitung.png" /></p>
