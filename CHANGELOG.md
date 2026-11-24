@@ -10,6 +10,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### SEPA-Mandat: Wortlaut des elektronischen Audit-Blocks ohne EIWOG-Verweis
+
+- Wunsch einer EEG (2026-11-24): Der Verweis „formfreie Willenserklärung gem. § 76 (3) EIWOG 2010“ ist veraltet. Neuer Satz im PDF: „Der Kunde hat der <EEG> nach Verifizierung (bzw. Eingabe) seiner E-Mail-Adresse am TT.MM.JJJJ um HH:MM Uhr auf elektronischem Weg seine Zustimmung zum SEPA-Lastschriftmandat erteilt.“ IP-Adresse und „Zustimmung zum Vertrag im obigen Sinne“ entfallen. Kopfzeile nur noch „Elektronisch erteiltes Mandat“. Gilt für CORE und B2B, betrifft nur EEGs mit eingeschaltetem elektronischen Mandat.
+- Der Paragraf entfällt auch in der Mitglieder-Mail beim Import (4 Absätze), auf der Datenschutz-Seite, in den Hilfetexten der EEG-Einstellungen und im User-Guide.
+- Unverändert: Die IP-Adresse wird weiter gespeichert, und ohne gespeicherte IP bleibt das PDF beim klassischen Unterschriftsblock. Die Erzeugung des PDFs, das Timing und der Datenexport bleiben gleich.
+- Satz in `sepaAuditText` ausgelagert, Test `TestSEPAAuditText` prüft beide Varianten wörtlich.
+
 ### PROJ-135: Zusatzinformation pro Antrag
 
 - **Migration 000096** (additiv): `application.additional_information TEXT NULL`. Noch nicht angewendet.

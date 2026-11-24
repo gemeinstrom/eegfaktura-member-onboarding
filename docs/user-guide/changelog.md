@@ -4,6 +4,17 @@
 
 ---
 
+## 2026-11-24
+
+**Elektronisches SEPA-Mandat: neuer Wortlaut**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Der Satz im SEPA-Mandat-PDF, der die elektronische Zustimmung festhält, ist kürzer: „Der Kunde hat der EEG Musterstadt nach Verifizierung seiner E-Mail-Adresse am 22.11.2026 um 13:40 Uhr auf elektronischem Weg seine Zustimmung zum SEPA-Lastschriftmandat erteilt.“ Der Verweis auf das EIWOG 2010 und die IP-Adresse stehen nicht mehr im PDF. Auch die Mail an das Mitglied und die Datenschutz-Seite nennen den Paragrafen nicht mehr. Die IP-Adresse wird weiterhin gespeichert. Betroffen sind nur EEGs, die das elektronische SEPA-Mandat eingeschaltet haben.
+
+Unabhängig davon ein Tipp: Prüf, ob der Gläubigername deiner EEG in den eegFaktura-Stammdaten mit dem Namen übereinstimmt, den deine Bank zur Creditor-ID hinterlegt hat.
+
 ## 2026-11-22
 
 **Neu: Zusatzinformation pro Antrag**

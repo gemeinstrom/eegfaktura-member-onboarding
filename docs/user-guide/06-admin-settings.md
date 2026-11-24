@@ -168,10 +168,18 @@ Im Modus *Alle Optionen* findest du einen separaten Toggle:
 
 Auch beim B2B-Audit-Pfad bekommt der EEG-Kontakt die Ablage-Kopie per E-Mail.
 
-> **Beispiel-Wortlaut Audit-Trail-Block:**
-> *Der Kunde hat der Musterstadt EEG nach Verifizierung seiner E-Mail-Adresse am 21.05.2026 11:50 von der IP-Adresse 192.0.2.42 auf elektronischem Weg (formfreie Willenserklärung gem. § 76 (3) EIWOG 2010) seine Zustimmung zum Vertrag im obigen Sinne sowie für das SEPA-Lastschriftmandat erteilt.*
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Dieser Wortlaut ist noch nicht in der Produktiv-Umgebung verfügbar.
 
-> **Hinweis:** Wenn der Audit-Trail aktiv ist, aber für einen einzelnen Antrag noch keine IP-Adresse gespeichert wurde (Altanträge aus der Zeit vor der elektronischen Erfassung), fällt das PDF automatisch auf die klassische Unterschriftslinie zurück. Es kommt also nie zu einem fehlerhaften Audit-Block ohne Datenbasis.
+> **Beispiel-Wortlaut Audit-Trail-Block:**
+> *Der Kunde hat der Musterstadt EEG nach Verifizierung seiner E-Mail-Adresse am 21.05.2026 um 11:50 Uhr auf elektronischem Weg seine Zustimmung zum SEPA-Lastschriftmandat erteilt.*
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Dass die IP-Adresse nicht mehr im PDF steht, gilt noch nicht in der Produktiv-Umgebung.
+
+> **Hinweis:** Die IP-Adresse steht nicht im PDF, wird aber weiterhin gespeichert.
+
+> Wenn der Audit-Trail aktiv ist, aber für einen einzelnen Antrag noch keine IP-Adresse gespeichert wurde (Altanträge aus der Zeit vor der elektronischen Erfassung), fällt das PDF automatisch auf die klassische Unterschriftslinie zurück. Es kommt also nie zu einem fehlerhaften Audit-Block ohne Datenbasis.
 
 #### Firmenlastschrift (B2B) und Vorbereitungs-Toggle
 
@@ -602,7 +610,7 @@ Bei Erfolg antwortet die API mit Status `201` und der eindeutigen `id` plus `ref
 
 **Vollständige technische Referenz** (alle Felder, Validierungen, Fehler-Codes, Mitgliedstyp-Details): Die API-Spezifikation erhalten Integrations-Partner auf Anfrage beim Betreiber.
 
-**Neu seit Juni 2026:** Du kannst im Request-Body das optionale Feld `submitterIp` mitgeben (z.B. `"submitterIp": "203.0.113.42"`). Wenn dein Backend die End-User-IP aus dem ursprünglichen Browser-Request kennt, dokumentiert die Plattform sie als Audit-Trail im SEPA-Firmenlastschrift-Mandat-PDF (rechtskonform nach § 76 (3) EIWOG 2010). Ohne dieses Feld wird das PDF im klassischen Format mit Datum/Unterschriftsfeld erstellt.
+**Neu seit Juni 2026:** Du kannst im Request-Body das optionale Feld `submitterIp` mitgeben (z.B. `"submitterIp": "203.0.113.42"`). Wenn dein Backend die End-User-IP aus dem ursprünglichen Browser-Request kennt, speichert die Plattform sie als Audit-Trail der elektronischen Zustimmung. Hat die EEG das elektronische Mandat für den Mandatstyp (Basis- oder Firmenlastschrift) aktiviert, bekommt das SEPA-Mandat-PDF dann den Audit-Block statt der Unterschriftslinie. Ohne dieses Feld wird das PDF im klassischen Format mit Datum/Unterschriftsfeld erstellt.
 
 ---
 
