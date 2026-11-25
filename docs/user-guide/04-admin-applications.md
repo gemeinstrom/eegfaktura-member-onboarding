@@ -154,7 +154,12 @@ Klicke auf **Bearbeiten**, nimm die Änderungen vor und speichere.
 
 Im Dialog **Bearbeiten** gibt es über der Admin-Notiz immer das mehrzeilige Feld **Zusatzinformation** (höchstens 2000 Zeichen), auch wenn das Feld im Beitrittsformular ausgeblendet ist. Dort hältst du individuelle Absprachen mit dem Mitglied fest, zum Beispiel: „Teilnahmefaktor 50 % im ersten Jahr. Depot: 500 €, Rückzahlung bei Austritt.“ Speichern ohne Änderung lässt den Text stehen; leerst du das Feld, wird die Zusatzinformation entfernt.
 
-Änderst du den Text bei einem eingereichten Antrag (neu, geändert oder geleert), bekommt das Mitglied die E-Mail **„Zusatzinformation zu deinem Antrag geändert“** (bei Unternehmen und Gemeinden „Ihrem Antrag“) mit dem neuen Text bzw. dem Hinweis, dass sie entfernt wurde. Die Kontaktadresse der EEG bekommt eine Kopie. Speichern ohne Textänderung löst keine Mail aus. Verlangt deine EEG die Bestätigung der E-Mail-Adresse und hat das Mitglied sie noch nicht bestätigt, wird der Text gespeichert, aber noch keine Mail verschickt. Kann die Mail nicht versendet werden, bleibt die Änderung trotzdem gespeichert, und du siehst die Meldung **„Mitglied nicht informiert“** — informiere das Mitglied dann bitte selbst. Wie alle Angaben lässt sich der Text im Dialog **Bearbeiten** in den Status Eingereicht, In Bearbeitung, Rückfrage, Genehmigt und Import fehlgeschlagen ändern; nach dem Import nicht mehr.
+Änderst du den Text bei einem eingereichten Antrag (neu, geändert oder geleert), bekommt das Mitglied die E-Mail **„Zusatzinformation zu deinem Antrag geändert“** (bei Unternehmen und Gemeinden „Ihrem Antrag“) mit dem neuen Text bzw. dem Hinweis, dass sie entfernt wurde. Die Kontaktadresse der EEG bekommt eine Kopie. Speichern ohne Textänderung löst keine Mail aus. Verlangt deine EEG die Bestätigung der E-Mail-Adresse und hat das Mitglied sie noch nicht bestätigt, wird der Text gespeichert, aber keine Mail verschickt. Kann die Mail nicht versendet werden, bleibt die Änderung trotzdem gespeichert, und du siehst die Meldung **„Mitglied nicht informiert“** — informiere das Mitglied dann bitte selbst. Wie alle Angaben lässt sich der Text im Dialog **Bearbeiten** in den Status Eingereicht, In Bearbeitung, Rückfrage, Genehmigt und Import fehlgeschlagen ändern; nach dem Import nicht mehr.
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Dieser Hinweis ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Wurde die Mail zurückgehalten, weil das Mitglied seine E-Mail-Adresse noch nicht bestätigt hat, sagt dir ein Hinweis nach dem Speichern das.
 
 ![Admin-Edit-Dialog mit der Zusatzangaben-Section zwischen Adresse und Zählpunkten](images/admin-edit-zusatzangaben.png)
 

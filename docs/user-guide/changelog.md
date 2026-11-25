@@ -13,6 +13,13 @@
 
 Im Satz zur elektronischen Zustimmung steht „nach Verifizierung seiner E-Mail-Adresse“ jetzt nur noch, wenn das Mitglied seine Adresse über den Bestätigungslink tatsächlich bestätigt hat. Sonst steht dort „nach Eingabe“, etwa bei Anträgen, die über die Schnittstelle kamen. Bisher stand dort „Verifizierung“, sobald deine EEG die Bestätigung verlangt — unabhängig davon, ob das Mitglied wirklich bestätigt hatte.
 
+**Zusatzinformation: Hinweis, wenn keine Mail verschickt wird**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Änderst du die Zusatzinformation eines Antrags, dessen Mitglied seine E-Mail-Adresse noch nicht bestätigt hat, wird der Text gespeichert, aber keine Mail verschickt. Das siehst du jetzt nach dem Speichern als Hinweis, damit du nicht davon ausgehst, dass das Mitglied informiert wurde.
+
 **Import nach Kontowechsel im selben Browser**
 
 Wer sich im selben Browser nacheinander mit verschiedenen Konten angemeldet hatte, konnte beim Import die Meldung „Der Import läuft ohne Tarif-Zuweisung …“ sehen, und der Import schlug fehl. Die Anmeldung bei eegFaktura gehörte dann noch zum vorherigen Konto. Jetzt wird sie automatisch erneuert, wenn sie nicht zum angemeldeten Konto passt, und beim Abmelden gelöscht.

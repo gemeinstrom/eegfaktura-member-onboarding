@@ -17,6 +17,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - Bekannte Grenze: Ändert sich die E-Mail-Adresse nach der Bestätigung, bleibt `email_confirmed_at` stehen.
 - Test `TestBuildSEPAMandateData_EmailVerifiedFollowsConfirmation`.
 
+### PROJ-135: Hinweis, wenn die Änderungsmail zurückgehalten wird
+
+- Folgepunkt: Ändert der Admin die Zusatzinformation, solange das Mitglied seine Adresse noch nicht bestätigt hat (PROJ-31), wird gespeichert und keine Mail verschickt — bisher ohne Rückmeldung.
+- `PUT /api/admin/applications/{id}` meldet dann `additionalInformationMailHeld: true` (additiv, `omitempty`); das Admin-Formular zeigt einen Info-Toast.
+- Test in `admin-additional-information.test.tsx`.
+
 ## 2026-11-25
 
 Deployed: Test und Prod, `sha-b5a1e04` (PROJ-135 #157, SEPA-Wortlaut #158, PROJ-137 #159). Migration 000096 angewendet; Test-Hinweise im User-Guide entfernt.
