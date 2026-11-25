@@ -355,6 +355,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#2026-11-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2026-11-25
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#2026-11-24" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1029,6 +1040,13 @@
 <h1 id="was-ist-neu">Was ist neu?<a class="headerlink" href="#was-ist-neu" title="Permanent link">&para;</a></h1>
 <p>Übersicht der Änderungen der letzten Tage, die für <strong>EEG-Admins</strong> und <strong>Mitglieder</strong> spürbar sind. Technische Details, Bug-Fixes ohne UI-Auswirkung und Infrastruktur-Themen sind hier bewusst weggelassen — die finden sich in der Commit-Historie.</p>
 <hr />
+<h2 id="2026-11-25">2026-11-25<a class="headerlink" href="#2026-11-25" title="Permanent link">&para;</a></h2>
+<p><strong>Import nach Kontowechsel im selben Browser</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
+<p>Diese Korrektur ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
+</div>
+<p>Wer sich im selben Browser nacheinander mit verschiedenen Konten angemeldet hatte, konnte beim Import die Meldung „Der Import läuft ohne Tarif-Zuweisung …“ sehen, und der Import schlug fehl. Die Anmeldung bei eegFaktura gehörte dann noch zum vorherigen Konto. Jetzt wird sie automatisch erneuert, wenn sie nicht zum angemeldeten Konto passt, und beim Abmelden gelöscht. Bis die Korrektur verfügbar ist, hilft ein Inkognito-Fenster oder das Löschen der Websitedaten von member-onboarding.eegfaktura.at.</p>
 <h2 id="2026-11-24">2026-11-24<a class="headerlink" href="#2026-11-24" title="Permanent link">&para;</a></h2>
 <p><strong>Elektronisches SEPA-Mandat: neuer Wortlaut</strong></p>
 <div class="admonition warning">
