@@ -10,6 +10,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### PROJ-138: Info-Anforderung erneut senden
+
+- Neuer Endpoint `POST /api/admin/applications/{id}/resend-needs-info` (204): schickt die Mail „Rückfragen zu deinem Beitrittsantrag“ 1:1 erneut — gespeicherter `needs_info_reason`, gleicher Bearbeiten-Link (PROJ-121). Nur im Status `needs_info`, sonst 409; ohne gespeicherten Text 409. Kein Status- oder Feldwechsel.
+- Nach erfolgreichem Versand `status_log`-Eintrag `needs_info → needs_info`, „Info-Anforderung erneut gesendet“, Admin als Auslöser. Mail-Fehler → 500 ohne Eintrag. Kein Rate-Limit (Muster SEPA-Mandat-Resend).
+- Bearbeiten-Link über gemeinsamen Helper `needsInfoEditURL`, auch vom Statuswechsel genutzt.
+- Admin-UI: Eintrag „Info-Anforderung“ im Menü „Erneut senden“ (nur `needs_info`), Toast + Neuladen.
+- Tests `TestNeedsInfoResendReason`, `TestNeedsInfoEditURL`.
+
 ### SEPA-Mandat: „Verifizierung“ nach der tatsächlichen Bestätigung
 
 - Folgepunkt zum neuen Wortlaut (#158): `AuditEmailVerified` kam aus `registration_entrypoint.require_email_confirmation` und sagte „nach Verifizierung“ auch für Mitglieder, die nie bestätigt haben (z. B. Anträge über die externe API).

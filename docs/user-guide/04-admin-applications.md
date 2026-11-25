@@ -86,6 +86,7 @@ Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne
 | **Beitrittserklärung** | Herunterladen | jederzeit, auch ohne Vorstands-Genehmigungs-Workflow |
 | **SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung** | Nach eegFaktura hochladen | Ab Status *Importiert* (gleiche Dokumente wie unter „Herunterladen"; die Beitrittserklärung nur bei Status *Aktiviert* + Vorstands-Genehmigungs-Workflow), siehe [unten](#dokumente-nach-eegfaktura-hochladen) |
 | **Bestätigungs-Mail** *(oder „Bestätigungs-Link" bei pendender E-Mail-Bestätigung)* | Erneut senden | jederzeit |
+| **Info-Anforderung** | Erneut senden | Status *Info benötigt* |
 | **SEPA-Mandat** | Erneut senden | Status *Aktiviert* |
 | **Stammdaten abgleichen** | Top-Level | Status *Aktiviert* (greift auf den Faktura-Core zu) |
 | **Datenweiterleitung** | Top-Level | jederzeit |
@@ -94,6 +95,11 @@ Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne
 | **Import zurücksetzen** | Status-Block (destruktiv) | Status *Importiert* / *Bereit zur Aktivierung* — bringt den Antrag zurück auf *Genehmigt*, damit erneut importiert werden kann |
 | **Auf Prüfung zurücksetzen** | Status-Block (destruktiv) | Status *Importiert* oder *Bereit zur Aktivierung* — bringt den Antrag zurück auf *In Prüfung*. Geeignet wenn der Antrag inhaltlich verworfen werden soll: nach diesem Schritt erreichbar ist *Ablehnen*. Mitgliedsnummer und alle Import-Verknüpfungen werden genullt. |
 | **Aktivierung zurücksetzen** | Status-Block (destruktiv) | Status *Aktiviert* — bringt den Antrag zurück auf *Bereit zur Aktivierung*. Geeignet wenn die Aktivierung versehentlich passiert ist (manueller Klick oder Auto-Aktivierungs-Check trotz fehlender Core-Aktivität). Von dort ist der Antrag jederzeit wieder aktivierbar (manuell oder über die Core-Prüfung). Mitgliedsnummer + Core-Verknüpfung bleiben erhalten. |
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    „Info-Anforderung erneut senden“ ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+**Info-Anforderung erneut senden:** Reagiert ein Mitglied nicht auf deine Rückfrage, schickt **Erneut senden → Info-Anforderung** dieselbe Mail noch einmal — mit dem Text deiner letzten Rückfrage und dem Link zum Bearbeiten des Antrags. Den Text kannst du dabei nicht ändern. Jeder Versand steht im Verlauf des Antrags („Info-Anforderung erneut gesendet“).
 
 Die Detailansicht zeigt alle Angaben des Mitglieds:
 

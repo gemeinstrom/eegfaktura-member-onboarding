@@ -6,6 +6,13 @@
 
 ## 2026-11-25
 
+**Neu: Info-Anforderung erneut senden**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Wartest du bei einem Antrag im Status *Info benötigt* noch auf eine Antwort, findest du in der Antragsansicht unter **Erneut senden** den Eintrag **Info-Anforderung**. Er schickt deine letzte Rückfrage noch einmal unverändert an das Mitglied, samt Link zum Bearbeiten des Antrags. Im Verlauf siehst du, wann erinnert wurde.
+
 **Elektronisches SEPA-Mandat: „Verifizierung“ nur nach echter Bestätigung**
 
 !!! warning "Derzeit nur in der Test-Umgebung"
