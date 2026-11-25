@@ -10,6 +10,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### SEPA-Mandat: „Verifizierung“ nach der tatsächlichen Bestätigung
+
+- Folgepunkt zum neuen Wortlaut (#158): `AuditEmailVerified` kam aus `registration_entrypoint.require_email_confirmation` und sagte „nach Verifizierung“ auch für Mitglieder, die nie bestätigt haben (z. B. Anträge über die externe API).
+- Jetzt `application.email_confirmed_at != nil`, gleich für alle Aufrufer von `buildSEPAMandateData` (Submit, Import, Download, Resync). Eine EEG, die die Bestätigung später ausgeschaltet hat, bekommt für bestätigte Mitglieder „Verifizierung“. Ein PDF mit Audit-Satz beim Einreichen gibt es praktisch nicht (CORE-Audit verlangt Versand beim Import, B2B geht beim Import raus).
+- Bekannte Grenze: Ändert sich die E-Mail-Adresse nach der Bestätigung, bleibt `email_confirmed_at` stehen.
+- Test `TestBuildSEPAMandateData_EmailVerifiedFollowsConfirmation`.
+
 ## 2026-11-25
 
 Deployed: Test und Prod, `sha-b5a1e04` (PROJ-135 #157, SEPA-Wortlaut #158, PROJ-137 #159). Migration 000096 angewendet; Test-Hinweise im User-Guide entfernt.

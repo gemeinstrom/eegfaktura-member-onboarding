@@ -6,9 +6,16 @@
 
 ## 2026-11-25
 
+**Elektronisches SEPA-Mandat: „Verifizierung“ nur nach echter Bestätigung**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Im Satz zur elektronischen Zustimmung steht „nach Verifizierung seiner E-Mail-Adresse“ jetzt nur noch, wenn das Mitglied seine Adresse über den Bestätigungslink tatsächlich bestätigt hat. Sonst steht dort „nach Eingabe“, etwa bei Anträgen, die über die Schnittstelle kamen. Bisher stand dort „Verifizierung“, sobald deine EEG die Bestätigung verlangt — unabhängig davon, ob das Mitglied wirklich bestätigt hatte.
+
 **Import nach Kontowechsel im selben Browser**
 
-Wer sich im selben Browser nacheinander mit verschiedenen Konten angemeldet hatte, konnte beim Import die Meldung „Der Import läuft ohne Tarif-Zuweisung …“ sehen, und der Import schlug fehl. Die Anmeldung bei eegFaktura gehörte dann noch zum vorherigen Konto. Jetzt wird sie automatisch erneuert, wenn sie nicht zum angemeldeten Konto passt, und beim Abmelden gelöscht. Bis die Korrektur verfügbar ist, hilft ein Inkognito-Fenster oder das Löschen der Websitedaten von member-onboarding.eegfaktura.at.
+Wer sich im selben Browser nacheinander mit verschiedenen Konten angemeldet hatte, konnte beim Import die Meldung „Der Import läuft ohne Tarif-Zuweisung …“ sehen, und der Import schlug fehl. Die Anmeldung bei eegFaktura gehörte dann noch zum vorherigen Konto. Jetzt wird sie automatisch erneuert, wenn sie nicht zum angemeldeten Konto passt, und beim Abmelden gelöscht.
 
 ## 2026-11-24
 
