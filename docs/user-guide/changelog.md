@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-11-25
+
+**Import nach Kontowechsel im selben Browser**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Korrektur ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Wer sich im selben Browser nacheinander mit verschiedenen Konten angemeldet hatte, konnte beim Import die Meldung „Der Import läuft ohne Tarif-Zuweisung …“ sehen, und der Import schlug fehl. Die Anmeldung bei eegFaktura gehörte dann noch zum vorherigen Konto. Jetzt wird sie automatisch erneuert, wenn sie nicht zum angemeldeten Konto passt, und beim Abmelden gelöscht. Bis die Korrektur verfügbar ist, hilft ein Inkognito-Fenster oder das Löschen der Websitedaten von member-onboarding.eegfaktura.at.
+
 ## 2026-11-24
 
 **Elektronisches SEPA-Mandat: neuer Wortlaut**

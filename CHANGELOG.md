@@ -10,6 +10,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### PROJ-137: eegFaktura-Token an den angemeldeten Admin binden
+
+- Meldung 2026-11-24: Import, Tarife und Mitgliedsnummer scheiterten mit 403 von eegFaktura. Der eegFaktura-Token im `localStorage` (`CORE_AUTH_MODE=exchange`) stammte von einem anderen Konto, das zuvor im selben Browser angemeldet war; er wurde nie gegen den Login geprüft und beim Abmelden nicht gelöscht.
+- `CoreAuthBootstrap` vergleicht jetzt `sub` des Tokens mit der Keycloak-Benutzer-ID der Session. Bei Abweichung: Token samt Refresh-Token verwerfen, einmal still neu anmelden; ein zweiter fremder Token im selben Tab stoppt die Weiterleitungen (`sessionStorage`-Merker).
+- „Abmelden“ löscht den eegFaktura-Token.
+- Nur Frontend; Modus `direct` unverändert. Tests `core-token-store.test.ts`, `core-auth-bootstrap.test.tsx`.
+
 ### SEPA-Mandat: Wortlaut des elektronischen Audit-Blocks ohne EIWOG-Verweis
 
 - Wunsch einer EEG (2026-11-24): Der Verweis „formfreie Willenserklärung gem. § 76 (3) EIWOG 2010“ ist veraltet. Neuer Satz im PDF: „Der Kunde hat der <EEG> nach Verifizierung (bzw. Eingabe) seiner E-Mail-Adresse am TT.MM.JJJJ um HH:MM Uhr auf elektronischem Weg seine Zustimmung zum SEPA-Lastschriftmandat erteilt.“ IP-Adresse und „Zustimmung zum Vertrag im obigen Sinne“ entfallen. Kopfzeile nur noch „Elektronisch erteiltes Mandat“. Gilt für CORE und B2B, betrifft nur EEGs mit eingeschaltetem elektronischen Mandat.
