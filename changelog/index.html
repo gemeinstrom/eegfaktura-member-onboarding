@@ -1041,8 +1041,14 @@
 <p>Übersicht der Änderungen der letzten Tage, die für <strong>EEG-Admins</strong> und <strong>Mitglieder</strong> spürbar sind. Technische Details, Bug-Fixes ohne UI-Auswirkung und Infrastruktur-Themen sind hier bewusst weggelassen — die finden sich in der Commit-Historie.</p>
 <hr />
 <h2 id="2026-11-25">2026-11-25<a class="headerlink" href="#2026-11-25" title="Permanent link">&para;</a></h2>
+<p><strong>Elektronisches SEPA-Mandat: „Verifizierung“ nur nach echter Bestätigung</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
+<p>Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
+</div>
+<p>Im Satz zur elektronischen Zustimmung steht „nach Verifizierung seiner E-Mail-Adresse“ jetzt nur noch, wenn das Mitglied seine Adresse über den Bestätigungslink tatsächlich bestätigt hat. Sonst steht dort „nach Eingabe“, etwa bei Anträgen, die über die Schnittstelle kamen. Bisher stand dort „Verifizierung“, sobald deine EEG die Bestätigung verlangt — unabhängig davon, ob das Mitglied wirklich bestätigt hatte.</p>
 <p><strong>Import nach Kontowechsel im selben Browser</strong></p>
-<p>Wer sich im selben Browser nacheinander mit verschiedenen Konten angemeldet hatte, konnte beim Import die Meldung „Der Import läuft ohne Tarif-Zuweisung …“ sehen, und der Import schlug fehl. Die Anmeldung bei eegFaktura gehörte dann noch zum vorherigen Konto. Jetzt wird sie automatisch erneuert, wenn sie nicht zum angemeldeten Konto passt, und beim Abmelden gelöscht. Bis die Korrektur verfügbar ist, hilft ein Inkognito-Fenster oder das Löschen der Websitedaten von member-onboarding.eegfaktura.at.</p>
+<p>Wer sich im selben Browser nacheinander mit verschiedenen Konten angemeldet hatte, konnte beim Import die Meldung „Der Import läuft ohne Tarif-Zuweisung …“ sehen, und der Import schlug fehl. Die Anmeldung bei eegFaktura gehörte dann noch zum vorherigen Konto. Jetzt wird sie automatisch erneuert, wenn sie nicht zum angemeldeten Konto passt, und beim Abmelden gelöscht.</p>
 <h2 id="2026-11-24">2026-11-24<a class="headerlink" href="#2026-11-24" title="Permanent link">&para;</a></h2>
 <p><strong>Elektronisches SEPA-Mandat: neuer Wortlaut</strong></p>
 <p>Der Satz im SEPA-Mandat-PDF, der die elektronische Zustimmung festhält, ist kürzer: „Der Kunde hat der EEG Musterstadt nach Verifizierung seiner E-Mail-Adresse am 22.11.2026 um 13:40 Uhr auf elektronischem Weg seine Zustimmung zum SEPA-Lastschriftmandat erteilt.“ Der Verweis auf das EIWOG 2010 und die IP-Adresse stehen nicht mehr im PDF. Auch die Mail an das Mitglied und die Datenschutz-Seite nennen den Paragrafen nicht mehr. Die IP-Adresse wird weiterhin gespeichert. Betroffen sind nur EEGs, die das elektronische SEPA-Mandat eingeschaltet haben.</p>
