@@ -12,11 +12,11 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ### PROJ-138: Info-Anforderung erneut senden
 
-- Neuer Endpoint `POST /api/admin/applications/{id}/resend-needs-info` (204): schickt die Mail „Rückfragen zu deinem Beitrittsantrag“ 1:1 erneut — gespeicherter `needs_info_reason`, gleicher Bearbeiten-Link (PROJ-121). Nur im Status `needs_info`, sonst 409; ohne gespeicherten Text 409. Kein Status- oder Feldwechsel.
-- Nach erfolgreichem Versand `status_log`-Eintrag `needs_info → needs_info`, „Info-Anforderung erneut gesendet“, Admin als Auslöser. Mail-Fehler → 500 ohne Eintrag. Kein Rate-Limit (Muster SEPA-Mandat-Resend).
+- Neuer Endpoint `POST /api/admin/applications/{id}/resend-needs-info` (204), Body `{ "reason": "…", "expectedReason": "…" }`: schickt die Mail „Rückfragen zu deinem Beitrittsantrag“ erneut, gleicher Bearbeiten-Link (PROJ-121). Der Text (unverändert oder geändert) wird als `needs_info_reason` gespeichert. Leerer Text 400, Status nicht `needs_info` 409; weicht die gespeicherte Rückfrage von `expectedReason` (Vorbefüllung des Dialogs) ab, 409 vor dem Versand — eine veraltete Seite überschreibt keine neuere Rückfrage. Kein Statuswechsel.
+- Nach erfolgreichem Versand in einer Transaktion: `needs_info_reason` (Compare-and-swap: nur solange noch `needs_info` und unverändert) und `status_log`-Eintrag `needs_info → needs_info` — „Info-Anforderung erneut gesendet“ bzw. bei geändertem Text „Info-Anforderung geändert und erneut gesendet: <Text>“. Mail-Fehler → 500 ohne Änderung. Kein Rate-Limit (Muster SEPA-Mandat-Resend).
 - Bearbeiten-Link über gemeinsamen Helper `needsInfoEditURL`, auch vom Statuswechsel genutzt.
-- Admin-UI: Eintrag „Info-Anforderung“ im Menü „Erneut senden“ (nur `needs_info`), Toast + Neuladen.
-- Tests `TestNeedsInfoResendReason`, `TestNeedsInfoEditURL`.
+- Admin-UI: Eintrag „Info-Anforderung …“ im Menü „Erneut senden“ (nur `needs_info`) öffnet den Dialog `AdminResendNeedsInfoDialog`, vorbefüllt mit der letzten Rückfrage; bei 409 schließt er und lädt die Ansicht neu.
+- Tests `TestValidateNeedsInfoResend`, `TestNeedsInfoResendLogReason`, `TestNeedsInfoEditURL`, `admin-resend-needs-info-dialog.test.tsx`.
 
 ### PROJ-137: Hinweis-Banner und Token-Löschen bei abgelaufener Sitzung
 

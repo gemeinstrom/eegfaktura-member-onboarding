@@ -11,7 +11,7 @@
 !!! warning "Derzeit nur in der Test-Umgebung"
     Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
-Wartest du bei einem Antrag im Status *Info benötigt* noch auf eine Antwort, findest du in der Antragsansicht unter **Erneut senden** den Eintrag **Info-Anforderung**. Er schickt deine letzte Rückfrage noch einmal unverändert an das Mitglied, samt Link zum Bearbeiten des Antrags. Im Verlauf siehst du, wann erinnert wurde.
+Wartest du bei einem Antrag im Status *Info benötigt* noch auf eine Antwort, findest du in der Antragsansicht unter **Erneut senden** den Eintrag **Info-Anforderung …**. Er zeigt deine letzte Rückfrage in einem Dialog; du schickst sie unverändert oder angepasst noch einmal an das Mitglied, samt Link zum Bearbeiten des Antrags. Ein geänderter Text gilt danach als letzte Rückfrage. Im Verlauf siehst du, wann erinnert wurde.
 
 **Hinweis, wenn die Verbindung zu eegFaktura zum falschen Konto gehört**
 

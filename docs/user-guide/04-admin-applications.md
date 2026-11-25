@@ -99,7 +99,7 @@ Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne
 !!! warning "Derzeit nur in der Test-Umgebung"
     „Info-Anforderung erneut senden“ ist noch nicht in der Produktiv-Umgebung verfügbar.
 
-**Info-Anforderung erneut senden:** Reagiert ein Mitglied nicht auf deine Rückfrage, schickt **Erneut senden → Info-Anforderung** dieselbe Mail noch einmal — mit dem Text deiner letzten Rückfrage und dem Link zum Bearbeiten des Antrags. Den Text kannst du dabei nicht ändern. Jeder Versand steht im Verlauf des Antrags („Info-Anforderung erneut gesendet“).
+**Info-Anforderung erneut senden:** Reagiert ein Mitglied nicht auf deine Rückfrage, öffnet **Erneut senden → Info-Anforderung …** einen Dialog mit dem Text deiner letzten Rückfrage. Du kannst ihn unverändert abschicken oder vorher anpassen; das Mitglied bekommt dieselbe Mail wie beim ersten Mal, samt Link zum Bearbeiten des Antrags. Der gesendete Text gilt danach als letzte Rückfrage und steht so in der Antragsansicht. Jeder Versand steht im Verlauf des Antrags („Info-Anforderung erneut gesendet“, bei geändertem Text mit dem neuen Text).
 
 Die Detailansicht zeigt alle Angaben des Mitglieds:
 
