@@ -18,6 +18,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - Admin-UI: Eintrag „Info-Anforderung“ im Menü „Erneut senden“ (nur `needs_info`), Toast + Neuladen.
 - Tests `TestNeedsInfoResendReason`, `TestNeedsInfoEditURL`.
 
+### PROJ-137: Hinweis-Banner und Token-Löschen bei abgelaufener Sitzung
+
+- Folgepunkte: Gibt der Tab nach einem zweiten fremden eegFaktura-Token auf, zeigt der Admin-Bereich oben ein Banner (abmelden und neu anmelden), statt erst beim Import zu scheitern.
+- Ist die NextAuth-Sitzung im offenen Tab weg (`useSession` = `unauthenticated` und `/api/auth/session` antwortet 200 mit leerem Objekt), löscht `CoreAuthBootstrap` den eegFaktura-Token samt Aufgabe-Merker. Ein abgelaufenes Keycloak-Refresh (`RefreshAccessTokenError`) führt stattdessen über `SessionRefreshGuard` zur neuen Anmeldung; meldet sich dann ein anderes Konto an, greift die Benutzer-Bindung. Ein bloß fehlgeschlagener Session-Abruf (next-auth meldet dann ebenfalls `unauthenticated`, z. B. nach dem Aufwachen eines Laptops) lässt ihn stehen. Ein geschlossener Tab bleibt bewusst ungelöst (Owner-Entscheidung, kein Wechsel auf `sessionStorage`).
+- Tests in `core-auth-bootstrap.test.tsx`.
+
 ### SEPA-Mandat: „Verifizierung“ nach der tatsächlichen Bestätigung
 
 - Folgepunkt zum neuen Wortlaut (#158): `AuditEmailVerified` kam aus `registration_entrypoint.require_email_confirmation` und sagte „nach Verifizierung“ auch für Mitglieder, die nie bestätigt haben (z. B. Anträge über die externe API).

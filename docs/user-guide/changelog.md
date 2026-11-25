@@ -13,6 +13,13 @@
 
 Wartest du bei einem Antrag im Status *Info benötigt* noch auf eine Antwort, findest du in der Antragsansicht unter **Erneut senden** den Eintrag **Info-Anforderung**. Er schickt deine letzte Rückfrage noch einmal unverändert an das Mitglied, samt Link zum Bearbeiten des Antrags. Im Verlauf siehst du, wann erinnert wurde.
 
+**Hinweis, wenn die Verbindung zu eegFaktura zum falschen Konto gehört**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Gehört die Anmeldung bei eegFaktura auch nach einem automatischen Neuversuch noch zu einem anderen Konto, siehst du oben im Admin-Bereich einen Hinweis. Tarife, Mitgliedsnummer und Import funktionieren dann nicht; melde dich ab und wieder an.
+
 **Elektronisches SEPA-Mandat: „Verifizierung“ nur nach echter Bestätigung**
 
 !!! warning "Derzeit nur in der Test-Umgebung"
