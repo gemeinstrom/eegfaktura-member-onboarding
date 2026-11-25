@@ -129,9 +129,6 @@ Nach der Zählpunkt-Eingabe erscheint — sofern deine EEG die zugehörigen Feld
 
 ### Zusatzinformation (nur bei aktivierten EEGs)
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Hat deine EEG das Feld eingeblendet, steht direkt vor den Einwilligungen ein Textfeld **Zusatzinformation**. Dort trägst du ein, was du mit deiner EEG vereinbart hast, zum Beispiel eine Depotzahlung. Du kannst mehrere Zeilen schreiben, höchstens 2000 Zeichen. Ist das Feld mit Stern (*) markiert, ist es Pflicht. Der Text erscheint in deiner Eingangsbestätigung und später auf deiner Beitrittsbestätigung.
 
 Stellt deine EEG eine Rückfrage, siehst du beim Bearbeiten über den Link aus der Mail den aktuellen Text — auch wenn ihn die EEG eingetragen hat — und kannst ihn ändern. Ändert die EEG den Text später, bekommst du eine E-Mail mit dem neuen Text.

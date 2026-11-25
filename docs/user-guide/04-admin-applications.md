@@ -118,9 +118,6 @@ Im Dialog **Bearbeiten** setzt du den Wert auf Ja, Nein oder „keine Angabe" �
 
 ### Zusatzinformation
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Hat der Antrag eine Zusatzinformation, zeigt die Detailansicht sie als eigenen Abschnitt **Zusatzinformation** über der Admin-Notiz, mit allen Zeilenumbrüchen. Anders als die Admin-Notiz ist sie für das Mitglied bestimmt: Sie steht auf Beitrittsbestätigung und Beitrittserklärung, in der Eingangsbestätigung, in der Mail „Neuer Antrag“ und im Daten-Export. Nach eegFaktura wird sie nicht übertragen.
 
 ## Dokumente nach eegFaktura hochladen
@@ -154,9 +151,6 @@ Als Admin kannst du folgende Felder direkt korrigieren:
 Klicke auf **Bearbeiten**, nimm die Änderungen vor und speichere.
 
 ### Zusatzinformation bearbeiten
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Im Dialog **Bearbeiten** gibt es über der Admin-Notiz immer das mehrzeilige Feld **Zusatzinformation** (höchstens 2000 Zeichen), auch wenn das Feld im Beitrittsformular ausgeblendet ist. Dort hältst du individuelle Absprachen mit dem Mitglied fest, zum Beispiel: „Teilnahmefaktor 50 % im ersten Jahr. Depot: 500 €, Rückzahlung bei Austritt.“ Speichern ohne Änderung lässt den Text stehen; leerst du das Feld, wird die Zusatzinformation entfernt.
 

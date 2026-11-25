@@ -10,6 +10,10 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+## 2026-11-25
+
+Deployed: Test und Prod, `sha-b5a1e04` (PROJ-135 #157, SEPA-Wortlaut #158, PROJ-137 #159). Migration 000096 angewendet; Test-Hinweise im User-Guide entfernt.
+
 ### PROJ-137: eegFaktura-Token an den angemeldeten Admin binden
 
 - Meldung 2026-11-24: Import, Tarife und Mitgliedsnummer scheiterten mit 403 von eegFaktura. Der eegFaktura-Token im `localStorage` (`CORE_AUTH_MODE=exchange`) stammte von einem anderen Konto, das zuvor im selben Browser angemeldet war; er wurde nie gegen den Login geprüft und beim Abmelden nicht gelöscht.
@@ -26,7 +30,7 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ### PROJ-135: Zusatzinformation pro Antrag
 
-- **Migration 000096** (additiv): `application.additional_information TEXT NULL`. Noch nicht angewendet.
+- **Migration 000096** (additiv): `application.additional_information TEXT NULL`.
 - Neue Feld-Einstellung `additional_information` (Standard `hidden`). Bei `optional`/`required` zeigt das Beitrittsformular ein mehrzeiliges Feld als letzten Abschnitt vor den Einwilligungen; „Pflicht“ prüfen Frontend und Backend beim Einreichen (externe API ausgenommen, sie kennt das Feld nicht).
 - Prüfung an einer Stelle (`internal/application/additional_information.go`): Trimmen, Zeilenumbrüche vereinheitlicht, leer → NULL, mehr als 2000 Zeichen → 400. Formular und Rückfrage-Link übernehmen den Wert nur bei eingeblendetem Feld; bei `hidden`/`admin_only` bleibt ein gespeicherter Text unverändert.
 - Admin-Bearbeiten zeigt das Feld immer und sendet es bei jedem Speichern mit. Eine echte Änderung an einem eingereichten Antrag schickt dem Mitglied die Mail „Zusatzinformation zu deinem/Ihrem Antrag geändert“ (Reply-To EEG) und der EEG eine Kopie (Reply-To EEG). Versand synchron nach dem Commit; scheitert die Mitglieder-Mail, bleibt die Änderung gespeichert und die Antwort meldet `additionalInformationMailFailed: true` („Mitglied nicht informiert“). Solange ein Antrag `submitted` ist und die E-Mail-Adresse bei Pflicht-Bestätigung (PROJ-31) noch nicht bestätigt wurde, geht keine Mail raus. Der Rückfrage-Link sendet den Text nur, wenn das Mitglied ihn geändert hat.

@@ -168,14 +168,8 @@ Im Modus *Alle Optionen* findest du einen separaten Toggle:
 
 Auch beim B2B-Audit-Pfad bekommt der EEG-Kontakt die Ablage-Kopie per E-Mail.
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Dieser Wortlaut ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 > **Beispiel-Wortlaut Audit-Trail-Block:**
 > *Der Kunde hat der Musterstadt EEG nach Verifizierung seiner E-Mail-Adresse am 21.05.2026 um 11:50 Uhr auf elektronischem Weg seine Zustimmung zum SEPA-Lastschriftmandat erteilt.*
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Dass die IP-Adresse nicht mehr im PDF steht, gilt noch nicht in der Produktiv-Umgebung.
 
 > **Hinweis:** Die IP-Adresse steht nicht im PDF, wird aber weiterhin gespeichert.
 
@@ -498,9 +492,6 @@ Felder, die pro Zählpunkt im Mitgliedsformular erscheinen — bei mehreren Zäh
 - **Teilnahmefaktor (%)** *(Zählpunkt-Scope, ab 2026-05-19 konfigurierbar)* — bisher fix sichtbar im Mitgliedsformular, vorbelegt mit 100 %. Default `Optional` (bewahrt heutiges Verhalten — Mitglied sieht das Feld und kann den Wert ändern). Bei `Ausgeblendet` oder `Admin-Vorbefüllung` ist das Feld im Formular weg und der Wert wird serverseitig automatisch auf **100 %** gesetzt. Bei `Verpflichtend` bleibt das Feld sichtbar und mit 100 % vorbelegt — der Default macht den Wert technisch nie leer, das Pflicht-Häkchen erinnert das Mitglied nur, hinzuschauen. **In allen Modi** zeigen Beitrittsbestätigungs-PDF, Mail und Excel-Export den Teilnahmefaktor unverändert — der Toggle steuert nur die Public-Form-Sichtbarkeit, nicht die Render-Pfade.
 
 ### Zusatzinformation
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Mit dem Feld **Zusatzinformation** *(nur in der Ansicht „Alle Optionen“)* können neue Mitglieder im Beitrittsformular selbst einen Text zu individuellen Absprachen eintragen, etwa zu Teilnahmefaktor, Depot oder Besicherung. Standard ist **Ausgeblendet** — für deine EEG ändert sich nichts, bis du das Feld umstellst.
 

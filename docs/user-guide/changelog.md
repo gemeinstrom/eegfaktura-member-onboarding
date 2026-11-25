@@ -8,17 +8,11 @@
 
 **Import nach Kontowechsel im selben Browser**
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Korrektur ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Wer sich im selben Browser nacheinander mit verschiedenen Konten angemeldet hatte, konnte beim Import die Meldung „Der Import läuft ohne Tarif-Zuweisung …“ sehen, und der Import schlug fehl. Die Anmeldung bei eegFaktura gehörte dann noch zum vorherigen Konto. Jetzt wird sie automatisch erneuert, wenn sie nicht zum angemeldeten Konto passt, und beim Abmelden gelöscht. Bis die Korrektur verfügbar ist, hilft ein Inkognito-Fenster oder das Löschen der Websitedaten von member-onboarding.eegfaktura.at.
 
 ## 2026-11-24
 
 **Elektronisches SEPA-Mandat: neuer Wortlaut**
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Der Satz im SEPA-Mandat-PDF, der die elektronische Zustimmung festhält, ist kürzer: „Der Kunde hat der EEG Musterstadt nach Verifizierung seiner E-Mail-Adresse am 22.11.2026 um 13:40 Uhr auf elektronischem Weg seine Zustimmung zum SEPA-Lastschriftmandat erteilt.“ Der Verweis auf das EIWOG 2010 und die IP-Adresse stehen nicht mehr im PDF. Auch die Mail an das Mitglied und die Datenschutz-Seite nennen den Paragrafen nicht mehr. Die IP-Adresse wird weiterhin gespeichert. Betroffen sind nur EEGs, die das elektronische SEPA-Mandat eingeschaltet haben.
 
@@ -27,9 +21,6 @@ Unabhängig davon ein Tipp: Prüf, ob der Gläubigername deiner EEG in den eegFa
 ## 2026-11-22
 
 **Neu: Zusatzinformation pro Antrag**
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Individuelle Absprachen mit einem Mitglied, etwa zum Teilnahmefaktor oder zu einer Depotzahlung, hältst du jetzt im Antrag als **Zusatzinformation** fest. Im Dialog **Bearbeiten** gibt es dafür immer ein mehrzeiliges Feld. Ist es befüllt, steht der Text auf Beitrittsbestätigung und Beitrittserklärung, in der Eingangsbestätigung, in der Mail „Neuer Antrag“ und im Daten-Export (Spalte **Zusatzinformation**). Änderst du ihn bei einem eingereichten Antrag, bekommt das Mitglied eine E-Mail mit dem neuen Text, die EEG eine Kopie. Unter **Einstellungen → Formular-Felder** (Ansicht „Alle Optionen“) kannst du das Feld auch im Beitrittsformular einblenden — als letzten Abschnitt vor den Einwilligungen, optional oder als Pflicht. Standardmäßig ist es dort ausgeblendet. Nach eegFaktura wird die Zusatzinformation nicht übertragen.
 
