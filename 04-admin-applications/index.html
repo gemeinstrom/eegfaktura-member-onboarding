@@ -612,6 +612,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#erinnerung-zur-datenfreigabe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Erinnerung zur Datenfreigabe
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dokumente-nach-eegfaktura-hochladen" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -848,6 +859,11 @@
 </ul>
 <p>Trifft das Kriterium zu, wird der Antrag automatisch auf <strong>„Aktiviert"</strong> gesetzt und das Mitglied bekommt die volle Beitrittsbestätigungs-Mail mit PDF. Toast zeigt das Ergebnis (z. B. „3 von 5 auf Aktiviert gesetzt") und die Liste wird neu geladen.
 - <strong>„Alle Entwürfe löschen"</strong> — erscheint nur, wenn Entwürfe existieren; löscht unwiderruflich alle nicht eingereichten Anträge deiner EEG(s).</p>
+<div class="admonition warning">
+<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
+<p>Die Liste „Datenfreigabe ausständig" ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
+</div>
+<p>Nach „Aktivierung im Core prüfen" kann sich die Liste <strong>„Datenfreigabe ausständig"</strong> öffnen, siehe <a href="#erinnerung-zur-datenfreigabe">unten</a>.</p>
 <p>Die Tabelle zeigt:
 - <strong>Referenznummer</strong> — eindeutige Kennung des Antrags
 - <strong>Name</strong> — Mitgliedsname oder Firmenname
@@ -977,6 +993,11 @@
 <td>Status <em>Info benötigt</em></td>
 </tr>
 <tr>
+<td><strong>Erinnerung Datenfreigabe</strong></td>
+<td>Erneut senden</td>
+<td>Status <em>Bereit zur Aktivierung</em> oder <em>Aktiviert</em>, siehe <a href="#erinnerung-zur-datenfreigabe">unten</a></td>
+</tr>
+<tr>
 <td><strong>SEPA-Mandat</strong></td>
 <td>Erneut senden</td>
 <td>Status <em>Aktiviert</em></td>
@@ -1042,6 +1063,23 @@
 <p>Im Dialog <strong>Bearbeiten</strong> setzt du den Wert auf Ja, Nein oder „keine Angabe" — auch dann, wenn die Frage inzwischen ausgeschaltet ist. Wie alle anderen Angaben im Antrag lässt sich die Antwort bearbeiten, solange der Antrag noch nicht importiert ist. So korrigierst du die Antwort, wenn sich das Mitglied umentschieden hat. Das Speichern anderer Änderungen lässt die Antwort unverändert.</p>
 <h3 id="zusatzinformation">Zusatzinformation<a class="headerlink" href="#zusatzinformation" title="Permanent link">&para;</a></h3>
 <p>Hat der Antrag eine Zusatzinformation, zeigt die Detailansicht sie als eigenen Abschnitt <strong>Zusatzinformation</strong> über der Admin-Notiz, mit allen Zeilenumbrüchen. Anders als die Admin-Notiz ist sie für das Mitglied bestimmt: Sie steht auf Beitrittsbestätigung und Beitrittserklärung, in der Eingangsbestätigung, in der Mail „Neuer Antrag“ und im Daten-Export. Nach eegFaktura wird sie nicht übertragen.</p>
+<h2 id="erinnerung-zur-datenfreigabe">Erinnerung zur Datenfreigabe<a class="headerlink" href="#erinnerung-zur-datenfreigabe" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
+<p>Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
+</div>
+<p>Bevor ein Zählpunkt Energie mit der EEG austauscht, muss das Mitglied im Online-Portal seines Netzbetreibers der Datenfreigabe für die EEG zustimmen. Vergisst es das, steht der Zählpunkt in eegFaktura auf „wartet auf Zustimmung" (<code>PENDING</code>). An diese Mitglieder kannst du eine Erinnerung schicken.</p>
+<p><strong>Nach „Aktivierung im Core prüfen":</strong> Warten bei Anträgen in <em>Bereit zur Aktivierung</em> oder <em>Aktiviert</em> noch Zählpunkte auf die Zustimmung, öffnet sich der Dialog <strong>„Datenfreigabe ausständig"</strong>. Er zeigt je Antrag das Mitglied, die betroffenen Zählpunkte und wie oft schon erinnert wurde. Alle Anträge, die jetzt erinnert werden dürfen, sind vorausgewählt. <strong>„Erinnerung senden"</strong> verschickt die Mail an die ausgewählten Mitglieder; danach steht bei jedem Antrag, ob sie rausging oder warum nicht.</p>
+<p><strong>Aus dem Antrag:</strong> <strong>Erneut senden → Erinnerung Datenfreigabe</strong> schickt die Erinnerung an dieses eine Mitglied, wenn eegFaktura noch wartende Zählpunkte meldet.</p>
+<p>Grenzen, damit niemand zu oft angeschrieben wird:</p>
+<ul>
+<li>die erste Erinnerung frühestens 7 Tage nach dem Import,</li>
+<li>danach mindestens 7 Tage Abstand,</li>
+<li>höchstens 3 Erinnerungen pro Antrag.</li>
+</ul>
+<p>Gesperrte Anträge sind im Dialog nicht auswählbar, im Menü ist der Eintrag ausgegraut — jeweils mit dem Grund („wieder ab …", „bereits 3-mal erinnert"). Vor jedem Versand fragt das Onboarding eegFaktura erneut ab: Hat das Mitglied inzwischen zugestimmt, geht keine Mail raus. Jede Erinnerung steht im Verlauf des Antrags („Erinnerung Datenfreigabe gesendet (1/3): …"), Anzahl und Datum der letzten im Antrag unter den Import-Angaben. Setzt du den Import oder den Antrag auf Prüfung zurück, beginnt die Zählung neu — auch beim einfachen Wechsel aus „Bereit zur Aktivierung“ zurück in die Prüfung.</p>
+<p>Den Text der Mail legst du in den Einstellungen fest, siehe <a href="../06-admin-settings/#erinnerung-zur-datenfreigabe-alle-optionen">Erinnerung zur Datenfreigabe</a>.</p>
+<p>Ganz automatisch, ohne Klick, geht es nicht: Ob die Zustimmung schon da ist, weiß nur eegFaktura, und das Onboarding darf dort nur mit deiner Anmeldung nachsehen. Als Superuser zeigt der Check über alle EEGs keine Liste — er würde sonst jede EEG bei eegFaktura abfragen. Einzeln aus dem Antrag erinnern geht auch als Superuser.</p>
 <h2 id="dokumente-nach-eegfaktura-hochladen">Dokumente nach eegFaktura hochladen<a class="headerlink" href="#dokumente-nach-eegfaktura-hochladen" title="Permanent link">&para;</a></h2>
 <p>Du kannst SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über <strong>Herunterladen ▾</strong> bekommst. Die Beitrittserklärung lässt sich allerdings nur bei Status <em>Aktiviert</em> und eingeschaltetem Vorstands-Genehmigungs-Workflow hochladen.</p>
 <p>Das geht erst, wenn das Mitglied in eegFaktura existiert, also ab Status <em>Importiert</em> (auch <em>Bereit zur Aktivierung</em> und <em>Aktiviert</em>). Vorher ist das Menü <strong>Nach eegFaktura hochladen ▾</strong> nicht sichtbar.</p>
