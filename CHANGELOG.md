@@ -10,6 +10,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Admin-UI: dunkle Hinweistexte und Chips im dunklen Theme lesbar
+
+- 39 Textfarben der Stufen 600–900 direkt auf dem dunklen Hintergrund auf die Stufe 400 gehoben: Erfolgsmeldungen („… gespeichert“), Hinweise in den EEG-Einstellungen und im Antrag, Punkte für ungespeicherte Änderungen, Symbole, durchscheinende Status-Chips (Vertragsstatus, Cockpit, Kunden-Onboarding). Tote `dark:text-*`-Varianten an diesen Stellen entfernt.
+- Bewusst unverändert: helle Badges (`bg-*-100`), Umgebungsbanner, Rechtstexte mit hellem Hintergrund, öffentliche Bestätigungsseite und Beitrittsformular.
+- Einstellungs-Screenshots neu (Chip „Plattform gebucht & aktiviert“).
+
 ### Admin-UI: Hinweiskästen im dunklen Theme, keine Platzhalter, Datum einmal
 
 - Helle Hinweiskästen (`bg-*-50` + dunkle Schrift, `dark:`-Varianten ohne Wirkung, da es nur ein dunkles `:root`-Theme gibt) auf das durchscheinende Muster umgestellt: Status-Dialoge, Info erneut senden, Import-Dialog, Umzuordnen, Ansichts-Banner, Stammdaten-Abgleich, Validierungs-/Bestätigungshinweise der EEG-Einstellungen, Import-hängt-Banner, WCAG-Prüfbox, Billing-Fehlerboxen, „Aktuell kostenlos“, Core-Callback. Öffentliche Bestätigungsseite unverändert (eigener heller Stil).
