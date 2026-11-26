@@ -1303,6 +1303,7 @@
 <p>Dasselbe Format findest du auch im <strong>Antrags-Filterpanel</strong> (Filter „EEG") und im <strong>Reassign-Dialog</strong> (Ziel-EEG beim Umordnen eines Antrags). In der Antragsliste selbst zeigt die Spalte „EEG" nur die Kurzform, mit der Referenznummer als Tooltip beim Überfahren.</p>
 <h2 id="einfache-ansicht-oder-alle-optionen">Einfache Ansicht oder Alle Optionen<a class="headerlink" href="#einfache-ansicht-oder-alle-optionen" title="Permanent link">&para;</a></h2>
 <p>Direkt neben der EEG-Auswahl gibt es einen Umschalter <strong>Einfache Ansicht / Alle Optionen</strong>. Die Wahl wird pro EEG gespeichert.</p>
+<p><img alt="Umschalter Einfache Ansicht / Alle Optionen" src="../images/admin-settings-view-mode.png" /></p>
 <ul>
 <li><strong>Einfache Ansicht</strong> blendet erweiterte Optionen aus, die nur ein Bruchteil der EEGs braucht (SEPA-B2B, Mandat-Timing, Genossenschaftsanteile, Zählpunkt-Prefixes, E-Mail-Bestätigung, Aktivierungs-Kriterium und alle nicht-standardmäßig sichtbaren Formular-Felder). Die hinterlegten Werte bleiben in der Datenbank — sie sind nur nicht editierbar, solange du in der Einfachen Ansicht bist.</li>
 <li><strong>Alle Optionen</strong> zeigt die komplette Konfiguration wie bisher. Bestehende EEGs starten mit Alle Optionen (rückwärts-kompatibel), neu angelegte EEGs starten mit der Einfachen Ansicht.</li>
@@ -1376,6 +1377,7 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 <p><img alt="EEG-Einstellungen" src="../images/admin-settings-eeg.png" /></p>
 <h3 id="vertrag-onboarding-status-plattform-buchen">Vertrag &amp; Onboarding-Status (Plattform buchen)<a class="headerlink" href="#vertrag-onboarding-status-plattform-buchen" title="Permanent link">&para;</a></h3>
 <p>Ganz oben auf der Einstellungs-Seite steht die Karte <strong>„Vertrag &amp; Onboarding-Status"</strong>. Sie zeigt, ob deine EEG die Plattform bereits gebucht hat, und ist die Voraussetzung dafür, die Mitgliederregistrierung scharfzuschalten.</p>
+<p><img alt="Karte „Vertrag &amp; Onboarding-Status“ vor der Buchung" src="../images/admin-settings-contract.png" /></p>
 <ul>
 <li><strong>Plattform buchen:</strong> Mit der Bestätigung von <strong>AGB</strong> und <strong>AVV</strong> (Auftragsverarbeitungsvertrag) buchst du die Plattform. Die Buchung schaltet deine EEG <strong>sofort frei</strong> — es ist keine separate manuelle Freischaltung mehr nötig. Du erhältst direkt eine Willkommens-Mail mit dem AVV-Beleg.</li>
 <li><strong>Status-Anzeige:</strong> Die Karte zeigt den aktuellen Vertragsstatus (z. B. <em>noch nicht gebucht</em>, <em>aktiv</em> oder <em>ausgesetzt</em>).</li>
@@ -1622,6 +1624,7 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 <blockquote>
 <p>Diese Sektion ist nur in <strong>Alle Optionen</strong> sichtbar.</p>
 </blockquote>
+<p><img alt="Erscheinungsbild der Online-Registrierung" src="../images/admin-settings-eeg-brand.png" /></p>
 <p>Die öffentliche Mitglied-werden-Seite (<code>/register/&lt;RC-Nummer&gt;</code>) lässt sich pro EEG farblich an die eigene Marke anpassen. Der Editor liefert eine <strong>Vorlagen-Listbox</strong> mit 16 vorgefertigten Farb-Kombinationen als schnellen Einstieg und acht einzelne <strong>Color-Picker</strong>, mit denen du das Ergebnis punktgenau anpassen kannst.</p>
 <h4 id="vorlage-wahlen">Vorlage wählen<a class="headerlink" href="#vorlage-wahlen" title="Permanent link">&para;</a></h4>
 <p>Die Listbox am oberen Rand des Editors enthält 22 Vorlagen aus drei etablierten Design-Systemen. Ein Klick lädt komplettes Farbschema und Schriftart in die Felder darunter — überschreibt also bisherige Einstellungen. Eigene Anpassungen, die du danach machst, bleiben erhalten.</p>
@@ -1726,6 +1729,7 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 <hr />
 <h2 id="mehrfachteilnahme">Mehrfachteilnahme<a class="headerlink" href="#mehrfachteilnahme" title="Permanent link">&para;</a></h2>
 <p>Viele EEGs arbeiten mit einer Bürgerenergiegemeinschaft (BEG) oder einer anderen Energiegemeinschaft zusammen. Im Tab <strong>Mehrfachteilnahme</strong> kannst du neue Mitglieder beim Beitritt fragen, ob sie zusätzlich dort teilnehmen möchten. Der Tab ist in beiden Ansichten sichtbar (einfache Ansicht und Alle Optionen).</p>
+<p><img alt="Tab Mehrfachteilnahme" src="../images/admin-settings-mehrfachteilnahme.png" /></p>
 <ul>
 <li><strong>Schalter</strong> „Frage zur Mehrfachteilnahme im Beitrittsformular anzeigen" — Standard ist aus. Ist er an, erscheint im Beitrittsformular direkt nach den Zählpunkten ein eigener Abschnitt, und das Mitglied muss <strong>Ja</strong> oder <strong>Nein</strong> wählen.</li>
 <li><strong>Überschrift</strong> — einzeilig, höchstens 200 Zeichen. Darf leer bleiben; dann zeigt das Formular keine Überschrift.</li>
@@ -1823,6 +1827,7 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 </ul>
 <h3 id="zusatzinformation">Zusatzinformation<a class="headerlink" href="#zusatzinformation" title="Permanent link">&para;</a></h3>
 <p>Mit dem Feld <strong>Zusatzinformation</strong> <em>(nur in der Ansicht „Alle Optionen“)</em> können neue Mitglieder im Beitrittsformular selbst einen Text zu individuellen Absprachen eintragen, etwa zu Teilnahmefaktor, Depot oder Besicherung. Standard ist <strong>Ausgeblendet</strong> — für deine EEG ändert sich nichts, bis du das Feld umstellst.</p>
+<p><img alt="So erscheint das Feld Zusatzinformation im Beitrittsformular" src="../images/register-form-zusatzinformation.png" /></p>
 <ul>
 <li><strong>Optional</strong> oder <strong>Verpflichtend:</strong> Das Formular zeigt als letzten Abschnitt direkt vor den Einwilligungen ein mehrzeiliges Textfeld (höchstens 2000 Zeichen). Bei „Verpflichtend“ lässt sich der Antrag ohne Text nicht einreichen.</li>
 <li><strong>Ausgeblendet</strong> oder <strong>Admin-Vorgabe:</strong> Das Feld erscheint nicht im Formular. Beide Zustände wirken hier gleich, denn im Dialog <strong>Bearbeiten</strong> eines Antrags kannst du die Zusatzinformation immer pflegen. Ein schon gespeicherter Text bleibt erhalten, auch wenn das Mitglied den Antrag nach einer Rückfrage korrigiert.</li>
@@ -2050,6 +2055,7 @@ Wenn du einen Antrag bereits per Import-Button verarbeitet hast und die Mitglied
 <hr />
 <h2 id="tab-rechnungen">Tab "Rechnungen"<a class="headerlink" href="#tab-rechnungen" title="Permanent link">&para;</a></h2>
 <p>In jeder EEG-Settings-Ansicht findest du seit dem Plattform-Abrechnungs-Update einen Tab <strong>„Rechnungen"</strong>. Hier siehst du als EEG-Admin die quartalsweisen Abrechnungs-Rechnungen, die der Plattform-Betreiber an deine EEG ausgestellt hat.</p>
+<p><img alt="Tab Rechnungen" src="../images/admin-settings-rechnungen.png" /></p>
 <blockquote>
 <p><strong>Aktuell kostenlos:</strong> Solange die Plattform-Nutzung kostenlos ist, erscheint oben im Tab ein Hinweis: <em>Die Nutzung ist derzeit kostenlos. Eine kostenpflichtige Nutzung ist geplant und wird rechtzeitig vorab angekündigt.</em> Die angezeigten Beträge sind eine <strong>unverbindliche Vorschau</strong> und werden aktuell nicht in Rechnung gestellt. Sobald für deine EEG echt abgerechnet wird, verschwindet der Hinweis automatisch.</p>
 </blockquote>

@@ -967,8 +967,9 @@ reguläre Import-Pfad übersprungen werden soll.</p>
 <p>Nimm einen eingereichten Antrag in Bearbeitung, um anzuzeigen, dass du ihn aktiv bearbeitest. Dies ist optional, hilft aber wenn mehrere Admins auf dieselbe EEG arbeiten.</p>
 <h2 id="ruckfragen-stellen-needs_info">Rückfragen stellen (<code>needs_info</code>)<a class="headerlink" href="#ruckfragen-stellen-needs_info" title="Permanent link">&para;</a></h2>
 <p>Wenn Angaben fehlen oder unklar sind:</p>
+<p><img alt="Dialog „Informationen anfordern“" src="../images/admin-dialog-needs-info.png" /></p>
 <ol>
-<li>Klicke auf <strong>Rückfragen stellen</strong></li>
+<li>Klicke auf <strong>Informationen anfordern</strong></li>
 <li>Gib den Grund / die Rückfrage ein — der blaue Hinweis im Dialog erinnert daran: <strong>„Der hier eingegebene Text wird per E-Mail an den Beitrittswerber übermittelt"</strong></li>
 <li>Das Mitglied erhält eine E-Mail mit deiner Rückfrage 1:1 im Body — inklusive eines Buttons <strong>„Antrag online bearbeiten"</strong>. Damit öffnet das Mitglied seinen Antrag vorausgefüllt, korrigiert die gewünschten Stellen selbst und reicht ihn erneut ein (kein Duplikat). Alternativ kannst du die Korrektur wie bisher selbst über <strong>Bearbeiten</strong> vornehmen.</li>
 <li><strong>Hard-Fail (ab 2026-05-17):</strong> scheitert der SMTP-Versand, wird der Statuswechsel zurückgerollt und du siehst die Fehlermeldung direkt im Dialog. Status bleibt unverändert, du kannst nach SMTP-Recovery erneut klicken</li>
@@ -985,10 +986,11 @@ reguläre Import-Pfad übersprungen werden soll.</p>
 </ol>
 <h2 id="ablehnen-rejected">Ablehnen (<code>rejected</code>)<a class="headerlink" href="#ablehnen-rejected" title="Permanent link">&para;</a></h2>
 <p>Wenn ein Antrag nicht genehmigt werden kann:</p>
+<p><img alt="Dialog „Antrag ablehnen“" src="../images/admin-dialog-reject.png" /></p>
 <ol>
 <li>Klicke auf <strong>Ablehnen</strong></li>
-<li>Gib einen Ablehnungsgrund an — der blaue Hinweis im Dialog erinnert daran: <strong>„Die hier eingegebene Begründung wird per E-Mail an den Beitrittswerber übermittelt"</strong></li>
-<li>Das Mitglied erhält eine E-Mail mit deiner Begründung 1:1 im Body</li>
+<li>Gib einen Ablehnungsgrund an</li>
+<li>Die Checkbox <strong>„Ablehnung per E-Mail an den Beitrittswerber übermitteln"</strong> ist vorausgewählt: Das Mitglied erhält eine E-Mail mit deiner Begründung 1:1 im Body. Nimmst du den Haken weg (z. B. bei offensichtlichem Spam), geht keine Mail raus; die Begründung steht nur im Statusverlauf</li>
 <li><strong>Hard-Fail:</strong> gleiches Verhalten wie bei Rückfragen — Mail-Fehler rollt den Statuswechsel zurück</li>
 </ol>
 <h2 id="import-in-eegfaktura">Import in eegFaktura<a class="headerlink" href="#import-in-eegfaktura" title="Permanent link">&para;</a></h2>
@@ -1034,6 +1036,7 @@ reguläre Import-Pfad übersprungen werden soll.</p>
 </blockquote>
 <h2 id="aktivierung-zurucksetzen-activated-ready_for_activation">Aktivierung zurücksetzen (<code>activated → ready_for_activation</code>)<a class="headerlink" href="#aktivierung-zurucksetzen-activated-ready_for_activation" title="Permanent link">&para;</a></h2>
 <p>Wurde ein Antrag versehentlich aktiviert (z. B. durch einen manuellen Klick oder den Batch „Aktivierung im Core prüfen", obwohl das Mitglied im Core noch nicht aktiv ist), kannst du die Aktivierung zurücknehmen.</p>
+<p><img alt="Dialog „Aktivierung zurücksetzen“" src="../images/admin-dialog-reset-activation.png" /></p>
 <ol>
 <li>Öffne den Antrag (Status <code>activated</code>)</li>
 <li>Klicke im Status-Block auf <strong>Aktivierung zurücksetzen</strong></li>
@@ -1045,6 +1048,7 @@ reguläre Import-Pfad übersprungen werden soll.</p>
 </blockquote>
 <h2 id="auf-prufung-zurucksetzen-imported-ready_for_activation-under_review">Auf Prüfung zurücksetzen (<code>imported</code> / <code>ready_for_activation</code> → <code>under_review</code>)<a class="headerlink" href="#auf-prufung-zurucksetzen-imported-ready_for_activation-under_review" title="Permanent link">&para;</a></h2>
 <p>Soll ein bereits importierter Antrag komplett neu bewertet werden, kannst du ihn ganz an den Anfang der Bearbeitung zurückholen — sowohl aus <code>imported</code> als auch aus <code>ready_for_activation</code> (z. B. nachdem du gerade eine Aktivierung zurückgesetzt hast).</p>
+<p><img alt="Dialog „Auf Prüfung zurücksetzen“" src="../images/admin-dialog-reset-to-review.png" /></p>
 <ol>
 <li>Öffne den Antrag (Status <code>imported</code> oder <code>ready_for_activation</code>)</li>
 <li>Klicke im Status-Block auf <strong>Auf Prüfung zurücksetzen</strong></li>
@@ -1122,6 +1126,7 @@ reguläre Import-Pfad übersprungen werden soll.</p>
 <p>Der Status-Log enthält den Eintrag „manuell aktiviert (Core-Member bereits vorhanden, Import übersprungen)" mit der gesetzten Mitgliedsnummer.</p>
 <h2 id="eeg-umzuordnen">EEG umzuordnen<a class="headerlink" href="#eeg-umzuordnen" title="Permanent link">&para;</a></h2>
 <p>Wenn ein Mitglied über den falschen RC-Link der EEG A registriert hat, aber eigentlich zur EEG B gehört (z. B. weil das Versorgungsgebiet woanders hingehört), kann der Antrag direkt umzuordnen werden — ohne dass das Mitglied neu einreichen muss.</p>
+<p><img alt="Dialog „Antrag einer anderen EEG zuordnen“" src="../images/admin-dialog-reassign.png" /></p>
 <p><strong>Verfügbarkeit</strong>: der Button <strong>„EEG umzuordnen"</strong> erscheint im Status-Aktionen-Block nur, wenn:
 - der Status <code>submitted</code>, <code>email_confirmed</code>, <code>under_review</code> oder <code>needs_info</code> ist (nicht bei <code>approved</code> / <code>imported</code> / <code>rejected</code>)
 - du als Admin Zugriff auf mindestens 2 EEGs hast</p>
