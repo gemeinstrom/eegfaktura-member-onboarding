@@ -10,6 +10,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Admin-UI: Hinweiskästen im dunklen Theme, keine Platzhalter, Datum einmal
+
+- Helle Hinweiskästen (`bg-*-50` + dunkle Schrift, `dark:`-Varianten ohne Wirkung, da es nur ein dunkles `:root`-Theme gibt) auf das durchscheinende Muster umgestellt: Status-Dialoge, Info erneut senden, Import-Dialog, Umzuordnen, Ansichts-Banner, Stammdaten-Abgleich, Validierungs-/Bestätigungshinweise der EEG-Einstellungen, Import-hängt-Banner, WCAG-Prüfbox, Billing-Fehlerboxen, „Aktuell kostenlos“, Core-Callback. Öffentliche Bestätigungsseite unverändert (eigener heller Stil).
+- Platzhalter entfernt (Projektregel): Begründungsfelder der Status-Dialoge (Hinweis samt Mindestlänge jetzt als Info-Popover am Label, Frontend-Regel), Zählpunktnummer, Bankverbindung, Admin-Notiz (2×), Mitgliedsnummer im Import-Dialog („Wird ermittelt…“ als Statuszeile, das Formatbeispiel steht bei einem Fehler in der Meldung), RC-Nummer auf der Startseite.
+- Liste „Datenfreigabe ausständig“: nennt der Sperrgrund das Datum der letzten Erinnerung selbst, steht es nicht noch einmal davor.
+- Screenshots der betroffenen Dialoge neu; Generator bildet für den Import-Dialog Tarife und Mitgliedsnummer-Vorschlag nach.
+
 ### Doku: alle User-Guide-Screenshots neu, 22 Bilder ergänzt
 
 - Alle bestehenden Bilder neu erzeugt (Stand Mai–Juli, u. a. veralteter Text zu Aktivierungs-Kriterium Variante B, fehlende Tabs).
