@@ -859,10 +859,6 @@
 </ul>
 <p>Trifft das Kriterium zu, wird der Antrag automatisch auf <strong>„Aktiviert"</strong> gesetzt und das Mitglied bekommt die volle Beitrittsbestätigungs-Mail mit PDF. Toast zeigt das Ergebnis (z. B. „3 von 5 auf Aktiviert gesetzt") und die Liste wird neu geladen.
 - <strong>„Alle Entwürfe löschen"</strong> — erscheint nur, wenn Entwürfe existieren; löscht unwiderruflich alle nicht eingereichten Anträge deiner EEG(s).</p>
-<div class="admonition warning">
-<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
-<p>Die Liste „Datenfreigabe ausständig" ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
-</div>
 <p>Nach „Aktivierung im Core prüfen" kann sich die Liste <strong>„Datenfreigabe ausständig"</strong> öffnen, siehe <a href="#erinnerung-zur-datenfreigabe">unten</a>.</p>
 <p>Die Tabelle zeigt:
 - <strong>Referenznummer</strong> — eindeutige Kennung des Antrags
@@ -1039,10 +1035,6 @@
 </tr>
 </tbody>
 </table>
-<div class="admonition warning">
-<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
-<p>„Info-Anforderung erneut senden“ ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
-</div>
 <p><strong>Info-Anforderung erneut senden:</strong> Reagiert ein Mitglied nicht auf deine Rückfrage, öffnet <strong>Erneut senden → Info-Anforderung …</strong> einen Dialog mit dem Text deiner letzten Rückfrage. Du kannst ihn unverändert abschicken oder vorher anpassen; das Mitglied bekommt dieselbe Mail wie beim ersten Mal, samt Link zum Bearbeiten des Antrags. Der gesendete Text gilt danach als letzte Rückfrage und steht so in der Antragsansicht. Jeder Versand steht im Verlauf des Antrags („Info-Anforderung erneut gesendet“, bei geändertem Text mit dem neuen Text).</p>
 <p>Die Detailansicht zeigt alle Angaben des Mitglieds:</p>
 <ul>
@@ -1064,10 +1056,6 @@
 <h3 id="zusatzinformation">Zusatzinformation<a class="headerlink" href="#zusatzinformation" title="Permanent link">&para;</a></h3>
 <p>Hat der Antrag eine Zusatzinformation, zeigt die Detailansicht sie als eigenen Abschnitt <strong>Zusatzinformation</strong> über der Admin-Notiz, mit allen Zeilenumbrüchen. Anders als die Admin-Notiz ist sie für das Mitglied bestimmt: Sie steht auf Beitrittsbestätigung und Beitrittserklärung, in der Eingangsbestätigung, in der Mail „Neuer Antrag“ und im Daten-Export. Nach eegFaktura wird sie nicht übertragen.</p>
 <h2 id="erinnerung-zur-datenfreigabe">Erinnerung zur Datenfreigabe<a class="headerlink" href="#erinnerung-zur-datenfreigabe" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
-<p>Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
-</div>
 <p>Bevor ein Zählpunkt Energie mit der EEG austauscht, muss das Mitglied im Online-Portal seines Netzbetreibers der Datenfreigabe für die EEG zustimmen. Vergisst es das, steht der Zählpunkt in eegFaktura auf „wartet auf Zustimmung" (<code>PENDING</code>). An diese Mitglieder kannst du eine Erinnerung schicken.</p>
 <p><strong>Nach „Aktivierung im Core prüfen":</strong> Warten bei Anträgen in <em>Bereit zur Aktivierung</em> oder <em>Aktiviert</em> noch Zählpunkte auf die Zustimmung, öffnet sich der Dialog <strong>„Datenfreigabe ausständig"</strong>. Er zeigt je Antrag das Mitglied, die betroffenen Zählpunkte und wie oft schon erinnert wurde. Alle Anträge, die jetzt erinnert werden dürfen, sind vorausgewählt. <strong>„Erinnerung senden"</strong> verschickt die Mail an die ausgewählten Mitglieder; danach steht bei jedem Antrag, ob sie rausging oder warum nicht.</p>
 <p><strong>Aus dem Antrag:</strong> <strong>Erneut senden → Erinnerung Datenfreigabe</strong> schickt die Erinnerung an dieses eine Mitglied, wenn eegFaktura noch wartende Zählpunkte meldet.</p>
@@ -1105,10 +1093,6 @@
 <h3 id="zusatzinformation-bearbeiten">Zusatzinformation bearbeiten<a class="headerlink" href="#zusatzinformation-bearbeiten" title="Permanent link">&para;</a></h3>
 <p>Im Dialog <strong>Bearbeiten</strong> gibt es über der Admin-Notiz immer das mehrzeilige Feld <strong>Zusatzinformation</strong> (höchstens 2000 Zeichen), auch wenn das Feld im Beitrittsformular ausgeblendet ist. Dort hältst du individuelle Absprachen mit dem Mitglied fest, zum Beispiel: „Teilnahmefaktor 50 % im ersten Jahr. Depot: 500 €, Rückzahlung bei Austritt.“ Speichern ohne Änderung lässt den Text stehen; leerst du das Feld, wird die Zusatzinformation entfernt.</p>
 <p>Änderst du den Text bei einem eingereichten Antrag (neu, geändert oder geleert), bekommt das Mitglied die E-Mail <strong>„Zusatzinformation zu deinem Antrag geändert“</strong> (bei Unternehmen und Gemeinden „Ihrem Antrag“) mit dem neuen Text bzw. dem Hinweis, dass sie entfernt wurde. Die Kontaktadresse der EEG bekommt eine Kopie. Speichern ohne Textänderung löst keine Mail aus. Verlangt deine EEG die Bestätigung der E-Mail-Adresse und hat das Mitglied sie noch nicht bestätigt, wird der Text gespeichert, aber keine Mail verschickt. Kann die Mail nicht versendet werden, bleibt die Änderung trotzdem gespeichert, und du siehst die Meldung <strong>„Mitglied nicht informiert“</strong> — informiere das Mitglied dann bitte selbst. Wie alle Angaben lässt sich der Text im Dialog <strong>Bearbeiten</strong> in den Status Eingereicht, In Bearbeitung, Rückfrage, Genehmigt und Import fehlgeschlagen ändern; nach dem Import nicht mehr.</p>
-<div class="admonition warning">
-<p class="admonition-title">Derzeit nur in der Test-Umgebung</p>
-<p>Dieser Hinweis ist noch nicht in der Produktiv-Umgebung verfügbar.</p>
-</div>
 <p>Wurde die Mail zurückgehalten, weil das Mitglied seine E-Mail-Adresse noch nicht bestätigt hat, sagt dir ein Hinweis nach dem Speichern das.</p>
 <p><img alt="Admin-Edit-Dialog mit der Zusatzangaben-Section zwischen Adresse und Zählpunkten" src="../images/admin-edit-zusatzangaben.png" /></p>
 <h3 id="abweichende-adresse-eines-zahlpunkts">Abweichende Adresse eines Zählpunkts<a class="headerlink" href="#abweichende-adresse-eines-zahlpunkts" title="Permanent link">&para;</a></h3>
