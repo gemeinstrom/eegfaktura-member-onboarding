@@ -101,6 +101,8 @@ Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne
 
 **Info-Anforderung erneut senden:** Reagiert ein Mitglied nicht auf deine Rückfrage, öffnet **Erneut senden → Info-Anforderung …** einen Dialog mit dem Text deiner letzten Rückfrage. Du kannst ihn unverändert abschicken oder vorher anpassen; das Mitglied bekommt dieselbe Mail wie beim ersten Mal, samt Link zum Bearbeiten des Antrags. Der gesendete Text gilt danach als letzte Rückfrage und steht so in der Antragsansicht. Jeder Versand steht im Verlauf des Antrags („Info-Anforderung erneut gesendet“, bei geändertem Text mit dem neuen Text).
 
+![Dialog „Info-Anforderung erneut senden“ mit dem Text der letzten Rückfrage](images/admin-resend-needs-info.png)
+
 Die Detailansicht zeigt alle Angaben des Mitglieds:
 
 - **Statusaktionen** — verfügbare Aktionen je nach aktuellem Status
@@ -132,6 +134,8 @@ Hat der Antrag eine Zusatzinformation, zeigt die Detailansicht sie als eigenen A
 Bevor ein Zählpunkt Energie mit der EEG austauscht, muss das Mitglied im Online-Portal seines Netzbetreibers der Datenfreigabe für die EEG zustimmen. Vergisst es das, steht der Zählpunkt in eegFaktura auf „wartet auf Zustimmung" (`PENDING`). An diese Mitglieder kannst du eine Erinnerung schicken.
 
 **Nach „Aktivierung im Core prüfen":** Warten bei Anträgen in *Bereit zur Aktivierung* oder *Aktiviert* noch Zählpunkte auf die Zustimmung, öffnet sich der Dialog **„Datenfreigabe ausständig"**. Er zeigt je Antrag das Mitglied, die betroffenen Zählpunkte und wie oft schon erinnert wurde. Alle Anträge, die jetzt erinnert werden dürfen, sind vorausgewählt. **„Erinnerung senden"** verschickt die Mail an die ausgewählten Mitglieder; danach steht bei jedem Antrag, ob sie rausging oder warum nicht.
+
+![Dialog „Datenfreigabe ausständig“: ein Antrag ausgewählt, zwei gesperrt mit Grund](images/admin-consent-reminder-list.png)
 
 **Aus dem Antrag:** **Erneut senden → Erinnerung Datenfreigabe** schickt die Erinnerung an dieses eine Mitglied, wenn eegFaktura noch wartende Zählpunkte meldet.
 

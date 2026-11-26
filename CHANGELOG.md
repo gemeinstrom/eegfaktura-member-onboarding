@@ -10,6 +10,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Doku: Screenshots Erinnerung zur Datenfreigabe und Info-Anforderung
+
+- Vier neue Bilder im User-Guide: Dialog „Datenfreigabe ausständig“, Dialog „Info-Anforderung erneut senden“, Einstellungskarte „Erinnerung zur Datenfreigabe“ und deren Vorschau.
+- `scripts/generate-screenshots.ts`: Shots dafür (Aktivierungs-Check-Antwort mit Musterdaten nachgebildet, da lokal kein eegFaktura); CSRF-Token per Request statt über die gerenderte Seite (Turbopack); Next.js-Dev-Symbol ausgeblendet.
+- `db/seeds/dev_seed.sql`: entfernte Spalte `sepa_mandate_enabled` aus dem RC-DEMO-Eintrag gestrichen — der Seed lief seit PROJ-80 nicht mehr durch.
+
 ### PROJ-139: Erinnerung zur Datenfreigabe
 
 - Migration 000097 (additiv): `application.consent_reminder_count` (INTEGER NOT NULL DEFAULT 0, CHECK ≥ 0), `application.consent_reminder_last_sent_at` (TIMESTAMPTZ NULL), `registration_entrypoint.consent_reminder_text` (TEXT NULL, bereinigtes HTML).

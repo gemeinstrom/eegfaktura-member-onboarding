@@ -442,12 +442,16 @@ Schaltest du die Frage später aus, bleiben bereits gespeicherte Antworten erhal
 
 Im Tab **Erinnerung** legst du den Text der [Erinnerung zur Datenfreigabe](04-admin-applications.md#erinnerung-zur-datenfreigabe) fest. Der Tab erscheint nur unter **Alle Optionen**.
 
+![Einstellung „Erinnerung zur Datenfreigabe“ mit leerem Editor](images/admin-settings-consent-reminder.png)
+
 - **Text der Erinnerung** — derselbe Editor wie beim Einleitungstext. Dein Text ersetzt den Standardabsatz der Mail. Anrede, die Liste der Zählpunkte, für die die Freigabe noch fehlt, der Hinweis „Falls du die Anleitung nicht mehr findest oder Fragen hast, antworte einfach auf diese E-Mail." sowie Gruß und Kontakt deiner EEG stehen immer in der Mail.
 - **Leer lassen** — dann verwendet die Mail einen Standardtext: Das Mitglied soll der EEG im Online-Portal seines Netzbetreibers den Zugriff auf seine Energiedaten gewähren; die Anleitung dazu hat es bereits per E-Mail bekommen, und erst mit der Freigabe beginnt die Teilnahme.
 - **Vorschau** — zeigt die Mail mit Beispieldaten und dem Text im Editor, auch ungespeichert.
 - **Du oder Sie** — Firmen und Gemeinden bekommen wie bei allen Onboarding-Mails die Sie-Anrede, alle anderen die Du-Form. Dein Text gilt für beide; formuliere ihn deshalb am besten ohne direkte Anrede (z. B. „Bitte die Freigabe im Portal des Netzbetreibers erteilen …“).
 - **Konfiguration importieren** — der Import übernimmt den Text aus der Datei; enthält die Datei keinen Text, gilt danach der Standardtext.
 - **Speichern** — speichert nur über den Button, wie beim Tab Mehrfachteilnahme.
+
+![Vorschau der Erinnerung mit dem Standardtext](images/admin-settings-consent-reminder-preview.png)
 
 Tipp: Habt ihr in eegFaktura die Mail zur Freigabe-Aufforderung angepasst, etwa mit einer Anleitung für euren Netzbetreiber, nimm Bezug darauf oder wiederhole die wichtigsten Schritte.
 
