@@ -8,36 +8,21 @@
 
 **Neu: Erinnerung zur Datenfreigabe**
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Mitglieder, die im Portal ihres Netzbetreibers der Datenfreigabe noch nicht zugestimmt haben, erinnerst du jetzt per Klick. Nach **„Aktivierung im Core prüfen"** zeigt der Dialog **„Datenfreigabe ausständig"** alle Mitglieder, bei denen in eegFaktura noch ein Zählpunkt auf die Zustimmung wartet; **„Erinnerung senden"** schickt die Mail an die ausgewählten. Einzeln geht es im Antrag über **Erneut senden → Erinnerung Datenfreigabe**. Höchstens 3 Erinnerungen pro Antrag, mindestens 7 Tage Abstand, die erste frühestens 7 Tage nach dem Import. Den Text legst du unter **Einstellungen → Erinnerung** fest (Alle Optionen), mit Vorschau; ohne eigenen Text gilt ein Standardtext.
 
 **Neu: Info-Anforderung erneut senden**
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Wartest du bei einem Antrag im Status *Info benötigt* noch auf eine Antwort, findest du in der Antragsansicht unter **Erneut senden** den Eintrag **Info-Anforderung …**. Er zeigt deine letzte Rückfrage in einem Dialog; du schickst sie unverändert oder angepasst noch einmal an das Mitglied, samt Link zum Bearbeiten des Antrags. Ein geänderter Text gilt danach als letzte Rückfrage. Im Verlauf siehst du, wann erinnert wurde.
 
 **Hinweis, wenn die Verbindung zu eegFaktura zum falschen Konto gehört**
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Gehört die Anmeldung bei eegFaktura auch nach einem automatischen Neuversuch noch zu einem anderen Konto, siehst du oben im Admin-Bereich einen Hinweis. Tarife, Mitgliedsnummer und Import funktionieren dann nicht; melde dich ab und wieder an.
 
 **Elektronisches SEPA-Mandat: „Verifizierung“ nur nach echter Bestätigung**
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Im Satz zur elektronischen Zustimmung steht „nach Verifizierung seiner E-Mail-Adresse“ jetzt nur noch, wenn das Mitglied seine Adresse über den Bestätigungslink tatsächlich bestätigt hat. Sonst steht dort „nach Eingabe“, etwa bei Anträgen, die über die Schnittstelle kamen. Bisher stand dort „Verifizierung“, sobald deine EEG die Bestätigung verlangt — unabhängig davon, ob das Mitglied wirklich bestätigt hatte.
 
 **Zusatzinformation: Hinweis, wenn keine Mail verschickt wird**
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Änderung ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Änderst du die Zusatzinformation eines Antrags, dessen Mitglied seine E-Mail-Adresse noch nicht bestätigt hat, wird der Text gespeichert, aber keine Mail verschickt. Das siehst du jetzt nach dem Speichern als Hinweis, damit du nicht davon ausgehst, dass das Mitglied informiert wurde.
 

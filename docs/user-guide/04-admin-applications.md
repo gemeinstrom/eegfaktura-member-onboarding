@@ -17,9 +17,6 @@ Rechts oben in der Übersicht stehen dir zwei Aktionen zur Verfügung:
   Trifft das Kriterium zu, wird der Antrag automatisch auf **„Aktiviert"** gesetzt und das Mitglied bekommt die volle Beitrittsbestätigungs-Mail mit PDF. Toast zeigt das Ergebnis (z. B. „3 von 5 auf Aktiviert gesetzt") und die Liste wird neu geladen.
 - **„Alle Entwürfe löschen"** — erscheint nur, wenn Entwürfe existieren; löscht unwiderruflich alle nicht eingereichten Anträge deiner EEG(s).
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Die Liste „Datenfreigabe ausständig" ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 Nach „Aktivierung im Core prüfen" kann sich die Liste **„Datenfreigabe ausständig"** öffnen, siehe [unten](#erinnerung-zur-datenfreigabe).
 
 Die Tabelle zeigt:
@@ -102,9 +99,6 @@ Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne
 | **Auf Prüfung zurücksetzen** | Status-Block (destruktiv) | Status *Importiert* oder *Bereit zur Aktivierung* — bringt den Antrag zurück auf *In Prüfung*. Geeignet wenn der Antrag inhaltlich verworfen werden soll: nach diesem Schritt erreichbar ist *Ablehnen*. Mitgliedsnummer und alle Import-Verknüpfungen werden genullt. |
 | **Aktivierung zurücksetzen** | Status-Block (destruktiv) | Status *Aktiviert* — bringt den Antrag zurück auf *Bereit zur Aktivierung*. Geeignet wenn die Aktivierung versehentlich passiert ist (manueller Klick oder Auto-Aktivierungs-Check trotz fehlender Core-Aktivität). Von dort ist der Antrag jederzeit wieder aktivierbar (manuell oder über die Core-Prüfung). Mitgliedsnummer + Core-Verknüpfung bleiben erhalten. |
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    „Info-Anforderung erneut senden“ ist noch nicht in der Produktiv-Umgebung verfügbar.
-
 **Info-Anforderung erneut senden:** Reagiert ein Mitglied nicht auf deine Rückfrage, öffnet **Erneut senden → Info-Anforderung …** einen Dialog mit dem Text deiner letzten Rückfrage. Du kannst ihn unverändert abschicken oder vorher anpassen; das Mitglied bekommt dieselbe Mail wie beim ersten Mal, samt Link zum Bearbeiten des Antrags. Der gesendete Text gilt danach als letzte Rückfrage und steht so in der Antragsansicht. Jeder Versand steht im Verlauf des Antrags („Info-Anforderung erneut gesendet“, bei geändertem Text mit dem neuen Text).
 
 Die Detailansicht zeigt alle Angaben des Mitglieds:
@@ -134,9 +128,6 @@ Hat der Antrag eine Zusatzinformation, zeigt die Detailansicht sie als eigenen A
 
 
 ## Erinnerung zur Datenfreigabe
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Bevor ein Zählpunkt Energie mit der EEG austauscht, muss das Mitglied im Online-Portal seines Netzbetreibers der Datenfreigabe für die EEG zustimmen. Vergisst es das, steht der Zählpunkt in eegFaktura auf „wartet auf Zustimmung" (`PENDING`). An diese Mitglieder kannst du eine Erinnerung schicken.
 
@@ -191,9 +182,6 @@ Klicke auf **Bearbeiten**, nimm die Änderungen vor und speichere.
 Im Dialog **Bearbeiten** gibt es über der Admin-Notiz immer das mehrzeilige Feld **Zusatzinformation** (höchstens 2000 Zeichen), auch wenn das Feld im Beitrittsformular ausgeblendet ist. Dort hältst du individuelle Absprachen mit dem Mitglied fest, zum Beispiel: „Teilnahmefaktor 50 % im ersten Jahr. Depot: 500 €, Rückzahlung bei Austritt.“ Speichern ohne Änderung lässt den Text stehen; leerst du das Feld, wird die Zusatzinformation entfernt.
 
 Änderst du den Text bei einem eingereichten Antrag (neu, geändert oder geleert), bekommt das Mitglied die E-Mail **„Zusatzinformation zu deinem Antrag geändert“** (bei Unternehmen und Gemeinden „Ihrem Antrag“) mit dem neuen Text bzw. dem Hinweis, dass sie entfernt wurde. Die Kontaktadresse der EEG bekommt eine Kopie. Speichern ohne Textänderung löst keine Mail aus. Verlangt deine EEG die Bestätigung der E-Mail-Adresse und hat das Mitglied sie noch nicht bestätigt, wird der Text gespeichert, aber keine Mail verschickt. Kann die Mail nicht versendet werden, bleibt die Änderung trotzdem gespeichert, und du siehst die Meldung **„Mitglied nicht informiert“** — informiere das Mitglied dann bitte selbst. Wie alle Angaben lässt sich der Text im Dialog **Bearbeiten** in den Status Eingereicht, In Bearbeitung, Rückfrage, Genehmigt und Import fehlgeschlagen ändern; nach dem Import nicht mehr.
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Dieser Hinweis ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Wurde die Mail zurückgehalten, weil das Mitglied seine E-Mail-Adresse noch nicht bestätigt hat, sagt dir ein Hinweis nach dem Speichern das.
 

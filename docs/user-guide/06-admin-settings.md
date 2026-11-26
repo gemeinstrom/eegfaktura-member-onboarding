@@ -173,9 +173,6 @@ Auch beim B2B-Audit-Pfad bekommt der EEG-Kontakt die Ablage-Kopie per E-Mail.
 
 > **Hinweis:** Die IP-Adresse steht nicht im PDF, wird aber weiterhin gespeichert.
 
-!!! warning "Derzeit nur in der Test-Umgebung"
-    In der Produktiv-Umgebung richtet sich das Wort noch danach, ob deine EEG die E-Mail-Bestätigung verlangt.
-
 „Verifizierung“ steht im Satz (CORE und B2B) nur, wenn das Mitglied seine E-Mail-Adresse über den Bestätigungslink tatsächlich bestätigt hat; sonst steht dort „Eingabe“ — etwa bei Anträgen, die über die Schnittstelle kamen, oder bei Mitgliedern, die nie bestätigt haben.
 
 > Wenn der Audit-Trail aktiv ist, aber für einen einzelnen Antrag noch keine IP-Adresse gespeichert wurde (Altanträge aus der Zeit vor der elektronischen Erfassung), fällt das PDF automatisch auf die klassische Unterschriftslinie zurück. Es kommt also nie zu einem fehlerhaften Audit-Block ohne Datenbasis.
@@ -442,9 +439,6 @@ Schaltest du die Frage später aus, bleiben bereits gespeicherte Antworten erhal
 
 
 ## Erinnerung zur Datenfreigabe *(Alle Optionen)*
-
-!!! warning "Derzeit nur in der Test-Umgebung"
-    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
 
 Im Tab **Erinnerung** legst du den Text der [Erinnerung zur Datenfreigabe](04-admin-applications.md#erinnerung-zur-datenfreigabe) fest. Der Tab erscheint nur unter **Alle Optionen**.
 
