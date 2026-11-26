@@ -88,7 +88,9 @@ Nimm einen eingereichten Antrag in Bearbeitung, um anzuzeigen, dass du ihn aktiv
 
 Wenn Angaben fehlen oder unklar sind:
 
-1. Klicke auf **Rückfragen stellen**
+![Dialog „Informationen anfordern“](images/admin-dialog-needs-info.png)
+
+1. Klicke auf **Informationen anfordern**
 2. Gib den Grund / die Rückfrage ein — der blaue Hinweis im Dialog erinnert daran: **„Der hier eingegebene Text wird per E-Mail an den Beitrittswerber übermittelt"**
 3. Das Mitglied erhält eine E-Mail mit deiner Rückfrage 1:1 im Body — inklusive eines Buttons **„Antrag online bearbeiten"**. Damit öffnet das Mitglied seinen Antrag vorausgefüllt, korrigiert die gewünschten Stellen selbst und reicht ihn erneut ein (kein Duplikat). Alternativ kannst du die Korrektur wie bisher selbst über **Bearbeiten** vornehmen.
 4. **Hard-Fail (ab 2026-05-17):** scheitert der SMTP-Versand, wird der Statuswechsel zurückgerollt und du siehst die Fehlermeldung direkt im Dialog. Status bleibt unverändert, du kannst nach SMTP-Recovery erneut klicken
@@ -108,9 +110,11 @@ Wenn alle Angaben korrekt und vollständig sind:
 
 Wenn ein Antrag nicht genehmigt werden kann:
 
+![Dialog „Antrag ablehnen“](images/admin-dialog-reject.png)
+
 1. Klicke auf **Ablehnen**
-2. Gib einen Ablehnungsgrund an — der blaue Hinweis im Dialog erinnert daran: **„Die hier eingegebene Begründung wird per E-Mail an den Beitrittswerber übermittelt"**
-3. Das Mitglied erhält eine E-Mail mit deiner Begründung 1:1 im Body
+2. Gib einen Ablehnungsgrund an
+3. Die Checkbox **„Ablehnung per E-Mail an den Beitrittswerber übermitteln"** ist vorausgewählt: Das Mitglied erhält eine E-Mail mit deiner Begründung 1:1 im Body. Nimmst du den Haken weg (z. B. bei offensichtlichem Spam), geht keine Mail raus; die Begründung steht nur im Statusverlauf
 4. **Hard-Fail:** gleiches Verhalten wie bei Rückfragen — Mail-Fehler rollt den Statuswechsel zurück
 
 ## Import in eegFaktura
@@ -168,6 +172,8 @@ Wenn ein bereits importierter Teilnehmer im eegFaktura-Core gelöscht wurde (z. 
 
 Wurde ein Antrag versehentlich aktiviert (z. B. durch einen manuellen Klick oder den Batch „Aktivierung im Core prüfen", obwohl das Mitglied im Core noch nicht aktiv ist), kannst du die Aktivierung zurücknehmen.
 
+![Dialog „Aktivierung zurücksetzen“](images/admin-dialog-reset-activation.png)
+
 1. Öffne den Antrag (Status `activated`)
 2. Klicke im Status-Block auf **Aktivierung zurücksetzen**
 3. Gib eine Begründung an (Pflichtfeld, mindestens 10 Zeichen, wird im Statusverlauf protokolliert)
@@ -178,6 +184,8 @@ Wurde ein Antrag versehentlich aktiviert (z. B. durch einen manuellen Klick oder
 ## Auf Prüfung zurücksetzen (`imported` / `ready_for_activation` → `under_review`)
 
 Soll ein bereits importierter Antrag komplett neu bewertet werden, kannst du ihn ganz an den Anfang der Bearbeitung zurückholen — sowohl aus `imported` als auch aus `ready_for_activation` (z. B. nachdem du gerade eine Aktivierung zurückgesetzt hast).
+
+![Dialog „Auf Prüfung zurücksetzen“](images/admin-dialog-reset-to-review.png)
 
 1. Öffne den Antrag (Status `imported` oder `ready_for_activation`)
 2. Klicke im Status-Block auf **Auf Prüfung zurücksetzen**
@@ -275,6 +283,8 @@ Der Status-Log enthält den Eintrag „manuell aktiviert (Core-Member bereits vo
 ## EEG umzuordnen
 
 Wenn ein Mitglied über den falschen RC-Link der EEG A registriert hat, aber eigentlich zur EEG B gehört (z. B. weil das Versorgungsgebiet woanders hingehört), kann der Antrag direkt umzuordnen werden — ohne dass das Mitglied neu einreichen muss.
+
+![Dialog „Antrag einer anderen EEG zuordnen“](images/admin-dialog-reassign.png)
 
 **Verfügbarkeit**: der Button **„EEG umzuordnen"** erscheint im Status-Aktionen-Block nur, wenn:
 - der Status `submitted`, `email_confirmed`, `under_review` oder `needs_info` ist (nicht bei `approved` / `imported` / `rejected`)

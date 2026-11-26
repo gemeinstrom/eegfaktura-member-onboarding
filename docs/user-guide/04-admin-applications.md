@@ -122,11 +122,15 @@ Die Detailansicht zeigt alle Angaben des Mitglieds:
 
 Hat die EEG die Frage zur Mehrfachteilnahme eingeschaltet (siehe [Einstellungen](06-admin-settings.md#mehrfachteilnahme)), zeigen die Mitgliedsdaten die Zeile **Mehrfachteilnahme: Ja**, **Nein** oder **keine Angabe**. „Keine Angabe" steht bei älteren Anträgen und bei Anträgen über die externe API ohne Antwort. Ist die Frage ausgeschaltet, erscheint die Zeile nur, wenn der Antrag eine Antwort hat.
 
+![Mitgliedsdaten mit der Zeile Mehrfachteilnahme](images/admin-application-multi-participation.png)
+
 Im Dialog **Bearbeiten** setzt du den Wert auf Ja, Nein oder „keine Angabe" — auch dann, wenn die Frage inzwischen ausgeschaltet ist. Wie alle anderen Angaben im Antrag lässt sich die Antwort bearbeiten, solange der Antrag noch nicht importiert ist. So korrigierst du die Antwort, wenn sich das Mitglied umentschieden hat. Das Speichern anderer Änderungen lässt die Antwort unverändert.
 
 ### Zusatzinformation
 
 Hat der Antrag eine Zusatzinformation, zeigt die Detailansicht sie als eigenen Abschnitt **Zusatzinformation** über der Admin-Notiz, mit allen Zeilenumbrüchen. Anders als die Admin-Notiz ist sie für das Mitglied bestimmt: Sie steht auf Beitrittsbestätigung und Beitrittserklärung, in der Eingangsbestätigung, in der Mail „Neuer Antrag“ und im Daten-Export. Nach eegFaktura wird sie nicht übertragen.
+
+![Abschnitt Zusatzinformation in der Antragsansicht](images/admin-application-additional-information.png)
 
 
 ## Erinnerung zur Datenfreigabe
@@ -155,6 +159,8 @@ Ganz automatisch, ohne Klick, geht es nicht: Ob die Zustimmung schon da ist, wei
 
 Du kannst SEPA-Mandat, Beitrittsbestätigung und Beitrittserklärung direkt beim Mitglied in eegFaktura ablegen — dort erscheinen sie unter den Dokumenten des Mitglieds als Vertrag. Hochgeladen wird genau das PDF, das du auch über **Herunterladen ▾** bekommst. Die Beitrittserklärung lässt sich allerdings nur bei Status *Aktiviert* und eingeschaltetem Vorstands-Genehmigungs-Workflow hochladen.
 
+![Menü „Nach eegFaktura hochladen“](images/admin-eegfaktura-upload-menu.png)
+
 Das geht erst, wenn das Mitglied in eegFaktura existiert, also ab Status *Importiert* (auch *Bereit zur Aktivierung* und *Aktiviert*). Vorher ist das Menü **Nach eegFaktura hochladen ▾** nicht sichtbar.
 
 1. Menü **Nach eegFaktura hochladen ▾** öffnen und das Dokument wählen.
@@ -164,6 +170,8 @@ Das geht erst, wenn das Mitglied in eegFaktura existiert, also ab Status *Import
 Wurde das Dokument schon einmal hochgeladen, fragt ein zweiter Dialog **Erneut hochladen?** nach und nennt das Datum des letzten Uploads. Bestätigst du, liegt das Dokument danach zweimal in eegFaktura; eine überzählige Kopie kannst du dort löschen.
 
 Der Bereich **Dokumente in eegFaktura** listet jeden Versuch mit Dokument, Zeitpunkt, Ergebnis (*hochgeladen* oder *fehlgeschlagen* mit Grund, z. B. „eegFaktura nicht erreichbar"), Auslöser und Admin. Fehlgeschlagene Uploads werden nicht automatisch wiederholt — lade das Dokument später einfach erneut hoch.
+
+![Bereich „Dokumente in eegFaktura“ mit Upload-Protokoll](images/admin-eegfaktura-uploads.png)
 
 Hochgeladen wird immer die **unsignierte** Beitrittserklärung. Die vom Vorstand unterschriebene Fassung musst du weiterhin selbst in eegFaktura beim Mitglied ergänzen.
 
@@ -195,6 +203,8 @@ Wurde die Mail zurückgehalten, weil das Mitglied seine E-Mail-Adresse noch nich
 
 Liegt eine Anlage nicht an der Adresse des Mitglieds, setzt du beim Zählpunkt die Option **Abweichende Adresse für diesen Zählpunkt** und trägst Straße, Hausnummer, PLZ und Ort ein. Das geht bei bestehenden und bei neu hinzugefügten Zählpunkten. Hat das Mitglied im Beitrittsformular schon eine abweichende Adresse angegeben, ist die Option beim Öffnen an und die Felder sind befüllt. Ist die Option an, sind alle vier Felder Pflicht — fehlt eines, speichert der Dialog nicht und markiert die leeren Felder. Schaltest du die Option aus, wird die Adresse beim Speichern entfernt und der Zählpunkt übernimmt wieder die Adresse des Mitglieds. Beispiel: Max Mustermann wohnt in der Musterstraße 1, seine PV-Anlage steht am Anlagenweg 7 in Musterdorf.
 
+![Zählpunkt mit abweichender Adresse im Dialog Bearbeiten](images/admin-edit-meter-address.png)
+
 ### Anlagenname eines Zählpunkts
 
 Jeder Zählpunkt hat im Dialog **Bearbeiten** das Feld **Anlagenname**, zum Beispiel „Hauptanlage“ oder „Nebengebäude“. Das Feld ist immer da, auch wenn es im Beitrittsformular ausgeblendet ist. Der Anlagenname wird beim Import als Anlagenbezeichnung nach eegFaktura übernommen.
@@ -206,6 +216,8 @@ Jeder Zählpunkt hat im Dialog **Bearbeiten** das Feld **Anlagenname**, zum Beis
 ## B2B-Vorbereitung mitsenden
 
 In der SEPA-Sektion des Bearbeiten-Dialogs erscheint bei Einzugsart „Core" der Toggle **„Mitglied für Umstellung auf B2B vorbereiten"**. Bei aktivem Toggle bekommt das Mitglied zusätzlich zum Basis-Lastschrift-Mandat (CORE) auch das Firmenlastschrift-Mandat (B2B) als zweites PDF — vorbereitet zur Vorlage bei der Hausbank. Im eegFaktura-Core wird der Antrag weiterhin als CORE angelegt; sobald die Hausbank den B2B-Mandatsantrag bestätigt hat, stellst du den SEPA-Typ im Faktura-Core manuell auf B2B um.
+
+![Schalter „Mitglied für Umstellung auf B2B vorbereiten“](images/admin-edit-b2b-prep.png)
 
 Praxis-Beispiel (Musterbetrieb GmbH): Im Bearbeiten-Dialog Einzugsart „Core" wählen, Toggle „Mitglied für Umstellung auf B2B vorbereiten" anhaken. Beim Import bekommt das Mitglied zwei Mandate (CORE + B2B). Die Buchhaltung der Musterbetrieb GmbH reicht das B2B-Mandat bei ihrer Hausbank ein. Nach Rückmeldung der Bank ändert der Admin im Faktura-Core den SEPA-Typ.
 
@@ -227,3 +239,5 @@ Falls ein Mitglied die Bestätigungs-E-Mail nicht erhalten hat, kannst du diese 
 ## EEG umzuordnen
 
 Falls ein Antrag fälschlich der falschen EEG zugeordnet wurde (Mitglied hat den falschen RC-Link verwendet), kann er als Admin direkt umzuordnen werden — ohne dass das Mitglied neu einreichen muss. Verfügbar nur für Admins mit Zugriff auf mehrere EEGs und nur solange der Antrag in der Review-Phase ist (`submitted` / `email_confirmed` / `under_review` / `needs_info`). Detail-Beschreibung siehe [Statusverwaltung → EEG umzuordnen](05-admin-status.md#eeg-umzuordnen).
+
+![Dialog „Antrag einer anderen EEG zuordnen“](images/admin-dialog-reassign.png)

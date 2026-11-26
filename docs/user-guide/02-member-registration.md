@@ -115,6 +115,8 @@ Solange erst ein Zählpunkt eingetragen ist, erinnert ein Hinweis daran: „Weit
 
 Hat deine EEG die Frage zur Mehrfachteilnahme eingeschaltet, erscheint direkt nach den Zählpunkten ein eigener Abschnitt. Deine EEG erklärt dort, an welcher weiteren Energiegemeinschaft (z. B. einer Bürgerenergiegemeinschaft) du zusätzlich teilnehmen kannst. Wähle **Ja** oder **Nein** — am Anfang ist nichts ausgewählt, und ohne Auswahl lässt sich der Antrag nicht einreichen. Auf dem Handy stehen die beiden Optionen untereinander.
 
+![Frage zur Mehrfachteilnahme im Beitrittsformular](images/register-form-mehrfachteilnahme.png)
+
 Stellt deine EEG eine Rückfrage zu deinem Antrag, ist deine bisherige Antwort beim Bearbeiten über den Link aus der Mail schon ausgewählt. Du kannst sie dort ändern.
 
 ## Schritt 7: Weitere Angaben *(typabhängig)*
@@ -130,6 +132,8 @@ Nach der Zählpunkt-Eingabe erscheint — sofern deine EEG die zugehörigen Feld
 ### Zusatzinformation (nur bei aktivierten EEGs)
 
 Hat deine EEG das Feld eingeblendet, steht direkt vor den Einwilligungen ein Textfeld **Zusatzinformation**. Dort trägst du ein, was du mit deiner EEG vereinbart hast, zum Beispiel eine Depotzahlung. Du kannst mehrere Zeilen schreiben, höchstens 2000 Zeichen. Ist das Feld mit Stern (*) markiert, ist es Pflicht. Der Text erscheint in deiner Eingangsbestätigung und später auf deiner Beitrittsbestätigung.
+
+![Feld Zusatzinformation im Beitrittsformular](images/register-form-zusatzinformation.png)
 
 Stellt deine EEG eine Rückfrage, siehst du beim Bearbeiten über den Link aus der Mail den aktuellen Text — auch wenn ihn die EEG eingetragen hat — und kannst ihn ändern. Ändert die EEG den Text später, bekommst du eine E-Mail mit dem neuen Text.
 

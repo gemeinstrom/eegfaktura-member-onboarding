@@ -14,6 +14,8 @@ Dasselbe Format findest du auch im **Antrags-Filterpanel** (Filter „EEG") und 
 
 Direkt neben der EEG-Auswahl gibt es einen Umschalter **Einfache Ansicht / Alle Optionen**. Die Wahl wird pro EEG gespeichert.
 
+![Umschalter Einfache Ansicht / Alle Optionen](images/admin-settings-view-mode.png)
+
 - **Einfache Ansicht** blendet erweiterte Optionen aus, die nur ein Bruchteil der EEGs braucht (SEPA-B2B, Mandat-Timing, Genossenschaftsanteile, Zählpunkt-Prefixes, E-Mail-Bestätigung, Aktivierungs-Kriterium und alle nicht-standardmäßig sichtbaren Formular-Felder). Die hinterlegten Werte bleiben in der Datenbank — sie sind nur nicht editierbar, solange du in der Einfachen Ansicht bist.
 - **Alle Optionen** zeigt die komplette Konfiguration wie bisher. Bestehende EEGs starten mit Alle Optionen (rückwärts-kompatibel), neu angelegte EEGs starten mit der Einfachen Ansicht.
 
@@ -84,6 +86,8 @@ In diesem Abschnitt steuerst du die öffentliche Registrierung und hinterlegst d
 ### Vertrag & Onboarding-Status (Plattform buchen)
 
 Ganz oben auf der Einstellungs-Seite steht die Karte **„Vertrag & Onboarding-Status"**. Sie zeigt, ob deine EEG die Plattform bereits gebucht hat, und ist die Voraussetzung dafür, die Mitgliederregistrierung scharfzuschalten.
+
+![Karte „Vertrag & Onboarding-Status“ vor der Buchung](images/admin-settings-contract.png)
 
 - **Plattform buchen:** Mit der Bestätigung von **AGB** und **AVV** (Auftragsverarbeitungsvertrag) buchst du die Plattform. Die Buchung schaltet deine EEG **sofort frei** — es ist keine separate manuelle Freischaltung mehr nötig. Du erhältst direkt eine Willkommens-Mail mit dem AVV-Beleg.
 - **Status-Anzeige:** Die Karte zeigt den aktuellen Vertragsstatus (z. B. *noch nicht gebucht*, *aktiv* oder *ausgesetzt*).
@@ -338,6 +342,8 @@ Falls eine Bestätigungs-Mail im Spam-Ordner landet: in der Antragsdetail-Seite 
 
 > Diese Sektion ist nur in **Alle Optionen** sichtbar.
 
+![Erscheinungsbild der Online-Registrierung](images/admin-settings-eeg-brand.png)
+
 Die öffentliche Mitglied-werden-Seite (`/register/<RC-Nummer>`) lässt sich pro EEG farblich an die eigene Marke anpassen. Der Editor liefert eine **Vorlagen-Listbox** mit 16 vorgefertigten Farb-Kombinationen als schnellen Einstieg und acht einzelne **Color-Picker**, mit denen du das Ergebnis punktgenau anpassen kannst.
 
 #### Vorlage wählen
@@ -416,6 +422,8 @@ Klicke auf **Speichern**, um den Text zu übernehmen.
 ## Mehrfachteilnahme
 
 Viele EEGs arbeiten mit einer Bürgerenergiegemeinschaft (BEG) oder einer anderen Energiegemeinschaft zusammen. Im Tab **Mehrfachteilnahme** kannst du neue Mitglieder beim Beitritt fragen, ob sie zusätzlich dort teilnehmen möchten. Der Tab ist in beiden Ansichten sichtbar (einfache Ansicht und Alle Optionen).
+
+![Tab Mehrfachteilnahme](images/admin-settings-mehrfachteilnahme.png)
 
 - **Schalter** „Frage zur Mehrfachteilnahme im Beitrittsformular anzeigen" — Standard ist aus. Ist er an, erscheint im Beitrittsformular direkt nach den Zählpunkten ein eigener Abschnitt, und das Mitglied muss **Ja** oder **Nein** wählen.
 - **Überschrift** — einzeilig, höchstens 200 Zeichen. Darf leer bleiben; dann zeigt das Formular keine Überschrift.
@@ -516,6 +524,8 @@ Felder, die pro Zählpunkt im Mitgliedsformular erscheinen — bei mehreren Zäh
 ### Zusatzinformation
 
 Mit dem Feld **Zusatzinformation** *(nur in der Ansicht „Alle Optionen“)* können neue Mitglieder im Beitrittsformular selbst einen Text zu individuellen Absprachen eintragen, etwa zu Teilnahmefaktor, Depot oder Besicherung. Standard ist **Ausgeblendet** — für deine EEG ändert sich nichts, bis du das Feld umstellst.
+
+![So erscheint das Feld Zusatzinformation im Beitrittsformular](images/register-form-zusatzinformation.png)
 
 - **Optional** oder **Verpflichtend:** Das Formular zeigt als letzten Abschnitt direkt vor den Einwilligungen ein mehrzeiliges Textfeld (höchstens 2000 Zeichen). Bei „Verpflichtend“ lässt sich der Antrag ohne Text nicht einreichen.
 - **Ausgeblendet** oder **Admin-Vorgabe:** Das Feld erscheint nicht im Formular. Beide Zustände wirken hier gleich, denn im Dialog **Bearbeiten** eines Antrags kannst du die Zusatzinformation immer pflegen. Ein schon gespeicherter Text bleibt erhalten, auch wenn das Mitglied den Antrag nach einer Rückfrage korrigiert.
@@ -729,6 +739,8 @@ Dateiname enthält RC-Nummer und Zeitstempel — manuelle Versionierung in Git o
 ## Tab "Rechnungen"
 
 In jeder EEG-Settings-Ansicht findest du seit dem Plattform-Abrechnungs-Update einen Tab **„Rechnungen"**. Hier siehst du als EEG-Admin die quartalsweisen Abrechnungs-Rechnungen, die der Plattform-Betreiber an deine EEG ausgestellt hat.
+
+![Tab Rechnungen](images/admin-settings-rechnungen.png)
 
 > **Aktuell kostenlos:** Solange die Plattform-Nutzung kostenlos ist, erscheint oben im Tab ein Hinweis: *Die Nutzung ist derzeit kostenlos. Eine kostenpflichtige Nutzung ist geplant und wird rechtzeitig vorab angekündigt.* Die angezeigten Beträge sind eine **unverbindliche Vorschau** und werden aktuell nicht in Rechnung gestellt. Sobald für deine EEG echt abgerechnet wird, verschwindet der Hinweis automatisch.
 

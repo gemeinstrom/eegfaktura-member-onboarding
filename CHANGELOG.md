@@ -10,6 +10,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Doku: alle User-Guide-Screenshots neu, 22 Bilder ergänzt
+
+- Alle bestehenden Bilder neu erzeugt (Stand Mai–Juli, u. a. veralteter Text zu Aktivierungs-Kriterium Variante B, fehlende Tabs).
+- Neue Bilder: Status-Dialoge (Informationen anfordern, Ablehnen, Aktivierung zurücksetzen, Auf Prüfung zurücksetzen, EEG umzuordnen), Upload nach eegFaktura (Menü + Protokoll), abweichende Zählpunkt-Adresse und B2B-Schalter im Bearbeiten-Dialog, Mehrfachteilnahme und Zusatzinformation (Formular + Antrag), Einstellungen (Ansicht, Vertragskarte, Erscheinungsbild, Tabs Mehrfachteilnahme und Rechnungen).
+- User-Guide: veraltete Schritte korrigiert — Button heißt „Informationen anfordern“, Ablehnen-Dialog hat die Checkbox für die Mail.
+- Neues `db/seeds/screenshot_seed.sql` (nur für den Screenshot-Lauf, nicht in CI). Generator: Vertragsstatus, Upload-Protokoll und zweite EEG in der Sitzung per `page.route` nachgebildet; neue Helfer `shootClip`, `shootButtonDialog`, `shootInDialog`.
+
 ### Doku: Screenshots Erinnerung zur Datenfreigabe und Info-Anforderung
 
 - Vier neue Bilder im User-Guide: Dialog „Datenfreigabe ausständig“, Dialog „Info-Anforderung erneut senden“, Einstellungskarte „Erinnerung zur Datenfreigabe“ und deren Vorschau.

@@ -4,6 +4,12 @@
 
 ---
 
+## 2026-11-26
+
+**Handbuch: Bilder aktualisiert und ergänzt**
+
+Alle Bilder im Handbuch zeigen jetzt den aktuellen Stand der Oberfläche. Neu bebildert sind unter anderem die Dialoge zum Anfordern von Informationen, Ablehnen, Zurücksetzen und Umzuordnen, die Erinnerung zur Datenfreigabe, das Hochladen nach eegFaktura, die Zählpunkt-Adresse und der B2B-Schalter im Dialog **Bearbeiten**, Mehrfachteilnahme und Zusatzinformation sowie die Tabs **Mehrfachteilnahme** und **Rechnungen** in den Einstellungen.
+
 ## 2026-11-25
 
 **Neu: Erinnerung zur Datenfreigabe**
