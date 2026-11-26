@@ -6,6 +6,13 @@
 
 ## 2026-11-25
 
+**Neu: Erinnerung zur Datenfreigabe**
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Mitglieder, die im Portal ihres Netzbetreibers der Datenfreigabe noch nicht zugestimmt haben, erinnerst du jetzt per Klick. Nach **„Aktivierung im Core prüfen"** zeigt der Dialog **„Datenfreigabe ausständig"** alle Mitglieder, bei denen in eegFaktura noch ein Zählpunkt auf die Zustimmung wartet; **„Erinnerung senden"** schickt die Mail an die ausgewählten. Einzeln geht es im Antrag über **Erneut senden → Erinnerung Datenfreigabe**. Höchstens 3 Erinnerungen pro Antrag, mindestens 7 Tage Abstand, die erste frühestens 7 Tage nach dem Import. Den Text legst du unter **Einstellungen → Erinnerung** fest (Alle Optionen), mit Vorschau; ohne eigenen Text gilt ein Standardtext.
+
 **Neu: Info-Anforderung erneut senden**
 
 !!! warning "Derzeit nur in der Test-Umgebung"

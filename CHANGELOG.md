@@ -10,6 +10,19 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### PROJ-139: Erinnerung zur Datenfreigabe
+
+- Migration 000097 (additiv): `application.consent_reminder_count` (INTEGER NOT NULL DEFAULT 0, CHECK ≥ 0), `application.consent_reminder_last_sent_at` (TIMESTAMPTZ NULL), `registration_entrypoint.consent_reminder_text` (TEXT NULL, bereinigtes HTML).
+- Aktivierungs-Check: für EEG-Admins zusätzlich `activated`-Anträge; neues Antwortfeld `awaitingConsent` mit allen Anträgen, deren eigene Zählpunkte in eegFaktura `processState = PENDING` haben (Abgleich über die Zählpunktnummer, gleicher `GET /participant`-Aufruf pro EEG). Für Superuser unverändert (keine Liste, sonst Abfrage aller EEGs). Aktivierungs-Logik unverändert.
+- Neuer Endpoint `POST /api/admin/applications/consent-reminders` (1–5 IDs, Mandanten-Prüfung je ID vorab; Schreib-Deadline der Route auf 58 s verlängert): je Antrag Status-Prüfung, frische eegFaktura-Abfrage, Grenzen (max. 3, 7 Tage Abstand, erste frühestens 7 Tage nach dem Import), Reservierung per Compare-and-swap, Mail, bei Mail-Fehler Rücknahme; `status_log`-Eintrag „Erinnerung Datenfreigabe gesendet (n/3): …“. Ergebnis je Antrag (`sent`/`skipped`/`failed`).
+- Neue Mail-Vorlage `consent_reminder_member.html` (nur Mitglied, Reply-To EEG-Kontakt): Anrede, EEG-Text oder Standardtext, wartende Zählpunkte (Bezug/Einspeisung, abweichende Adresse), fester Rückfrage-Satz, Kontakt. EEG-Text wird beim Rendern erneut bereinigt. Metrik `member_consent_reminder`.
+- Einstellungen: `GET`/`PUT /api/admin/settings/consent-reminder`, `POST …/consent-reminder/preview` (echte Vorlage mit Beispieldaten). Neuer Helfer `sanitize.HTMLHasText` — ein geleerter Editor (`<p></p>`) gilt als leer = Standardtext. Text ist Teil des Konfigurations-Exports/-Imports.
+- Detail-Antwort: `consentReminderCount`, `consentReminderLastSentAt`, `consentReminderBlockedReason` (vom Backend berechnet).
+- `ResetImportTx`/`ResetToReviewTx` und der generische Statuswechsel zurück nach `under_review` setzen Zähler und Zeitpunkt zurück; `ResetActivationTx`/`RollbackActivation` lassen sie stehen.
+- Admin-UI: Dialog „Datenfreigabe ausständig“ nach dem Check (Vorauswahl, Versand in Paketen zu 5, Ergebnis je Antrag, nach einem Paket-Fehler lassen sich die offenen erneut senden), Menü-Eintrag „Erinnerung Datenfreigabe“ unter „Erneut senden“, Anzeige im Antrag, Einstellungs-Tab „Erinnerung“ (nur „Alle Optionen“) mit Editor und Vorschau (sandboxed iframe).
+- Pro-Funktion laut Owner; wie der Dokument-Upload ohne eigene Sperre, auf der Pro-Liste von PROJ-130.
+- Tests: `consent_reminder_test.go` (application, mail, http), `TestHTMLHasText`, `consent-reminder-dialog.test.tsx`, `admin-consent-reminder-editor.test.tsx`.
+
 ### PROJ-138: Info-Anforderung erneut senden
 
 - Neuer Endpoint `POST /api/admin/applications/{id}/resend-needs-info` (204), Body `{ "reason": "…", "expectedReason": "…" }`: schickt die Mail „Rückfragen zu deinem Beitrittsantrag“ erneut, gleicher Bearbeiten-Link (PROJ-121). Der Text (unverändert oder geändert) wird als `needs_info_reason` gespeichert. Leerer Text 400, Status nicht `needs_info` 409; weicht die gespeicherte Rückfrage von `expectedReason` (Vorbefüllung des Dialogs) ab, 409 vor dem Versand — eine veraltete Seite überschreibt keine neuere Rückfrage. Kein Statuswechsel.

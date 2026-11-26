@@ -17,6 +17,11 @@ Rechts oben in der Übersicht stehen dir zwei Aktionen zur Verfügung:
   Trifft das Kriterium zu, wird der Antrag automatisch auf **„Aktiviert"** gesetzt und das Mitglied bekommt die volle Beitrittsbestätigungs-Mail mit PDF. Toast zeigt das Ergebnis (z. B. „3 von 5 auf Aktiviert gesetzt") und die Liste wird neu geladen.
 - **„Alle Entwürfe löschen"** — erscheint nur, wenn Entwürfe existieren; löscht unwiderruflich alle nicht eingereichten Anträge deiner EEG(s).
 
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Die Liste „Datenfreigabe ausständig" ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Nach „Aktivierung im Core prüfen" kann sich die Liste **„Datenfreigabe ausständig"** öffnen, siehe [unten](#erinnerung-zur-datenfreigabe).
+
 Die Tabelle zeigt:
 - **Referenznummer** — eindeutige Kennung des Antrags
 - **Name** — Mitgliedsname oder Firmenname
@@ -87,6 +92,7 @@ Die Aktionsleiste oben rechts gruppiert Aktionen in drei Dropdowns plus einzelne
 | **SEPA-Mandat / Beitrittsbestätigung / Beitrittserklärung** | Nach eegFaktura hochladen | Ab Status *Importiert* (gleiche Dokumente wie unter „Herunterladen"; die Beitrittserklärung nur bei Status *Aktiviert* + Vorstands-Genehmigungs-Workflow), siehe [unten](#dokumente-nach-eegfaktura-hochladen) |
 | **Bestätigungs-Mail** *(oder „Bestätigungs-Link" bei pendender E-Mail-Bestätigung)* | Erneut senden | jederzeit |
 | **Info-Anforderung** | Erneut senden | Status *Info benötigt* |
+| **Erinnerung Datenfreigabe** | Erneut senden | Status *Bereit zur Aktivierung* oder *Aktiviert*, siehe [unten](#erinnerung-zur-datenfreigabe) |
 | **SEPA-Mandat** | Erneut senden | Status *Aktiviert* |
 | **Stammdaten abgleichen** | Top-Level | Status *Aktiviert* (greift auf den Faktura-Core zu) |
 | **Datenweiterleitung** | Top-Level | jederzeit |
@@ -125,6 +131,30 @@ Im Dialog **Bearbeiten** setzt du den Wert auf Ja, Nein oder „keine Angabe" �
 ### Zusatzinformation
 
 Hat der Antrag eine Zusatzinformation, zeigt die Detailansicht sie als eigenen Abschnitt **Zusatzinformation** über der Admin-Notiz, mit allen Zeilenumbrüchen. Anders als die Admin-Notiz ist sie für das Mitglied bestimmt: Sie steht auf Beitrittsbestätigung und Beitrittserklärung, in der Eingangsbestätigung, in der Mail „Neuer Antrag“ und im Daten-Export. Nach eegFaktura wird sie nicht übertragen.
+
+
+## Erinnerung zur Datenfreigabe
+
+!!! warning "Derzeit nur in der Test-Umgebung"
+    Diese Funktion ist noch nicht in der Produktiv-Umgebung verfügbar.
+
+Bevor ein Zählpunkt Energie mit der EEG austauscht, muss das Mitglied im Online-Portal seines Netzbetreibers der Datenfreigabe für die EEG zustimmen. Vergisst es das, steht der Zählpunkt in eegFaktura auf „wartet auf Zustimmung" (`PENDING`). An diese Mitglieder kannst du eine Erinnerung schicken.
+
+**Nach „Aktivierung im Core prüfen":** Warten bei Anträgen in *Bereit zur Aktivierung* oder *Aktiviert* noch Zählpunkte auf die Zustimmung, öffnet sich der Dialog **„Datenfreigabe ausständig"**. Er zeigt je Antrag das Mitglied, die betroffenen Zählpunkte und wie oft schon erinnert wurde. Alle Anträge, die jetzt erinnert werden dürfen, sind vorausgewählt. **„Erinnerung senden"** verschickt die Mail an die ausgewählten Mitglieder; danach steht bei jedem Antrag, ob sie rausging oder warum nicht.
+
+**Aus dem Antrag:** **Erneut senden → Erinnerung Datenfreigabe** schickt die Erinnerung an dieses eine Mitglied, wenn eegFaktura noch wartende Zählpunkte meldet.
+
+Grenzen, damit niemand zu oft angeschrieben wird:
+
+- die erste Erinnerung frühestens 7 Tage nach dem Import,
+- danach mindestens 7 Tage Abstand,
+- höchstens 3 Erinnerungen pro Antrag.
+
+Gesperrte Anträge sind im Dialog nicht auswählbar, im Menü ist der Eintrag ausgegraut — jeweils mit dem Grund („wieder ab …", „bereits 3-mal erinnert"). Vor jedem Versand fragt das Onboarding eegFaktura erneut ab: Hat das Mitglied inzwischen zugestimmt, geht keine Mail raus. Jede Erinnerung steht im Verlauf des Antrags („Erinnerung Datenfreigabe gesendet (1/3): …"), Anzahl und Datum der letzten im Antrag unter den Import-Angaben. Setzt du den Import oder den Antrag auf Prüfung zurück, beginnt die Zählung neu — auch beim einfachen Wechsel aus „Bereit zur Aktivierung“ zurück in die Prüfung.
+
+Den Text der Mail legst du in den Einstellungen fest, siehe [Erinnerung zur Datenfreigabe](06-admin-settings.md#erinnerung-zur-datenfreigabe-alle-optionen).
+
+Ganz automatisch, ohne Klick, geht es nicht: Ob die Zustimmung schon da ist, weiß nur eegFaktura, und das Onboarding darf dort nur mit deiner Anmeldung nachsehen. Als Superuser zeigt der Check über alle EEGs keine Liste — er würde sonst jede EEG bei eegFaktura abfragen. Einzeln aus dem Antrag erinnern geht auch als Superuser.
 
 ## Dokumente nach eegFaktura hochladen
 
